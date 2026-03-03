@@ -1,0 +1,58 @@
+SCRIPT
+- El script importa los módulos necesarios: os para rutas y archivos, re para expresiones regulares, requests para descargar contenido web y BeautifulSoup para procesar HTML.
+
+- Se define una ruta base (RUTA_TEMP) donde se guardarán los archivos ZIP descargados. Esta ruta puede adaptarse según el entorno (PythonAnywhere o PC local).
+
+- Se define la URL oficial de la DGT donde se publica mensualmente el listado del parque de vehículos.
+
+- Se define un patrón de URL (PATRON_ZIP) que permite construir la dirección exacta del ZIP final sustituyendo la fecha detectada.
+
+- La función obtener_ultima_fecha() descarga el HTML de la página de la DGT usando requests.get() y comprueba errores con raise_for_status().
+
+- El HTML se procesa con BeautifulSoup para extraer todo el texto visible de la página.
+
+- Se utiliza una expresión regular (20\d{4}) para encontrar todas las fechas en formato YYYYMM dentro del texto.
+
+- Si no se encuentra ninguna fecha, se lanza una excepción controlada para evitar continuar con datos incorrectos.
+
+- En lugar de tomar la primera coincidencia, se obtiene la fecha más reciente usando max(fechas), ya que el formato YYYYMM permite comparar lexicográficamente.
+
+- La función descargar_zip(fecha) construye la URL final del ZIP sustituyendo {fecha} en el patrón definido.
+
+- Se genera el nombre del archivo ZIP y la ruta completa donde se guardará.
+
+- Se descarga el ZIP con requests.get() y se comprueba que la descarga no haya fallado con raise_for_status().
+
+- El contenido del ZIP se guarda en disco en modo binario (wb) mediante un with open(...).
+
+- La función main() coordina el proceso: obtiene la fecha más reciente y descarga el ZIP correspondiente.
+
+- El bloque if __name__ == "__main__": asegura que el script solo ejecuta main() cuando se ejecuta directamente, evitando que se ejecute automáticamente cuando otro script (como el coordinador) lo importe.
+
+- Esta estructura permite que el script funcione tanto de forma independiente como integrado dentro de un pipeline mayor.
+
+
+
+
+PROBLEMAS
+- El script de descarga funciona correctamente en local, pero en PythonAnywhere (cuenta gratuita) aparece un error del tipo ProxyError y 403 Forbidden.
+
+- PythonAnywhere, en su modalidad gratuita, no permite conexiones directas a Internet. Todas las peticiones HTTP/HTTPS se realizan obligatoriamente a través de un proxy compartido.
+
+- Este proxy es utilizado por miles de usuarios gratuitos y tiene una IP pública conocida y catalogada por muchas webs como origen de tráfico automatizado o potencialmente abusivo.
+
+- La web de la DGT (www.dgt.es) bloquea explícitamente las conexiones que provienen de proxies públicos o compartidos, como medida de seguridad y control de scraping.
+
+- Cuando el script intenta acceder a la página de la DGT desde PythonAnywhere Free, la petición sale a través del proxy obligatorio y la DGT responde con un 403 Forbidden, indicando que ese origen no está autorizado.
+
+- Requests reintenta varias veces la conexión (mecanismo interno de urllib3), pero siempre recibe el mismo rechazo, lo que provoca el error final:requests.exceptions.ProxyError: Unable to connect to proxy.
+
+- Este problema no está causado por el código, sino por la infraestructura de red de PythonAnywhere y las políticas de seguridad de la DGT.
+
+- En un entorno local (ordenador personal), donde la conexión es directa y no pasa por un proxy compartido, el script funciona sin ningún problema y descarga correctamente el ZIP más reciente.
+
+- La única forma de que PythonAnywhere pueda acceder a la DGT es usando un plan de pago, ya que estos planes permiten conexiones directas sin pasar por el proxy bloqueado.
+
+- Alternativamente, se puede realizar la descarga desde un ordenador local y subir manualmente el ZIP a PythonAnywhere, o usar otro servidor sin restricciones de red.
+
+- Para el TFG, esta limitación es totalmente justificable y se puede explicar como una restricción técnica del proveedor, no como un fallo del desarrollo.
