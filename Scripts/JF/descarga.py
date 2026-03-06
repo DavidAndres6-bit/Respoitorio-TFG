@@ -6,8 +6,11 @@ from bs4 import BeautifulSoup       # Librería que permite interpretar y proces
 
 # Carpeta base en el escritorio donde guardaremos los ZIP
 # Resultado: C:/Users/herre/Desktop/DGT/zips
+
 # Cambia 'herre' por tu usuario y así funciona sin tocar nada más
-RUTA_BASE = os.path.join("C:\\Users", "herre", "Desktop", "DGT", "zips")
+RUTA_BASE = os.path.join("C:\\Users", usuario, "Desktop", "DGT", "zips")
+
+RUTA_BASE = os.path.join("C:\\Users", "david", "Desktop", "DGT", "zips")
 
 # Página oficial de la DGT
 URL_DGT = "https://www.dgt.es/menusecundario/dgt-en-cifras/matraba-listados/parque-vehiculos-mensual.html"
