@@ -1,0 +1,67 @@
+- El script importa los módulos necesarios:
+	+ os para trabajar con rutas y carpetas del sistema.
+	+ re para utilizar expresiones regulares al buscar fechas en el HTML.
+	+ requests para realizar peticiones HTTP y descargar contenido web.
+	+ BeautifulSoup para interpretar y procesar el HTML de la página de la DGT.
+- Se define una carpeta temporal (RUTA_TEMP) donde se guardarán los archivos ZIP descargados.
+Esta ruta se adapta según el entorno (PythonAnywhere o PC local).
+- Se define la URL oficial de la DGT donde se publica mensualmente el listado del parque de vehículos.
+- Se define un patrón de URL (PATRON_ZIP) que permite construir la dirección exacta del ZIP final sustituyendo la fecha detectada.
+
+Función asegurar_carpeta()
+- Comprueba si la carpeta temporal definida en RUTA_TEMP existe.
+- Si no existe, la crea utilizando os.makedirs().
+- Si ya existe, simplemente informa de ello mediante un mensaje informativo.
+- Evita errores al guardar archivos en rutas inexistentes.
+
+Función obtener_ultima_fecha()
+- Descarga el HTML de la página de la DGT usando requests.get() y comprueba errores con raise_for_status().
+- Procesa el HTML con BeautifulSoup para extraer todo el texto visible de la página.
+- Utiliza una expresión regular 20\d{4} para encontrar todas las fechas en formato YYYYMM.
+- Si no se encuentra ninguna fecha, lanza una excepción controlada.
+- Se obtiene la fecha más reciente usando max(fechas) (lexicográficamente correcto con formato YYYYMM).
+- Devuelve la fecha detectada para poder construir la URL de descarga.
+
+Función descargar_zip(fecha)
+- Construye la URL final del ZIP sustituyendo {fecha} en el patrón definido (PATRON_ZIP).
+- Genera el nombre del archivo ZIP correspondiente.
+- Construye la ruta completa donde se guardará el archivo dentro de la carpeta temporal.
+- Descarga el ZIP utilizando requests.get().
+- Comprueba que la descarga no falle usando raise_for_status().
+- Guarda el archivo en disco en modo binario (wb), ya que se trata de un archivo comprimido.
+- Imprime mensajes de progreso para indicar el estado de la descarga.
+- Devuelve la ruta completa del archivo ZIP descargado.
+
+Función main()
+- Centraliza el flujo principal del script.
+- Ejecuta las funciones en el orden correcto:
+	+ Comprueba o crea la carpeta temporal (asegurar_carpeta()).
+	+ Detecta la fecha más reciente publicada por la DGT (obtener_ultima_fecha()).
+	+ Descarga el archivo ZIP correspondiente (descargar_zip()).
+- Muestra un mensaje final indicando que el proceso de descarga se ha completado correctamente.
+
+Bloque if __name__ == "__main__":
+- Garantiza que la función main() solo se ejecute cuando el script se ejecuta directamente.
+- Evita que el script se ejecute automáticamente si sus funciones se importan desde otro script (por ejemplo procesarTXT.py o un coordinador).
+
+Ventajas de esta estructura
+- El script tiene una única responsabilidad: descargar el ZIP más reciente de la DGT.
+- Permite integrarse fácilmente en un pipeline de procesamiento de datos.
+- Incluye mensajes de seguimiento ([INFO]) que facilitan la depuración.
+- Separa claramente las responsabilidades entre scripts:
+	+ descarga.py → descarga los datos.
+	+ procesarTXT.py → extrae los archivos TXT necesarios.
+- Facilita la automatización del proceso mensual.
+
+Problemas detectados (PythonAnywhere)
+- El script funciona correctamente en entornos locales.
+- En PythonAnywhere Free, pueden producirse errores del tipo:
+	+ ProxyError
+	+ 403 Forbidden
+- Esto ocurre porque:
+	+ Todas las conexiones HTTP/HTTPS pasan por un proxy compartido.
+	+ Algunos sitios web, como la DGT, bloquean accesos desde estos proxies.
+- Posibles soluciones
+	+ Usar un plan de pago de PythonAnywhere.
+	+ Descargar el archivo ZIP en local y subirlo manualmente al servidor.
+	+ Utilizar otro servidor o entorno sin restricciones de red.
