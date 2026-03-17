@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import pandas as pd      #Libreria utilizada para el analisis de datos
 import os               # Trabaja con rutas y archivos del sistema operativo
 
@@ -71,10 +70,6 @@ def procesar_archivo_txt(archivoTxt, columnas_interes):
 # Funcion que recorre el archivo zip indicado y se queda con los archivos de las provincias
 # que nos interesan filtrando por su codigo con el array
 def extraer_datos_provincias(codigos_provincias):
-=======
-import pandas as pd      # Libreria utilizada para el analisis de datos
-import os                # Trabaja con rutas y archivos del sistema operativo
-
 
 # Ruta donde están los TXT ya filtrados al descomprimir el ZIP
 RUTA_ENTRADA = "/home/DJF/temp/txt"
@@ -146,12 +141,12 @@ def procesar_archivo_txt(archivoTxt, columnas_interes):
 
 # Función que recorre todos los TXT y une los datos
 def procesar_datos():
->>>>>>> 3f5b9134f5f9a161e540f02beb62e726ab3800dd
+
 
     # Lista para almacenar los DataFrames de cada provincia
     lista_dfs = []
 
-<<<<<<< HEAD
+
     # Llamada a la función para obtener los nombres filtrados
     archivos_cyl = obtener_listado_archivos(codigos_provincias)
 
@@ -189,7 +184,7 @@ def procesar_datos():
         # index = False -> Para que no escriba en el csv los indices de los datos
         # solo las columnas que queremos 
         df_final_cyl.to_csv(RUTA_SALIDA, index=False, sep=";",encoding="UTF-8")
-=======
+
     # Obtener todos los archivos de la carpeta
     nombre_ficheros = os.listdir(RUTA_ENTRADA)
 
@@ -234,20 +229,11 @@ def procesar_datos():
             sep=";",
             encoding="UTF-8"
         )
->>>>>>> 3f5b9134f5f9a161e540f02beb62e726ab3800dd
+
 
         print('Archivo guardado correctamente en ', RUTA_SALIDA)
 
     else:
-<<<<<<< HEAD
-        print('No se han encontrado archivos para procesar')    
-    
-    return lista_dfs
-
-
-# Ejecución del script
-extraer_datos_provincias(CODIGOS_PROVINCIAS)
-=======
 
         print('No se han encontrado archivos para procesar')
 
@@ -264,4 +250,3 @@ def main():
 # Ejecutar solo si se lanza este script directamente
 if __name__ == "__main__":
     main()
->>>>>>> 3f5b9134f5f9a161e540f02beb62e726ab3800dd
