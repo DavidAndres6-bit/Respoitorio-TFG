@@ -3,8 +3,8 @@ import os                   # Para trabajar con rutas y archivos del sistema ope
 import hashlib              # Para generar hashes y crear matrículas únicas
 
 
-# Carpeta donde están los TXT filtrados de los ZIP de la DGT 
-RUTA_ENTRADA = "/home/DJF/temp/txt/"
+# Carpeta donde están los TXT filtrados de los ZIP de la DGT
+RUTA_ENTRADA = "/home/DJF/temp/txt"
 
 # Ruta a la carpeta de los CSV
 RUTA_BASE = "/home/DJF/temp/csv"
@@ -39,13 +39,13 @@ CODIGOS_PROVINCIAS = {
 # Funcion que comprueba que existe la carpeta para almacenar los csv
 # En caso de no existir la crearia
 def asegurar_carpeta_csv():
-   
+
     # En caso de no existir la creamos
     if not os.path.exists(RUTA_BASE):
         os.makedirs(RUTA_BASE)
         print(f" Carpeta creada: {RUTA_BASE}")
     else:
-        print(f" La carpeta", {RUTA_BASE}, " ya existe") 
+        print(f" La carpeta", {RUTA_BASE}, " ya existe")
 
 
 # Funcion para procesar un TXT individual
@@ -70,8 +70,11 @@ def procesar_archivo_txt(archivoTxt, columnas_interes):
     # Creamos una copia que contiene las columnas que nos interesan
     df_final_provincia = df_provincia[columnas_validas].copy()
 
+    # Lo pasamos a texto y limpiamos el ".0" para que coincida con nuestro diccionario.
+    df_final_provincia["PROVINCIA"] = df_final_provincia["PROVINCIA"].astype(str).str.replace('.0', '', regex=False).str.zfill(2)
+
     # Cambiamos los códigos por los nombres usando nuestro diccionario
-    df_final_provincia["PROVINCIA"] = df_final_provincia["PROVINCIA"].replace(CODIGOS_PROVINCIAS)
+    df_final_provincia["PROVINCIA"] = df_final_provincia["PROVINCIA"].map(CODIGOS_PROVINCIAS)
 
     # Controlamos el caso de que un codigo no estuviese en nuestro diccionario
     df_final_provincia["PROVINCIA"] = df_final_provincia["PROVINCIA"].fillna("Provincia no identificada")
@@ -81,12 +84,12 @@ def procesar_archivo_txt(archivoTxt, columnas_interes):
 
 # Funcion para crear el csv a partir del txt procesado
 def procesar_datos():
-    
+
     # Comprobamos que archivos hay en la carpeta de los txt
     listado_archivos = os.listdir(RUTA_ENTRADA)
-    
+
     for archivoTxt in listado_archivos:
-        
+
         # Asegurarnos que el archivo es un txt
         if(archivoTxt.endswith('txt')):
 
@@ -100,12 +103,14 @@ def procesar_datos():
             df_prov = df_prov.replace('¡', 'SIN DATOS', regex=False)
             df_prov = df_prov.replace('ND', 'SIN DATOS', regex=False)
             df_prov = df_prov.replace('NAN', 'SIN DATOS', regex=False)
+            df_prov = df_prov.replace('nan', 'SIN DATOS')
             df_prov = df_prov.replace('', 'SIN DATOS', regex=False)
+            df_prov['EMISIONES_CO2'] = df_prov['EMISIONES_CO2'].replace('nan', 'SIN DATOS')
 
             # Guardar el CSV con los datos filtrados y limpios de esa provincia
 
             # Cogemos el nombre de la provincia del archivo txt que estamos recorriendo (es la provincia correspondiente)
-            
+
             # Coger el codigo de la provincia de ese txt
             codigo = archivoTxt[:2]
 
@@ -123,21 +128,17 @@ def procesar_datos():
             print('Generando el archivo ', nombre_csv, '....')
 
         else:
-            print('No se han encontrado archivos para procesar') 
+            print('No se han encontrado archivos para procesar')
 
 
 
-# ==========================
-# FUNCIÓN PRINCIPAL
-# ==========================
+# Funcion principal
 def main():
     # Asegurar carpeta del CSV
     asegurar_carpeta_csv()
     # Procesar datos y generar CSV final
     procesar_datos()
 
-# ==========================
-# BLOQUE PRINCIPAL
-# ==========================
+# Blque principal del script
 if __name__ == "__main__":
     main()
