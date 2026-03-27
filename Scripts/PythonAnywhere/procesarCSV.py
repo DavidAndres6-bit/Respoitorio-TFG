@@ -97,9 +97,10 @@ FECHA_ACTUALIZACION = date.today().strftime("%d/%m/%Y")
 # Patrón de valores vacíos o nulos — compilado una sola vez para reutilizarlo eficientemente
 PATRON_VACIO = re.compile(r"^\s*$|^nan$|^null$|^none$|^n/a$|^-$|^\.$", re.IGNORECASE)
 
-# Set global de matrículas ya asignadas — compartido por ambos tipos de matrícula
-# Garantiza que no se repite ninguna matrícula, ni entre modernas ni entre antiguas
-matriculas_usadas = set()
+# Mapa global de matrículas ya asignadas — compartido por ambos tipos de matrícula
+# Cuenta cuántas veces se ha generado cada matrícula entre todas las provincias
+# Si una matrícula ya existe, la nueva se guarda como matricula_1, matricula_2, etc.
+matriculas_usadas = defaultdict(int)
 
 # Mapa global de hashes — acumula {hash1: número_de_instancias} entre todos los TXT
 mapa_hashes = defaultdict(int)
@@ -153,49 +154,43 @@ def extraer_anyo(fecha_str):
 def hash_a_matricula_moderna(hash_md5):
     """
     Convertimos hash MD5 → matrícula NNNNLLL.
-    Si hay colisión, rehhasheamos hasta encontrar una libre.
+    Si la matrícula ya existe en el mapa global, añadimos sufijo _N
+    donde N es el número de veces que ya se ha generado esa matrícula.
     """
-    intento = 0
-    h = hash_md5
-    while True:
-        numero    = int.from_bytes(bytes.fromhex(h), byteorder="big")
-        digitos   = str(numero % 10000).zfill(4)
-        letra1    = LETRAS[(numero // 10000) % N_LETRAS]
-        letra2    = LETRAS[(numero // (10000 * N_LETRAS)) % N_LETRAS]
-        letra3    = LETRAS[(numero // (10000 * N_LETRAS ** 2)) % N_LETRAS]
-        matricula = f"{digitos}{letra1}{letra2}{letra3}"
+    numero         = int.from_bytes(bytes.fromhex(hash_md5), byteorder="big")
+    digitos        = str(numero % 10000).zfill(4)
+    letra1         = LETRAS[(numero // 10000) % N_LETRAS]
+    letra2         = LETRAS[(numero // (10000 * N_LETRAS)) % N_LETRAS]
+    letra3         = LETRAS[(numero // (10000 * N_LETRAS ** 2)) % N_LETRAS]
+    matricula_base = f"{digitos}{letra1}{letra2}{letra3}"
 
-        if matricula not in matriculas_usadas:
-            matriculas_usadas.add(matricula)
-            return matricula
+    # Consultamos cuántas veces se ha generado esta matrícula antes
+    count = matriculas_usadas[matricula_base]
+    matriculas_usadas[matricula_base] += 1
 
-        # Colisión → rehhasheamos con el número de intento y volvemos a probar
-        intento += 1
-        h = calcular_hash([hash_md5, str(intento)])
+    # Si es la primera vez → matrícula limpia, si no → añadimos sufijo
+    return matricula_base if count == 0 else f"{matricula_base}_{count}"
 
 
 def hash_a_matricula_antigua(hash_md5, letras_provincia):
     """
     Convertimos hash MD5 → matrícula LLNNNNLL.
     Las dos primeras letras son las de la provincia del fichero.
-    Si hay colisión, rehhasheamos hasta encontrar una libre.
+    Si la matrícula ya existe en el mapa global, añadimos sufijo _N
+    donde N es el número de veces que ya se ha generado esa matrícula.
     """
-    intento = 0
-    h = hash_md5
-    while True:
-        numero    = int.from_bytes(bytes.fromhex(h), byteorder="big")
-        digitos   = str(numero % 10000).zfill(4)
-        letra1    = LETRAS[(numero // 10000) % N_LETRAS]
-        letra2    = LETRAS[(numero // (10000 * N_LETRAS)) % N_LETRAS]
-        matricula = f"{letras_provincia}{digitos}{letra1}{letra2}"
+    numero         = int.from_bytes(bytes.fromhex(hash_md5), byteorder="big")
+    digitos        = str(numero % 10000).zfill(4)
+    letra1         = LETRAS[(numero // 10000) % N_LETRAS]
+    letra2         = LETRAS[(numero // (10000 * N_LETRAS)) % N_LETRAS]
+    matricula_base = f"{letras_provincia}{digitos}{letra1}{letra2}"
 
-        if matricula not in matriculas_usadas:
-            matriculas_usadas.add(matricula)
-            return matricula
+    # Consultamos cuántas veces se ha generado esta matrícula antes
+    count = matriculas_usadas[matricula_base]
+    matriculas_usadas[matricula_base] += 1
 
-        # Colisión → rehhasheamos con el número de intento y volvemos a probar
-        intento += 1
-        h = calcular_hash([hash_md5, str(intento)])
+    # Si es la primera vez → matrícula limpia, si no → añadimos sufijo
+    return matricula_base if count == 0 else f"{matricula_base}_{count}"
 
 
 def generar_matricula(fila, letras_provincia):
@@ -217,9 +212,9 @@ def generar_matricula(fila, letras_provincia):
     # Decidimos el formato según el año de primera matriculación
     anyo = extraer_anyo(fila.iloc[IDX_FEC_PRIM_MATR])
     if anyo < ANYO_CORTE:
-        return hash1, instancia, hash_a_matricula_antigua(hash2, letras_provincia)
+        return hash_a_matricula_antigua(hash2, letras_provincia)
     else:
-        return hash1, instancia, hash_a_matricula_moderna(hash2)
+        return hash_a_matricula_moderna(hash2)
 
 
 # ─── PROCESADO ───────────────────────────────────────────────────────────────
@@ -235,9 +230,9 @@ def asegurar_carpeta_csv():
 
 def procesar_archivo(ruta_archivo):
     """
-    Leemos un TXT de provincia, generamos las matrículas fila a fila,
-    construimos el dataframe final con los campos pedidos y lo devolvemos
-    junto con el dataframe del mapa (hash1 | instancia | matricula).
+    Leemos un TXT de provincia, generamos las matrículas fila a fila
+    y construimos el dataframe final con los campos pedidos.
+    Devolvemos el dataframe listo para guardar como CSV.
     """
     nombre_fichero = os.path.basename(ruta_archivo)
     print(f"  · Procesando: {nombre_fichero}")
@@ -254,10 +249,7 @@ def procesar_archivo(ruta_archivo):
     # que convierte cada fila en una Series antes de pasarla — con millones de registros
     # esa conversión acumula un coste significativo. apply() evita esa sobrecarga.
     # axis=1 indica que aplicamos la función fila a fila (no columna a columna).
-    # Cada llamada devuelve la tupla (hash1, instancia, matricula) de generar_matricula().
-    # zip(*resultados) desempaqueta todas las tuplas en tres listas separadas.
-    resultados = df.apply(lambda fila: generar_matricula(fila, letras_provincia), axis=1)
-    hash1s, instancias, matriculas = zip(*resultados)
+    matriculas = df.apply(lambda fila: generar_matricula(fila, letras_provincia), axis=1)
 
     # Añadimos la matrícula al dataframe
     df['MATRICULA'] = matriculas
@@ -301,21 +293,18 @@ def procesar_archivo(ruta_archivo):
     # Añadimos la fecha de actualización
     df_provincia['FECHA_ACTUALIZACION'] = FECHA_ACTUALIZACION
 
-    # Construimos el dataframe del mapa para esta provincia
-    df_mapa = pd.DataFrame({
-        'hash1':     hash1s,
-        'instancia': instancias,
-        'matricula': matriculas,
-    })
+    # Añadimos el estado actual: A (Activa) si la matrícula no tiene sufijo, D (Descartada) si lo tiene
+    df_provincia['ESTADO_ACTUAL'] = df_provincia['MATRICULA'].apply(
+        lambda m: 'D' if '_' in m else 'A'
+    )
 
     print(f"    → {len(df_provincia)} filas procesadas")
-    return df_provincia, df_mapa
+    return df_provincia
 
 
 def procesar_todos_los_txt():
     """
-    Recorremos todos los TXT de RUTA_TXT, generamos los 9 CSVs de provincia
-    y el CSV del mapa global.
+    Recorremos todos los TXT de RUTA_TXT y generamos los 9 CSVs de provincia.
     """
     archivos = sorted([os.path.join(RUTA_TXT, f) for f in os.listdir(RUTA_TXT)])
 
@@ -328,11 +317,8 @@ def procesar_todos_los_txt():
         print(f"  · {os.path.basename(ruta)}")
     print()
 
-    # Lista donde acumulamos los dataframes del mapa de todas las provincias
-    dfs_mapa = []
-
     for ruta in archivos:
-        df_provincia, df_mapa = procesar_archivo(ruta)
+        df_provincia = procesar_archivo(ruta)
 
         # Extraemos el código de provincia del nombre del fichero para nombrar el CSV
         nombre_fichero = os.path.basename(ruta)
@@ -344,18 +330,9 @@ def procesar_todos_los_txt():
         df_provincia.to_csv(ruta_csv, index=False, sep=";", encoding="utf-8-sig")
         print(f"    → CSV guardado: {ruta_csv}")
 
-        dfs_mapa.append(df_mapa)
-
-    # Combinamos todos los mapas en uno y lo guardamos como CSV
-    df_mapa_global = pd.concat(dfs_mapa, ignore_index=True)
-    ruta_mapa      = os.path.join(RUTA_CSV, "mapa_matriculas.csv")
-    df_mapa_global.to_csv(ruta_mapa, index=False, sep=";", encoding="utf-8-sig")
-    print(f"\n[INFO] CSV del mapa guardado: {ruta_mapa}")
-    print(f"[INFO] Total registros en el mapa: {len(df_mapa_global)}")
-
 
 def main():
-    """Lanzamos el procesado completo y generamos los 10 CSVs."""
+    """Lanzamos el procesado completo y generamos los 9 CSVs."""
     print("=== GENERADOR DE CSVs DGT - CyL ===\n")
     asegurar_carpeta_csv()
     procesar_todos_los_txt()
