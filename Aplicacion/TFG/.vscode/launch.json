@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "UsuarioDAO",
+            "request": "launch",
+            "mainClass": "clases.UsuarioDAO",
+            "projectName": "TFG_eb8760e9"
+        },
+        {
+            "type": "java",
+            "name": "Conexion",
+            "request": "launch",
+            "mainClass": "clases.Conexion",
+            "projectName": "TFG_eb8760e9"
+        },
+        {
+            "type": "java",
+            "name": "Launch App",
+            "request": "launch",
+            "mainClass": "clases.Login",
+            "vmArgs": "--module-path \"C:/Users/david/TFG/Archivos JavaFX/Archivos JAR\" --add-modules javafx.controls,javafx.fxml -Djava.library.path=\"C:/Users/david/TFG/Archivos JavaFX/Archivos JAR\""
+        }
+    ]
+}
