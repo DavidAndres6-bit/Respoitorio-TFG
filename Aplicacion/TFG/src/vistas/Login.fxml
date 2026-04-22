@@ -15,7 +15,7 @@
    <children>
       <ImageView fitHeight="506.0" fitWidth="600.0" layoutY="-3.0" pickOnBounds="true">
          <image>
-            <Image url="@../img/fondo_login.jpeg" />
+            <Image url="@../img/Fondo_Ventanas.png" />
          </image>
       </ImageView>
       <VBox alignment="TOP_CENTER" layoutX="102.0" layoutY="34.0" prefHeight="433.0" prefWidth="411.0" spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 15;">
@@ -23,7 +23,7 @@
             <DropShadow />
          </effect>
          <children>
-            <ImageView fitHeight="155.0" fitWidth="182.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="163.0" fitWidth="213.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/logo_app.png" />
                </image>
@@ -71,7 +71,7 @@
                   <Insets left="50.0" right="40.0" />
                </VBox.margin>
             </HBox>
-            <Button id="btn_inicioSesion" mnemonicParsing="false" onAction="#inicioSesion" prefHeight="36.0" prefWidth="160.0" style="-fx-background-color: #616161; -fx-background-radius: 5; -fx-text-fill: white; -fx-font-weight: bold;" text="Inciar Sesión">
+            <Button id="btn_inicioSesion" mnemonicParsing="false" onAction="#inicioSesion" prefHeight="36.0" prefWidth="160.0" style="-fx-background-color: #616161; -fx-background-radius: 5; -fx-text-fill: white; -fx-font-weight: bold;" text="Iniciar Sesión">
                <VBox.margin>
                   <Insets />
                </VBox.margin>

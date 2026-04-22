@@ -10,65 +10,65 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="668.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="607.0" fitWidth="668.0" layoutY="-3.0" pickOnBounds="true">
+      <ImageView fitHeight="709.0" fitWidth="900.0" layoutY="-3.0" pickOnBounds="true">
          <image>
-            <Image url="@../imagenes/fondo_inspeccion1.png" />
+            <Image url="@../Aplicacion/TFG/src/img/fondo_Paneles.png" />
          </image>
       </ImageView>
-      <Label layoutX="172.0" layoutY="23.0" prefHeight="53.0" prefWidth="389.0" text="Inspección Técnica">
+      <Label layoutX="288.0" layoutY="23.0" prefHeight="53.0" prefWidth="389.0" text="Inspección Técnica">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-      <Pane id="panel-datos" layoutX="46.0" layoutY="270.0" prefHeight="216.0" prefWidth="592.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-border-width: 1;">
+      <Pane id="panel-datos" layoutX="46.0" layoutY="270.0" prefHeight="323.0" prefWidth="798.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-border-width: 1;">
          <children>
-            <Label layoutX="-8.0" layoutY="-5.0" prefHeight="39.0" prefWidth="607.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="  2. Pruebas Mecánicas" textFill="#fcf9f9">
+            <Label layoutX="-8.0" layoutY="-5.0" prefHeight="39.0" prefWidth="826.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="  2. Pruebas Mecánicas" textFill="#fcf9f9">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="31.0" layoutY="54.0" prefHeight="43.0" prefWidth="233.0" text="- Niveles de gases:">
+            <Label layoutX="31.0" layoutY="68.0" prefHeight="43.0" prefWidth="233.0" text="- Niveles de gases:">
                <font>
-                  <Font size="20.0" />
+                  <Font size="28.0" />
                </font>
             </Label>
-            <TextField id="txt_nivelesGases" layoutX="278.0" layoutY="62.0" prefHeight="27.0" prefWidth="284.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
-            <Label layoutX="31.0" layoutY="97.0" prefHeight="43.0" prefWidth="233.0" text="- Estado de los frenos:">
+            <TextField id="txt_nivelesGases" layoutX="428.0" layoutY="76.0" prefHeight="27.0" prefWidth="338.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
+            <Label layoutX="31.0" layoutY="119.0" prefHeight="43.0" prefWidth="297.0" text="- Estado de los frenos:">
                <font>
-                  <Font size="20.0" />
+                  <Font size="28.0" />
                </font>
             </Label>
-            <TextField id="txt_estadoFrenos" layoutX="278.0" layoutY="105.0" prefHeight="27.0" prefWidth="284.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
-            <Label id="txt_estadoElectronica" layoutX="31.0" layoutY="140.0" prefHeight="43.0" prefWidth="233.0" text="- Estado de la electrónica:">
+            <TextField id="txt_estadoFrenos" layoutX="428.0" layoutY="127.0" prefHeight="27.0" prefWidth="338.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
+            <Label id="txt_estadoElectronica" layoutX="31.0" layoutY="175.0" prefHeight="43.0" prefWidth="351.0" text="- Estado de la electrónica:">
                <font>
-                  <Font size="20.0" />
+                  <Font size="28.0" />
                </font>
             </Label>
-            <TextField id="txt_estadoElectronica" layoutX="281.0" layoutY="148.0" prefHeight="27.0" prefWidth="278.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
+            <TextField id="txt_estadoElectronica" layoutX="428.0" layoutY="183.0" prefHeight="27.0" prefWidth="338.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
          </children>
          <effect>
             <DropShadow />
          </effect>
       </Pane>
-      <Button id="btn_siguiente" disable="true" layoutX="218.0" layoutY="530.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="248.0" style="-fx-background-radius: 10px; -fx-background-color: #00ab4b;" text="Siguiente -&gt;" />
-      <HBox layoutX="31.0" layoutY="179.0" prefHeight="43.0" prefWidth="622.0" style="-fx-background-radius: 5; -fx-padding: 5;">
+      <Button id="btn_siguiente" disable="true" layoutX="277.0" layoutY="629.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="361.0" style="-fx-background-radius: 10px; -fx-background-color: #00ab4b;" text="Siguiente -&gt;" />
+      <HBox layoutX="31.0" layoutY="179.0" prefHeight="43.0" prefWidth="839.0" style="-fx-background-radius: 5; -fx-padding: 5;">
          <children>
-            <Label disable="true" prefHeight="34.0" prefWidth="182.0" style="-fx-background-radius: 10; -fx-background-color: gray; -fx-alignment: center;" text="1) Identificación" textFill="#f4f1f1" />
-            <Label prefHeight="34.0" prefWidth="177.0" style="-fx-background-radius: 6; -fx-border-color: gray; -fx-border-radius: 10; -fx-alignment: center;" text="2) Pruebas Mecánicas" textFill="#404040" />
-            <Label disable="true" prefHeight="34.0" prefWidth="159.0" style="-fx-background-color: gray; -fx-background-radius: 10; -fx-alignment: center;" text="3) Defectos" textFill="WHITE" />
+            <Label disable="true" prefHeight="34.0" prefWidth="226.0" style="-fx-background-radius: 10; -fx-background-color: gray; -fx-alignment: center;" text="1) Identificación" textFill="#f4f1f1" />
+            <Label prefHeight="34.0" prefWidth="241.0" style="-fx-background-radius: 6; -fx-border-color: gray; -fx-border-radius: 10; -fx-alignment: center;" text="2) Pruebas Mecánicas" textFill="#404040" />
+            <Label disable="true" prefHeight="34.0" prefWidth="217.0" style="-fx-background-color: gray; -fx-background-radius: 10; -fx-alignment: center;" text="3) Defectos" textFill="WHITE" />
             <Label disable="true" prefHeight="34.0" prefWidth="159.0" style="-fx-background-color: gray; -fx-background-radius: 10; -fx-alignment: center;" text="4) Resultado" textFill="WHITE" />
          </children>
       </HBox>
-      <Pane layoutX="109.0" layoutY="88.0" prefHeight="43.0" prefWidth="484.0" style="-fx-background-radius: 10; -fx-border-color: gray; -fx-border-radius: 5; -fx-border-width: 3;">
+      <Pane layoutX="185.0" layoutY="95.0" prefHeight="43.0" prefWidth="601.0" style="-fx-background-radius: 10; -fx-border-color: gray; -fx-border-radius: 5; -fx-border-width: 3;">
          <children>
             <Label layoutX="25.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0" text="Matricula:">
                <font>
                   <Font size="17.0" />
                </font>
             </Label>
-            <Label layoutX="251.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0" text="Modelo:">
+            <Label layoutX="265.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0" text="Modelo:">
                <font>
                   <Font size="17.0" />
                </font>
@@ -78,7 +78,7 @@
                   <Font size="17.0" />
                </font>
             </Label>
-            <Label id="txt_modelo" layoutX="330.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0">
+            <Label id="txt_modelo" layoutX="371.0" layoutY="9.0" prefHeight="26.0" prefWidth="223.0">
                <font>
                   <Font size="17.0" />
                </font>
