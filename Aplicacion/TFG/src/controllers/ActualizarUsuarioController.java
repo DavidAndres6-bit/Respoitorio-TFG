@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import utilities.Utilities;
@@ -22,8 +21,6 @@ public class ActualizarUsuarioController {
     @FXML 
     private ComboBox<String> spRolUsuario;
 
-    @FXML
-    private Button btn_actualizarUsuario, btn_cancelar;
 
     /*
     *   Inicializamos el spinner con los roles disponibles al cargar la aplicacion

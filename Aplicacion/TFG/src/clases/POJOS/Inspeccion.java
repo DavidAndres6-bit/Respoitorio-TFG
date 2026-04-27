@@ -20,6 +20,7 @@ public class Inspeccion {
     private boolean alumbradoSenializacion;
     private boolean emisiones;
     private boolean frenos;
+    private boolean direccion;
     private boolean ejesRuedasNeumaticos;
     private boolean motorTransmision;
     private String resultadoInspeccion;
@@ -112,6 +113,14 @@ public class Inspeccion {
 
     public void setFrenos(boolean frenos) {
         this.frenos = frenos;
+    }
+
+    public boolean isDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(boolean direccion) {
+        this.direccion = direccion;
     }
 
     public boolean isEjesRuedasNeumaticos() {

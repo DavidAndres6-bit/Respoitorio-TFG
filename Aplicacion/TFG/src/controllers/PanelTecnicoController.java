@@ -100,8 +100,11 @@ public class PanelTecnicoController {
     /**
      * Función para pasar a la siguiente ventana y empezar con la inspeccion
     */
+   
     @FXML
     private void accionIniciarInspeccion(ActionEvent event) {
         Utilities.abrirVentana("/vistas/Identificacion.fxml", "Identificación del Vehiculo");
+
+        Utilities.cerrarVentana(event);
     }
 }

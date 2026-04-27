@@ -4,8 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader; 
 import javafx.scene.Parent; 
 import javafx.scene.Scene; 
-import javafx.stage.Stage;
-import controllers.LoginController; 
+import javafx.stage.Stage; 
 
 public class Login extends Application{
 
@@ -16,10 +15,6 @@ public class Login extends Application{
             //Cargamos la ventana del login
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/Login.fxml"));
             Parent root = loader.load();
-
-            //Usamos el controlador del login desde el cual se gestiona la logica y funciones de esta ventana
-            LoginController controller = loader.getController();
-
 
             //Configuramos la ventana con algunas opciones
             Scene scene = new Scene(root);

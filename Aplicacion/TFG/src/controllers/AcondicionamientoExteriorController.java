@@ -1,7 +1,7 @@
 package controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -22,9 +22,7 @@ public class AcondicionamientoExteriorController {
     
     @FXML 
     private TextArea txtObservaciones;
-    
-    @FXML 
-    private Button btnSiguiente;
+
 
     /*
     *   Metodo para inicializar los valores de matricula modelo
@@ -82,7 +80,7 @@ public class AcondicionamientoExteriorController {
     */
 
     @FXML
-    private void accionSiguiente() {
+    private void accionSiguiente(ActionEvent event) {
 
         //Si se han marcado checkboxs guardamos el resultado como false
         BufferInspeccion.getInspeccionActual().setAcondicionamientoExterior(hayFallos());
@@ -96,9 +94,10 @@ public class AcondicionamientoExteriorController {
             BufferInspeccion.getInspeccionActual().setObservaciones("");
         }
 
-        //Cambiamos de ventana
+        //Cambiamos de ventana        
         Utilities.abrirVentana("/vistas/AcondicionamientoInterior.fxml", "Acondicionamiento Interior");
 
+        Utilities.cerrarVentana(event);
     }
 
 }

@@ -6,7 +6,6 @@ import clases.DAOS.UsuarioDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import utilities.Sesion;
@@ -21,10 +20,6 @@ public class EliminarUsuarioController {
 
     @FXML 
     private TextField txtCorreo, txtContrasenia;
-
-    @FXML
-    private Button btn_eliminarUsuario, btn_cancelar;
-
 
     /*
     *   Funcion del boton eliminar usuario

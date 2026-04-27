@@ -104,7 +104,10 @@ public class IdentificacionController {
             } else {
                 // Guardar y pasar de página
                 BufferInspeccion.getInspeccionActual().setKmActuales(kmAct);
+                
                 Utilities.abrirVentana("/vistas/AcondicionamientoExterior.fxml", "Acondicionamiento Exterior, Carroceria y Chasis");
+            
+                Utilities.cerrarVentana(event);
             }
 
         } catch (NumberFormatException e) {

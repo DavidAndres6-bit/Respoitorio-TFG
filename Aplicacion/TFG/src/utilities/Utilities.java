@@ -1,5 +1,6 @@
 package utilities;
 
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import javafx.event.ActionEvent;
@@ -19,8 +20,26 @@ public class Utilities {
     private static final String REGEX_EMAIL = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
     private static final String REGEX_TELEFONO = "^[6789]\\d{8}$";
 
+
     /*
-    *   Metodo para abrir una nueva ventana
+    *   Metodo para abrir una nueva ventana para el admin
+    */
+    public static void abrirVentanaWait(String rutaFXML, String titulo) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Utilities.class.getResource(rutaFXML));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle(titulo);
+            stage.setScene(new Scene(root));
+            stage.showAndWait(); // Pausar el codigo para que se reflejen los cambios en la tabla
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /*
+    *   Metodo para abrir una nueva ventana para el tecnico
     */
 
     public static void abrirVentana(String rutaFXML, String titulo) {
@@ -31,7 +50,7 @@ public class Utilities {
             stage.setTitle(titulo);
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.showAndWait(); 
+            stage.show(); 
         } catch (Exception e) {
             e.printStackTrace();
         }

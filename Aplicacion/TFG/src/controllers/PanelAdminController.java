@@ -6,14 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import utilities.Utilities;
 
 public class PanelAdminController {
@@ -25,8 +20,6 @@ public class PanelAdminController {
     @FXML
     private TableView<Usuario> tablaUsuarios;
     
-    @FXML
-    private Button btn_aniadirUsuario, btn_actualizarUsuario, btn_eliminarUsuario;
 
     /*
     *   Definimos las columnas de la tabla que corresponden con el id que les hemos asignado en Scene Builder
@@ -83,7 +76,7 @@ public class PanelAdminController {
 
     @FXML
     private void abrirAniadirUsuario(ActionEvent event) {
-        Utilities.abrirVentana("/vistas/AniadirUsuario.fxml", "Añadir Nuevo Usuario");
+        Utilities.abrirVentanaWait("/vistas/AniadirUsuario.fxml", "Añadir Nuevo Usuario");
 
         //Recargar la Tabla para que se reflejen los cambios al volver
         rellenarTabla();
@@ -96,7 +89,7 @@ public class PanelAdminController {
 
     @FXML
     private void abrirActualizarUsuario(ActionEvent event) {
-        Utilities.abrirVentana("/vistas/ActualizarUsuario.fxml", "Modificar Usuario");   
+        Utilities.abrirVentanaWait("/vistas/ActualizarUsuario.fxml", "Modificar Usuario");   
         rellenarTabla();  
     }
 
@@ -106,7 +99,8 @@ public class PanelAdminController {
     
     @FXML
     private void abrirEliminarUsuario(ActionEvent event) {
-       Utilities.abrirVentana("/vistas/EliminarUsuario.fxml", "Dar de baja Usuario");
-    rellenarTabla();
+       Utilities.abrirVentanaWait("/vistas/EliminarUsuario.fxml", "Dar de baja Usuario");
+       rellenarTabla();
     }
+
 }

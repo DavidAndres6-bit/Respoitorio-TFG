@@ -24,46 +24,46 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <Pane id="panel-datos" cache="true" layoutX="45.0" layoutY="238.0" prefHeight="393.0" prefWidth="810.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-border-width: 1;">
+      <Pane id="panel-datos" cache="true" layoutX="45.0" layoutY="238.0" prefHeight="403.0" prefWidth="810.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-border-width: 1;">
          <children>
             <Label layoutX="-8.0" layoutY="-5.0" prefHeight="39.0" prefWidth="834.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="   3. Defectos Encontrados" textFill="#fcf9f9">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <HBox layoutX="13.0" layoutY="55.0" prefHeight="42.0" prefWidth="790.0">
+            <HBox layoutX="13.0" layoutY="55.0" prefHeight="62.0" prefWidth="790.0">
                <children>
-                  <TextField prefHeight="42.0" prefWidth="118.0" promptText="Unidad..." style="-fx-background-color: #DBDBDB; -fx-border-color: black;">
+                  <TextField prefHeight="66.0" prefWidth="116.0" promptText="Unidad..." style="-fx-background-color: #DBDBDB; -fx-border-color: black;">
                      <font>
                         <Font name="Century Schoolbook" size="20.0" />
                      </font>
                   </TextField>
-                  <TextField prefHeight="42.0" prefWidth="542.0" promptText="Descripción del defecto..." style="-fx-background-color: #DBDBDB; -fx-border-color: black;">
+                  <TextField prefHeight="64.0" prefWidth="538.0" promptText="Descripción del defecto..." style="-fx-background-color: #DBDBDB; -fx-border-color: black;">
                      <font>
                         <Font name="Century Schoolbook" size="20.0" />
                      </font>
                   </TextField>
-                  <TextField prefHeight="42.0" prefWidth="143.0" promptText="Calificación..." style="-fx-background-color: #DBDBDB; -fx-border-color: black;">
+                  <TextField prefHeight="67.0" prefWidth="140.0" promptText="Calificación..." style="-fx-background-color: #DBDBDB; -fx-border-color: black;">
                      <font>
                         <Font name="Century Schoolbook" size="20.0" />
                      </font>
                   </TextField>
                </children>
             </HBox>
-            <Button layoutX="332.0" layoutY="120.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="153.0" style="-fx-background-color: #09E600; -fx-background-radius: 10;" text="Añadir (+)" textFill="WHITE" />
-            <TableView layoutX="13.0" layoutY="171.0" prefHeight="210.0" prefWidth="777.0">
+            <TableView layoutX="16.0" layoutY="138.0" prefHeight="210.0" prefWidth="777.0">
               <columns>
                 <TableColumn prefWidth="132.0000228881836" text="Unidad" />
                 <TableColumn prefWidth="517.5999450683594" text="Descripción del defecto" />
                   <TableColumn prefWidth="132.0000228881836" text="Calificación" />
               </columns>
             </TableView>
+            <Button layoutX="328.0" layoutY="356.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="153.0" style="-fx-background-color: #09E600; -fx-background-radius: 10;" text="Añadir (+)" textFill="WHITE" />
          </children>
          <effect>
             <DropShadow />
          </effect>
       </Pane>
-      <Button id="btn_siguiente" layoutX="314.0" layoutY="653.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="324.0" style="-fx-background-radius: 10px; -fx-background-color: #E0980F;" text="Siguiente -&gt;" />
+      <Button id="btn_siguiente" layoutX="288.0" layoutY="653.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="324.0" style="-fx-background-radius: 10px; -fx-background-color: #E0980F;" text="Siguiente -&gt;" />
       <Pane layoutX="175.0" layoutY="87.0" prefHeight="43.0" prefWidth="601.0" style="-fx-background-radius: 10; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-border-width: 3;">
          <children>
             <Label layoutX="25.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0" style="-fx-text-fill: white;" text="Matricula:">
