@@ -1,0 +1,18 @@
+Administrador
+david          | 1234
+
+Técnico
+juanfan        | 1234
+Prueba2        | 12345
+
+Matrículas 
+8139THH
+5885HFT
+ZA9999VE
+
+0000BBZ
+0000FMS
+0000GJB
+
+
+
