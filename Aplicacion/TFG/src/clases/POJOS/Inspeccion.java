@@ -1,6 +1,7 @@
 package clases.POJOS;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class Inspeccion {
 
     /*
      * Atributos de la inspeccion
-     */
+    */
 
 
     private int id;
@@ -23,8 +24,9 @@ public class Inspeccion {
     private boolean direccion;
     private boolean ejesRuedasNeumaticos;
     private boolean motorTransmision;
-    private String resultadoInspeccion;
-    private Date fechaProximaInspeccion;
+    private String resultadoInspeccion; 
+    private java.sql.Date fechaProximaInspeccion;  //Para evitar errores con la base de datos con el formato de las fechas
+    private LocalDate fechaInspeccion;
     private String observaciones;
 
     // Lista para almacenar los defectos
@@ -151,10 +153,13 @@ public class Inspeccion {
         return fechaProximaInspeccion;
     }
 
-    public void setFechaProximaInspeccion(Date fechaProximaInspeccion) {
-        this.fechaProximaInspeccion = fechaProximaInspeccion;
+    public void setFechaProximaInspeccion(LocalDate fechaSiguienteRevision) {
+        if (fechaSiguienteRevision != null) {
+            // Convertimos LocalDate a java.sql.Date
+            this.fechaProximaInspeccion = java.sql.Date.valueOf(fechaSiguienteRevision);
+        }
     }
-
+    
     public String getObservaciones() {
         return observaciones;
     }
@@ -169,5 +174,13 @@ public class Inspeccion {
 
     public void setListaDefectos(List<Defecto> listaDefectos) {
         this.listaDefectos = listaDefectos;
+    }
+    
+    public LocalDate getFechaInspeccion() {
+        return fechaInspeccion;
+    }
+
+    public void setFechaInspeccion(LocalDate fechaInspeccion) {
+        this.fechaInspeccion = fechaInspeccion;
     }
 }

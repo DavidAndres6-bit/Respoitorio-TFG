@@ -5,7 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import utilities.Utilities;
 
@@ -19,7 +19,7 @@ public class ActualizarUsuarioController {
     private TextField txtCorreo, txtContrasenia;
     
     @FXML 
-    private ComboBox<String> spRolUsuario;
+    private ChoiceBox<String> spRolUsuario;
 
 
     /*
@@ -77,7 +77,7 @@ public class ActualizarUsuarioController {
 
         //Comprobamos que se ha encontrado ese usuario
         if (id != -1) {
-            //Lammamos al metodo que actualiza
+            //Llammamos al metodo que actualiza
             boolean actualizado = usuarioDAO.actualizarRol(id, rolSeleccionado, nuevaContrasenia);
 
             //Comprobamos si se ha actualizado

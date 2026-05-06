@@ -27,19 +27,20 @@ CREATE TABLE usuarios (
 
 /* Tabla para guardar las inspecciones realizas en cada vehiculo */
 CREATE TABLE inspecciones (
-    -> id INT AUTO_INCREMENT PRIMARY KEY,
-    -> matricula_coche VARCHAR(9) NOT NULL,
-    -> km_actuales INT,
-    -> itv_previa_vigor TINYINT(1),
-    -> niveles_gases VARCHAR(50),
-    -> estado_frenos VARCHAR(50),
-    -> luces_defectuosas TINYINT(1),
-    -> neumaticos_defectuosos TINYINT(1),
-    -> frenos_defectuosos TINYINT(1),
-    -> intermitentes_defectuosos TINYINT(1),
-    -> resultado_inspeccion VARCHAR(20),
-    -> fecha_proxima_inspeccion DATE,
-    -> observaciones TEXT);
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     matricula_coche VARCHAR(9) NOT NULL,
+    ->     km_anterior_inspeccion INT,
+    ->     km_actuales INT NOT NULL,
+    ->     acondicionamiento_exterior TINYINT(1),
+    ->     acondicionamiento_interior TINYINT(1),
+    ->     alumbrado_senializacion TINYINT(1),
+    ->     emisiones TINYINT(1),
+    ->     frenos TINYINT(1),
+    ->     ejes_ruedas_neumaticos TINYINT(1),
+    ->     motor_transmision TINYINT(1),
+    ->     resultado_inspeccion VARCHAR(20),
+    ->     fecha_proxima_inspeccion DATE,
+    ->     observaciones TEXT);
 
 /* Relacion de la tabla inspecciones con la tabla vehiculos */
 ALTER TABLE inspecciones ADD CONSTRAINT fk_inspeccion_vehiculo FOREIGN KEY (matricula_coche) REFERENCES vehiculos_cyl(MATRICULA);
@@ -58,6 +59,27 @@ CREATE TABLE tarifas(
     -> ('Vehiculos sin etiqueta', 65.00),
     -> ('Vehiculos con etiqueta B', 55.00),
     -> ('Vehiculos con etiqueta C', 45.00),
-    -> ('Vehiculos con etiqueta D', 35.00),
+    -> ('Vehiculos con etiqueta 0', 35.00),
     -> ('Vehiculos pesados', 81.09),
     -> ('Tractores', 81.09);
+
+/*   Tabla para almacenar los defectos de cada inspeccion  */
+CREATE TABLE inspeccion_defectos (
+    -> id INT AUTO_INCREMENT PRIMARY KEY,
+    -> id_inspeccion INT NOT NULL,       
+    -> unidad VARCHAR(50),               
+    -> descripcion TEXT,                 
+    -> calificacion VARCHAR(20));   
+
+/* Relacion de la tabla inspeccion_defectos con la tabla inspecciones */
+ALTER TABLE inspeccion_defectos ADD CONSTRAINT fk_inspeccion_defectos FOREIGN KEY (id_inspeccion) REFERENCES inspecciones(id) ON DELETE CASCADE;
+
+/*  Tabla para almacenar el cliente que realiza la inspeccion del vehiculo  */
+CREATE TABLE clientes (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     matricula VARCHAR(10) NOT NULL,
+    ->     dni VARCHAR(15) NOT NULL,
+    ->     nombre VARCHAR(100));
+
+/* Relación de la tabla clientes con la tabla vehiculos */
+ALTER TABLE clientes  ADD CONSTRAINT fk_cliente_vehiculo  FOREIGN KEY (matricula) REFERENCES vehiculos_cyl(matricula)  ON DELETE CASCADE;

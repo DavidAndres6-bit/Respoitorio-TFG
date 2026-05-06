@@ -31,7 +31,7 @@
                   <Font name="Century Schoolbook" size="21.0" />
                </font>
             </Label>
-            <TextArea fx:id= "txtObservaciones" disable="true" layoutX="79.0" layoutY="138.0" prefHeight="156.0" prefWidth="639.0" style="-fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
+            <TextArea fx:id="txtObservaciones" disable="true" layoutX="79.0" layoutY="138.0" prefHeight="156.0" prefWidth="639.0" style="-fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
             <HBox layoutX="31.0" layoutY="49.0" prefHeight="34.0" prefWidth="752.0">
                <children>
                   <Label prefHeight="22.0" prefWidth="150.0" text="Desviación de ruedas">
@@ -39,7 +39,7 @@
                         <Font name="Century Schoolbook" size="15.0" />
                      </font>
                   </Label>
-                  <CheckBox fx:id="chkDesviacion" onAction="#gestionarCheck" mnemonicParsing="false" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
+                  <CheckBox fx:id="chkDesviacion" mnemonicParsing="false" onAction="#gestionarCheck" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -52,7 +52,7 @@
                         <Insets left="10.0" />
                      </HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkDireccion" onAction="#gestionarCheck" mnemonicParsing="false" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
+                  <CheckBox fx:id="chkDireccion" mnemonicParsing="false" onAction="#gestionarCheck" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -65,7 +65,7 @@
                         <Insets left="30.0" />
                      </HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkVolanteColumna" onAction="#gestionarCheck" mnemonicParsing="false" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
+                  <CheckBox fx:id="chkVolanteColumna" mnemonicParsing="false" onAction="#gestionarCheck" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -78,7 +78,7 @@
                         <Insets left="30.0" />
                      </HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkServoDireccion" onAction="#gestionarCheck" mnemonicParsing="false" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
+                  <CheckBox fx:id="chkServoDireccion" mnemonicParsing="false" onAction="#gestionarCheck" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -131,19 +131,19 @@
                   <Font name="Century Schoolbook" size="17.0" />
                </font>
             </Label>
-            <Label fx:id="lblMatricula" layoutX="121.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0">
+            <Label fx:id="lblMatricula" layoutX="121.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0" textFill="WHITE">
                <font>
                   <Font size="17.0" />
                </font>
             </Label>
-            <Label fx:id="lblModelo" layoutX="371.0" layoutY="9.0" prefHeight="26.0" prefWidth="223.0">
+            <Label fx:id="lblModelo" layoutX="371.0" layoutY="9.0" prefHeight="26.0" prefWidth="223.0" textFill="WHITE">
                <font>
                   <Font size="17.0" />
                </font>
             </Label>
          </children>
       </Pane>
-      <Button fx:id="btnSiguiente" onAction="#accionSiguiente" layoutX="217.0" layoutY="633.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="488.0" style="-fx-background-radius: 10px; -fx-background-color: #bf820d;" text="Siguiente -&gt;" textFill="WHITE">
+      <Button fx:id="btnSiguiente" layoutX="217.0" layoutY="633.0" mnemonicParsing="false" onAction="#accionSiguiente" prefHeight="33.0" prefWidth="488.0" style="-fx-background-radius: 10px; -fx-background-color: #bf820d;" text="Siguiente -&gt;" textFill="WHITE">
          <font>
             <Font name="Century Schoolbook" size="21.0" />
          </font>

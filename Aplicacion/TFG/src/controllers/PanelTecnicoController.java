@@ -1,6 +1,8 @@
 package controllers;
 
+import clases.DAOS.ClienteDAO;
 import clases.DAOS.VehiculoDAO;
+import clases.POJOS.Cliente;
 import clases.POJOS.Inspeccion;
 import clases.POJOS.Vehiculo;
 import javafx.event.ActionEvent;
@@ -23,13 +25,13 @@ public class PanelTecnicoController {
     private TextField txtBuscarMatricula;
 
     @FXML
-    private Pane panelInicial, panelDatos;
+    private Pane panelInicial, panelDatos, panelFormularioCliente;
 
     @FXML
-    private Label lblMatricula, lblMarca, lblModelo, lblFechaMatriculacion;
+    private Label lblMatricula, lblMarca, lblModelo, lblFechaMatriculacion, lblCliente;
 
     @FXML
-    private Button btnIniciarInspeccion;
+    private Button btnIniciarInspeccion, btnRegistrarCliente;
 
 
     /*
@@ -70,20 +72,37 @@ public class PanelTecnicoController {
                     lblModelo.setText(vehiculoEncontrado.getModelo());
                     lblFechaMatriculacion.setText(vehiculoEncontrado.getFechaMatriculacion().toString());
 
-                    // Cambiamos la visibilidad de los paneles
-                    panelInicial.setVisible(false);
-                    panelDatos.setVisible(true);
-                    
-                    // Habilitamos el botón de inspección
-                    btnIniciarInspeccion.setDisable(false);
-                    
-                    // Inicializamos la clase que va a hacer la funcion de "buffer" durante la inspeccion del vehiculo
-                    Inspeccion inspeccionActual = BufferInspeccion.getInspeccionActual();
+                    // Buscamos el cliente asociado al vehiculo
+                    Cliente clienteAsociado = ClienteDAO.buscarCliente(matricula);
 
-                    //Guardamos los la matricula y el vehiculo que hemos obtenido en ese buffer
-                    inspeccionActual.setMatriculaCoche(vehiculoEncontrado.getMatricula());
+                    if(clienteAsociado != null){
+                        lblCliente.setText(clienteAsociado.getDni() + ", " +(clienteAsociado.getNombre()));
+                       
+                        // Guardar el cliente en el buffer de la inspeccion
+                        BufferInspeccion.setClienteActual(clienteAsociado);
                     
-                    BufferInspeccion.setVehiculoActual(vehiculoEncontrado);
+                        btnIniciarInspeccion.setDisable(false);
+                    } else {
+
+                        // Si NO hay cliente, limpiamos labels y mostramos botón de añadir
+                        lblCliente.setText("Sin asignar");
+                        
+                        BufferInspeccion.setClienteActual(null);
+                        btnIniciarInspeccion.setDisable(true);  // Bloqueamos el boton hasta que exista el cliente
+                    }
+
+                        // Dejamos el boton activo
+                        btnRegistrarCliente.setVisible(true);
+                        btnRegistrarCliente.setText("Cambiar/Nuevo Cliente");
+                        
+                        // Cambiamos la visibilidad de los paneles
+                        panelInicial.setVisible(false);
+                        panelDatos.setVisible(true);
+
+                        // Buffer de inspección
+                        Inspeccion inspeccionActual = BufferInspeccion.getInspeccionActual();
+                        inspeccionActual.setMatriculaCoche(vehiculoEncontrado.getMatricula());
+                        BufferInspeccion.setVehiculoActual(vehiculoEncontrado);
                     
                 } else {
                     
@@ -91,11 +110,28 @@ public class PanelTecnicoController {
                     panelInicial.setVisible(true);
                     panelDatos.setVisible(false);
                     btnIniciarInspeccion.setDisable(true);
-                    
                     Utilities.mostrarAlerta("Sin resultados", "No se ha encontrado ningún vehículo con esa matrícula.", Alert.AlertType.INFORMATION);
                 }
             }
         }
+
+    /*
+    *   Accion del boton añadir cliente
+    */
+
+    @FXML
+    private void accionRegistrarCliente(ActionEvent event) {
+        
+        // Abrimos la ventana con show and wait para que se actualizen los valores una vez rellenados
+        Utilities.abrirVentanaWait("/vistas/AltaCliente.fxml", "Registro de Cliente");
+
+        // Al volver guardamos ese cliente en el buffer
+        if (BufferInspeccion.getClienteActual() != null) {
+            Cliente nuevo = BufferInspeccion.getClienteActual();
+            lblCliente.setText(nuevo.getDni() + ", " + nuevo.getNombre());
+            btnIniciarInspeccion.setDisable(false);
+        }
+    }
 
     /**
      * Función para pasar a la siguiente ventana y empezar con la inspeccion

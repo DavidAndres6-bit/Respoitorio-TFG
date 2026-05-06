@@ -5,34 +5,30 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PanelTecnicoController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PanelTecnicoController">
    <children>
-      <ImageView fitHeight="710.0" fitWidth="900.0" layoutY="-3.0" pickOnBounds="true">
-         <image>
-            <Image url="@../img/Fondo_Ventanas.png" />
-         </image>
-      </ImageView>
-      <Pane layoutX="152.0" layoutY="132.0" prefHeight="157.0" prefWidth="634.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-border-width: 1;">
+      <Pane layoutX="47.0" layoutY="131.0" prefHeight="151.0" prefWidth="632.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-border-width: 1;">
          <children>
-            <Label layoutX="-12.0" layoutY="-5.0" prefHeight="39.0" prefWidth="659.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="     Buscar Vehiculo" textFill="WHITE">
+            <Label layoutX="-12.0" layoutY="-5.0" prefHeight="46.0" prefWidth="666.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="     Buscar Vehiculo" textFill="WHITE">
                <font>
-                  <Font name="Century Schoolbook" size="16.0" />
+                  <Font name="Century Schoolbook" size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtBuscarMatricula" layoutX="37.0" layoutY="59.0" prefHeight="39.0" prefWidth="342.0" style="-fx-background-color: blawhiteck; -fx-border-color: #A8A5A5; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;">
+            <TextField fx:id="txtBuscarMatricula" layoutX="42.0" layoutY="79.0" prefHeight="50.0" prefWidth="372.0" style="-fx-background-color: blawhiteck; -fx-border-color: #A8A5A5; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;">
                <padding>
                   <Insets left="10.0" right="10.0" />
                </padding>
-            </TextField>
-            <Button fx:id="btnBuscar" layoutX="412.0" layoutY="62.0" mnemonicParsing="false" onAction="#accionBuscar" prefHeight="33.0" prefWidth="178.0" style="-fx-background-radius: 10px; -fx-background-color: #b0b0b0;" text="Buscar 🔍">
                <font>
-                  <Font name="Century Schoolbook" size="18.0" />
+                  <Font size="25.0" />
+               </font>
+            </TextField>
+            <Button fx:id="btnBuscar" layoutX="449.0" layoutY="76.0" mnemonicParsing="false" onAction="#accionBuscar" prefHeight="50.0" prefWidth="169.0" style="-fx-background-radius: 10px; -fx-background-color: #b0b0b0;" text="Buscar 🔍" textFill="#fafafa">
+               <font>
+                  <Font name="Century Schoolbook" size="28.0" />
                </font>
             </Button>
          </children>
@@ -40,55 +36,65 @@
             <DropShadow />
          </effect>
       </Pane>
-      <StackPane layoutX="152.0" layoutY="314.0" prefHeight="216.0" prefWidth="634.0">
+      <StackPane layoutX="47.0" layoutY="331.0" prefHeight="323.0" prefWidth="797.0">
          <children>
-            <Pane fx:id="panelDatos" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-border-width: 1;" visible="false">
+            <Pane fx:id="panelDatos" layoutX="10.0" layoutY="10.0" prefHeight="244.0" prefWidth="646.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-border-width: 1;" visible="false">
                <children>
-                  <Label layoutX="-4.0" layoutY="-5.0" prefHeight="39.0" prefWidth="648.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="     Datos del Vehiculo" textFill="#fcf9f9">
+                  <Label layoutX="79.0" layoutY="39.0" prefHeight="58.0" prefWidth="204.0" text=" - Matricula:">
                      <font>
-                        <Font size="16.0" />
+                        <Font size="25.0" />
                      </font>
                   </Label>
-                  <Label layoutX="78.0" layoutY="49.0" prefHeight="35.0" prefWidth="151.0" text=" - Matricula:">
+                  <Label layoutX="79.0" layoutY="84.0" prefHeight="58.0" prefWidth="110.0" text=" - Marca:">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="79.0" layoutY="133.0" prefHeight="58.0" prefWidth="128.0" text=" - Modelo:">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="79.0" layoutY="178.0" prefHeight="58.0" prefWidth="307.0" text=" - Fecha de Matriculación:">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblMatricula" layoutX="233.0" layoutY="52.0" prefHeight="18.0" prefWidth="208.0" text="5432JRD">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblMarca" layoutX="193.0" layoutY="88.0" prefHeight="51.0" prefWidth="520.0" text="Audi">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblModelo" layoutX="220.0" layoutY="146.0" prefHeight="32.0" prefWidth="452.0" text="A5">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblFechaMatriculacion" layoutX="386.0" layoutY="191.0" prefHeight="32.0" prefWidth="322.0" text="02/05/2016">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="79.0" layoutY="229.0" prefHeight="58.0" prefWidth="128.0" text=" - Cliente:">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblCliente" layoutX="219.0" layoutY="233.0" prefHeight="51.0" prefWidth="444.0" text="Sin cliente asociado">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btnRegistrarCliente" layoutX="521.0" layoutY="239.0" mnemonicParsing="false" onAction="#accionRegistrarCliente" prefHeight="40.0" prefWidth="187.0" style="-fx-background-color: green; -fx-background-radius: 30;" text="Añadir Cliente" textFill="WHITE">
                      <font>
                         <Font size="20.0" />
                      </font>
-                  </Label>
-                  <Label layoutX="78.0" layoutY="85.0" prefHeight="35.0" prefWidth="140.0" text=" - Marca:">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="78.0" layoutY="126.0" prefHeight="26.0" prefWidth="94.0" text=" - Modelo:">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="78.0" layoutY="165.0" prefHeight="18.0" prefWidth="331.0" text=" - Fecha de Matriculacion:">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblMatricula" layoutX="193.0" layoutY="54.0" prefHeight="18.0" prefWidth="208.0" text="5432JRD">
-                     <font>
-                        <Font size="17.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblMarca" layoutX="162.0" layoutY="90.0" prefHeight="18.0" prefWidth="208.0" text="Audi">
-                     <font>
-                        <Font size="17.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblModelo" layoutX="184.0" layoutY="128.0" prefHeight="18.0" prefWidth="208.0" text="A5">
-                     <font>
-                        <Font size="17.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblFechaMatriculacion" layoutX="320.0" layoutY="167.0" prefHeight="18.0" prefWidth="208.0" text="02/05/2016">
-                     <font>
-                        <Font size="17.0" />
-                     </font>
-                  </Label>
+                  </Button>
                </children>
                <effect>
                   <DropShadow />
@@ -96,14 +102,9 @@
             </Pane>
             <Pane fx:id="panelInicial" prefHeight="200.0" prefWidth="563.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-border-width: 1;">
                <children>
-                  <Label layoutX="95.0" layoutY="71.0" prefHeight="97.0" prefWidth="460.0" style="-fx-text-fill: #555555;" text="No hay resultados del vehiculo seleccionado...." textFill="#998a8a">
+                  <Label layoutX="33.0" layoutY="97.0" prefHeight="214.0" prefWidth="734.0" style="-fx-text-fill: #555555;" text="No hay resultados del vehiculo seleccionado...." textFill="#998a8a">
                      <font>
-                        <Font name="Century Schoolbook Italic" size="21.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="-4.0" layoutY="-5.0" prefHeight="39.0" prefWidth="648.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="     Datos del Vehiculo" textFill="#fcf9f9">
-                     <font>
-                        <Font name="Century Schoolbook" size="16.0" />
+                        <Font name="Century Schoolbook Italic" size="35.0" />
                      </font>
                   </Label>
                </children>
@@ -113,13 +114,27 @@
             </Pane>
          </children>
       </StackPane>
-      <Button fx:id="btnIniciarInspeccion" disable="true" layoutX="220.0" layoutY="607.0" mnemonicParsing="false" onAction="#accionIniciarInspeccion" prefHeight="39.0" prefWidth="505.0" style="-fx-background-radius: 10px; -fx-background-color: #bf820d;" text="Realizar Inspección">
+      <Button fx:id="btnIniciarInspeccion" disable="true" layoutX="257.0" layoutY="685.0" minHeight="16.0" mnemonicParsing="false" onAction="#accionIniciarInspeccion" prefHeight="40.0" prefWidth="706.0" style="-fx-background-radius: 20px; -fx-background-color: #bf820d;" text="Realizar Inspección" textFill="WHITE">
          <font>
-            <Font name="Century Schoolbook" size="12.0" />
-         </font></Button>
-      <Label layoutX="167.0" layoutY="14.0" prefHeight="62.0" prefWidth="656.0" style="-fx-text-fill: #bf820d;" text="Panel del Administrador" textFill="#bf820d">
+            <Font name="Century Schoolbook" size="20.0" />
+         </font>
+      </Button>
+      <Label layoutX="301.0" layoutY="-9.0" prefHeight="100.0" prefWidth="772.0" style="-fx-text-fill: #bf820d;" text="Panel del Técnico" textFill="#bf820d">
          <font>
-            <Font name="Century Schoolbook" size="54.0" />
+            <Font name="Century Schoolbook" size="80.0" />
+         </font>
+      </Label>
+      <Pane layoutX="919.0" layoutY="152.0" prefHeight="365.0" prefWidth="242.0" style="-fx-border-color: black; -fx-background-color: #DBDBDB; -fx-border-radius: 15;">
+         <children>
+            <Label layoutX="-7.0" layoutY="-6.0" prefHeight="46.0" prefWidth="262.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="    Inspecciones Anteriores" textFill="WHITE">
+               <font>
+                  <Font name="Century Schoolbook" size="20.0" />
+               </font>
+            </Label>
+         </children></Pane>
+      <Label layoutX="29.0" layoutY="308.0" prefHeight="53.0" prefWidth="832.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="     Datos del Vehiculo" textFill="#fcf9f9">
+         <font>
+            <Font size="20.0" />
          </font>
       </Label>
    </children>

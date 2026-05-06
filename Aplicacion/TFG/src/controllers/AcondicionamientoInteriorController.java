@@ -44,10 +44,10 @@ public class AcondicionamientoInteriorController {
 
     private boolean hayFallos(){
         
-        //Variable para almacenar si ha seleccionado alguno
+        // Variable para almacenar si ha seleccionado alguno
         boolean fallos = false;
 
-        //Comprobar si hay check seleccionados
+        // Comprobar si hay check seleccionados
         if(chkCinturones.isSelected() || chkVelocidad.isSelected() || chkAsientos.isSelected() || chkCarga.isSelected()){
             fallos = true;
         }
@@ -62,15 +62,15 @@ public class AcondicionamientoInteriorController {
     @FXML
     private void gestionarCheck() {
 
-        //Variable para almacenar si ha seleccionado alguno
+        // Variable para almacenar si ha seleccionado alguno
         boolean fallos = hayFallos();
 
-        //Si hay fallos habilitamos la caja de texto
+        // Si hay fallos habilitamos la caja de texto
         if(fallos){
             txtObservaciones.setDisable(false);
         }
 
-        //Si desmarca todos los checkboxs volvemos a deshabilitar
+        // Si desmarca todos los checkboxs volvemos a deshabilitar
         if(!fallos){
             txtObservaciones.setDisable(true);
         }
@@ -83,19 +83,25 @@ public class AcondicionamientoInteriorController {
     @FXML
     private void accionSiguiente(ActionEvent event) {
 
-        //Si se han marcado checkboxs guardamos el resultado como false
-        BufferInspeccion.getInspeccionActual().setAcondicionamientoInterior(hayFallos());
+        // Si se han marcado checkboxs guardamos el resultado como false
+        BufferInspeccion.getInspeccionActual().setAcondicionamientoInterior(!hayFallos());
 
-        //Guardamos las observaciones
+        // Guardamos los checkboxs
+        BufferInspeccion.getChecksMarcados().put("cinturones", chkCinturones.isSelected());
+        BufferInspeccion.getChecksMarcados().put("velocidad", chkVelocidad.isSelected());
+        BufferInspeccion.getChecksMarcados().put("asientos", chkAsientos.isSelected());
+        BufferInspeccion.getChecksMarcados().put("carga", chkCarga.isSelected());
+        
+        // Guardamos las observaciones
         String texto = txtObservaciones.getText().trim();
     
         if (!texto.isEmpty()) {
-            BufferInspeccion.getInspeccionActual().setObservaciones("[INTERIOR]: " + texto);
+            BufferInspeccion.guardarObservacion(1,"[ACONDICIONAMIENTO INTERIOR]: " +texto);
         } else {
-            BufferInspeccion.getInspeccionActual().setObservaciones("");
+            BufferInspeccion.guardarObservacion(1,"");
         }
 
-        //Cambiamos de ventana        
+        // Cambiamos de ventana        
         Utilities.abrirVentana("/vistas/AlumbradoySenializacion.fxml", "Alumbrado y Señalización");
 
         Utilities.cerrarVentana(event);      

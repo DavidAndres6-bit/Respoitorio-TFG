@@ -40,12 +40,13 @@ public class AcondicionamientoExteriorController {
     /*
     *   Funcion que comprueba si hay checkboxs marcados
     */
+
     private boolean hayFallos(){
         
-        //Variable para almacenar si ha seleccionado alguno
+        // Variable para almacenar si ha seleccionado alguno
         boolean fallos = false;
 
-        //Comprobar si hay check seleccionados
+        // Comprobar si hay check seleccionados
         if(chkRetrovisores.isSelected() || chkLimpia.isSelected() || chkChasis.isSelected() || chkProtecciones.isSelected()){
             fallos = true;
         }
@@ -61,15 +62,15 @@ public class AcondicionamientoExteriorController {
     @FXML
     private void gestionarCheck() {
 
-        //Variable para almacenar si ha seleccionado alguno
+        // Variable para almacenar si ha seleccionado alguno
         boolean fallos = hayFallos();
 
-        //Si hay fallos habilitamos la caja de texto
+        // Si hay fallos habilitamos la caja de texto
         if(fallos){
             txtObservaciones.setDisable(false);
         }
 
-        //Si desmarca todos los checkboxs volvemos a deshabilitar
+        // Si desmarca todos los checkboxs volvemos a deshabilitar
         if(!fallos){
             txtObservaciones.setDisable(true);
         }
@@ -82,19 +83,26 @@ public class AcondicionamientoExteriorController {
     @FXML
     private void accionSiguiente(ActionEvent event) {
 
-        //Si se han marcado checkboxs guardamos el resultado como false
-        BufferInspeccion.getInspeccionActual().setAcondicionamientoExterior(hayFallos());
+        // Si se han marcado checkboxs guardamos el resultado como false
+        BufferInspeccion.getInspeccionActual().setAcondicionamientoExterior(!hayFallos());
 
-        //Guardamos las observaciones
+        // Guardamos los checkboxs
+        BufferInspeccion.getChecksMarcados().put("retrovisores", chkRetrovisores.isSelected());
+        BufferInspeccion.getChecksMarcados().put("limpia", chkLimpia.isSelected());
+        BufferInspeccion.getChecksMarcados().put("chasis", chkChasis.isSelected());
+        BufferInspeccion.getChecksMarcados().put("protecciones", chkProtecciones.isSelected());
+
+
+        // Guardamos las observaciones
         String texto = txtObservaciones.getText().trim();
     
         if (!texto.isEmpty()) {
-            BufferInspeccion.getInspeccionActual().setObservaciones("[EXTERIOR]: " + texto);
+            BufferInspeccion.guardarObservacion(0,"[ACONDICIONAMIENTO EXTERIOR]: " +texto);
         } else {
-            BufferInspeccion.getInspeccionActual().setObservaciones("");
+            BufferInspeccion.guardarObservacion(0,"");
         }
-
-        //Cambiamos de ventana        
+       
+        // Cambiamos de ventana        
         Utilities.abrirVentana("/vistas/AcondicionamientoInterior.fxml", "Acondicionamiento Interior");
 
         Utilities.cerrarVentana(event);

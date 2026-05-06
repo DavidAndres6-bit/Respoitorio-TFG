@@ -82,19 +82,33 @@ public class EjesRuedasController {
     @FXML
     private void accionSiguiente(ActionEvent event) {
 
-        //Si se han marcado checkboxs guardamos el resultado como false
-        BufferInspeccion.getInspeccionActual().setEjesRuedasNeumaticos(hayFallos());
+        // Si se han marcado checkboxs guardamos el resultado como false
+        BufferInspeccion.getInspeccionActual().setEjesRuedasNeumaticos(!hayFallos());
 
-        //Guardamos las observaciones
+        // Guardamos los Checkboxs
+        BufferInspeccion.getChecksMarcados().put("ejes", chkEjes.isSelected());
+        BufferInspeccion.getChecksMarcados().put("neumaticos", chkNeumaticos.isSelected());
+        BufferInspeccion.getChecksMarcados().put("ruedas", chkRuedas.isSelected());
+        BufferInspeccion.getChecksMarcados().put("suspension", chkSuspension.isSelected());
+
+        // Guardamos las observaciones
         String texto = txtObservaciones.getText().trim();
     
         if (!texto.isEmpty()) {
-            BufferInspeccion.getInspeccionActual().setObservaciones("[EJES,RUEDAS,NEUMATICOS Y SUSPENSIÓN]: " + texto);
+            BufferInspeccion.guardarObservacion(6,"[EJES RUEDAS NEUMATICOS SUSPENSION]: " +texto);
         } else {
-            BufferInspeccion.getInspeccionActual().setObservaciones("");
+            BufferInspeccion.guardarObservacion(6,"");
         }
 
-        //Cambiamos de ventana
+        // --- DEBUG ---
+System.out.println("========================================");
+System.out.println("PANTALLA: Acondicionamiento Exterior");
+System.out.println("¿APARTADO APTO?: " + !hayFallos()); // Si no hay fallos, es true (apto)
+System.out.println("MAPA DE CHECKS (Tamaño): " + BufferInspeccion.getChecksMarcados().size());
+System.out.println("DETALLE CHECKS: " + BufferInspeccion.getChecksMarcados().toString());
+System.out.println("========================================");
+
+        // Cambiamos de ventana
         Utilities.abrirVentana("/vistas/MotoryTransmision.fxml", "MOTOR Y TRANSMISIÓN");
 
         Utilities.cerrarVentana(event);

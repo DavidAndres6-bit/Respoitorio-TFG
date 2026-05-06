@@ -26,11 +26,10 @@
          <children>
             <TableView fx:id="tablaUsuarios" prefHeight="341.0" prefWidth="804.0" style="-fx-background-color: #E0E0E0;">
             <columns>
-               <TableColumn fx:id="colUsuario" prefWidth="139.99999237060547" text="Usuario" />
-               <TableColumn fx:id="colContrasenia" prefWidth="122.39996337890625" text="Contraseña" />
-               <TableColumn fx:id="colCorreo" minWidth="5.60003662109375" prefWidth="261.6000671386719" text="Correo Electrónico" />
-               <TableColumn fx:id="colTelefono" minWidth="0.0" prefWidth="121.5999755859375" text="Telefono" />
-               <TableColumn fx:id="colRol" prefWidth="157.5999755859375" text="Rol" />
+               <TableColumn fx:id="colUsuario" prefWidth="198.39998626708984" text="Usuario" />
+               <TableColumn fx:id="colCorreo" minWidth="5.60003662109375" prefWidth="204.0" text="Correo Electrónico" />
+               <TableColumn fx:id="colTelefono" minWidth="0.0" prefWidth="168.80001831054688" text="Telefono" />
+               <TableColumn fx:id="colRol" prefWidth="231.199951171875" text="Rol" />
             </columns>
             </TableView>
          </children>

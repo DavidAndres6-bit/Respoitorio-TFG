@@ -43,10 +43,10 @@ public class FrenosController {
 
     private boolean hayFallos(){
         
-        //Variable para almacenar si ha seleccionado alguno
+        // Variable para almacenar si ha seleccionado alguno
         boolean fallos = false;
 
-        //Comprobar si hay check seleccionados
+        // Comprobar si hay check seleccionados
         if(chkTambores.isSelected() || chkEstacionamiento.isSelected() || chkServicio.isSelected() || chkDispoFrenado.isSelected()){
             fallos = true;
         }
@@ -61,15 +61,15 @@ public class FrenosController {
     @FXML
     private void gestionarCheck() {
 
-        //Variable para almacenar si ha seleccionado alguno
+        // Variable para almacenar si ha seleccionado alguno
         boolean fallos = hayFallos();
 
-        //Si hay fallos habilitamos la caja de texto
+        // Si hay fallos habilitamos la caja de texto
         if(fallos){
             txtObservaciones.setDisable(false);
         }
 
-        //Si desmarca todos los checkboxs volvemos a deshabilitar
+        // Si desmarca todos los checkboxs volvemos a deshabilitar
         if(!fallos){
             txtObservaciones.setDisable(true);
         }
@@ -82,21 +82,27 @@ public class FrenosController {
     @FXML
     private void accionSiguiente(ActionEvent event) {
 
-        //Si se han marcado checkboxs guardamos el resultado como false
-        BufferInspeccion.getInspeccionActual().setFrenos(hayFallos());
+        // Si se han marcado checkboxs guardamos el resultado como false
+        BufferInspeccion.getInspeccionActual().setFrenos(!hayFallos());
 
-        //Guardamos las observaciones
+        // Guardamos los checkboxs
+        BufferInspeccion.getChecksMarcados().put("tambores", chkTambores.isSelected());
+        BufferInspeccion.getChecksMarcados().put("estacionamiento", chkEstacionamiento.isSelected());
+        BufferInspeccion.getChecksMarcados().put("servicio", chkServicio.isSelected());
+        BufferInspeccion.getChecksMarcados().put("dispoFrenado", chkDispoFrenado.isSelected());
+
+
+        // Guardamos las observaciones
         String texto = txtObservaciones.getText().trim();
     
         if (!texto.isEmpty()) {
-            BufferInspeccion.getInspeccionActual().setObservaciones("[FRENOS]: " + texto);
+            BufferInspeccion.guardarObservacion(4, "[FRENOS]: " + texto);
         } else {
-            BufferInspeccion.getInspeccionActual().setObservaciones("");
+            BufferInspeccion.guardarObservacion(4, "");
         }
 
-        //Cambiamos de ventana
+        // Cambiamos de ventana
         Utilities.cerrarVentana(event);
-
 
         Utilities.abrirVentana("/vistas/Direccion.fxml", "Dirección");
 

@@ -1,30 +1,23 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 7.5pt;
+            font-size: 7pt;
             color: #000;
             line-height: 1.1;
+            margin: 0;
+            padding: 0;
         }
 
         /* Cabecera */
         .header-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
-        }
-
-        .logo-cyl {
-            width: 180px;
-        }
-
-        .logo-app {
-            width: 150px;
-            text-align: right;
+            margin-bottom: 5px;
         }
 
         .titulo-central {
@@ -37,49 +30,52 @@
         .section-header {
             background-color: #e0e0e0;
             border: 1px solid #000;
-            padding: 3px 5px;
+            padding: 2px 5px;
             font-weight: bold;
-            font-size: 8.5pt;
-            margin-top: 18px;
+            font-size: 8pt;
+            margin-top: 8px;
         }
 
         .data-container {
             border: 1px solid #000;
             border-top: none;
-            padding: 5px;
+            padding: 4px;
         }
 
-        /* Estructura de la Sección B con la tabla por apartados */
+        /* Estructura Sección B (3 columnas fijas) */
         .grid-inspeccion {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
 
         .grid-inspeccion td {
             border: 0.5px solid #000;
-            padding: 4px;
-            width: 33.3%;
+            padding: 0;
             vertical-align: top;
+            width: 33.3%;
         }
 
         .sub-titulo {
             font-weight: bold;
             background-color: #f2f2f2;
-            display: block;
             border-bottom: 0.5px solid #000;
-            margin-bottom: 3px;
-            padding: 1px;
+            padding: 2px 4px;
+            display: block;
+            font-size: 7pt;
         }
 
-        .item-inspeccion {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-left: 5px;
-            padding: 3px;
-            font-size: 7pt;
-            border-bottom: 4px solid #eee;
+        /* Tabla interna para los items (Evita el descuadre de alineación) */
+        .tabla-items {
+            width: 100%;
+            border-collapse: collapse;
         }
+        .tabla-items td {
+            border: none !important;
+            padding: 1.5px 4px !important;
+            font-size: 6.5pt;
+        }
+        .item-val { text-align: right; font-weight: bold; width: 35px; }
 
         /* Tablas de datos generales */
         .tabla-datos {
@@ -89,28 +85,18 @@
 
         .tabla-datos td {
             border: 0.5px solid #ccc;
-            padding: 3px;
+            padding: 2px 4px;
         }
 
         .label {
             font-weight: bold;
-            font-size: 12px;
+            font-size: 7pt;
             color: #444;
             display: block;
         }
 
         .value {
-            font-size: 8.5pt;
-            font-weight: bold;
-        }
-
-        /* Resultado */
-        .resultado-final {
-            text-align: center;
-            border: 2px solid #000;
-            margin-top: 15px;
-            padding: 15px;
-            font-size: 16pt;
+            font-size: 8pt;
             font-weight: bold;
         }
     </style>
@@ -120,9 +106,9 @@
 
     <table class="header-table">
         <tr>
-            <td class="logo-cyl"><img src="../img/logoCYL.png" style="width: 180px;"></td>
-            <td class="titulo-central">INFORME DE INSPECCIÓN<br>TÉCNICA DE VEHÍCULOS</td>
-            <td class="logo-app"><img src="../img/Logo_app.png" style="width: 150px;"></td>
+            <td style="width: 180px;"><img src="../img/logoCYL.png" style="width: 180px;" /></td>
+            <td class="titulo-central">INFORME DE INSPECCIÓN<br />TÉCNICA DE VEHÍCULOS</td>
+            <td style="width: 150px; text-align: right;"><img src="../img/Logo_app.png" style="width: 150px;" /></td>
         </tr>
     </table>
 
@@ -131,29 +117,22 @@
         <table class="tabla-datos">
             <tr>
                 <td><span class="label">Código Estación:</span><span class="value">27</span></td>
-                <td><span class="label">(3) Grupo:</span><span class="value">GRUPO ITV Cyl Valladolid 47012</span></td>
-                <td><span class="label">(2) Matrícula:</span><span class="value" th:text="${matricula}">0760FBT</span>
-                </td>
+                <td><span class="label">(3) Grupo:</span><span class="value">GRUPO ITV Cyl Valladolid</span></td>
+                <td><span class="label">(2) Matrícula:</span><span class="value" th:text="${matricula}">---</span></td>
+                <td><span class="label">DNI Cliente:</span><span class="value" th:text="${dniCliente}">---</span></td>
+                <td><span class="label">Nombre Cliente:</span><span class="value" th:text="${nombreCliente}">---</span></td>
             </tr>
             <tr>
-                <td><span class="label">Marca/Modelo:</span><span class="value" th:text="${marcaModelo}">Seat Leon 1.9
-                        TDI</span></td>
-
-                <td><span class="label">Tipo de Vehiculo:</span><span class="value"
-                        th:text="${tipoVehiculo}">Turismo</span></td>
-                <td><span class="label">Fecha 1ª Matrículación:</span><span class="value"
-                        th:text="${fechaMatrculacion}">21/04/2006</span></td>
-                <td><span class="label">Lectura del cuentakilometros:</span><span class="value"
-                        th:text="${kmActuales}">155.345</span></td>
+                <td colspan="2"><span class="label">Marca/Modelo:</span><span class="value" th:text="${marcaModelo}">---</span></td>
+                <td><span class="label">Tipo Vehículo:</span><span class="value" th:text="${tipoVehiculo}">---</span></td>
+                <td><span class="label">Fecha 1ª Matrículación:</span><span class="value" th:text="${fechaMatriculacion}">---</span></td>
+                <td><span class="label">Kilómetros:</span><span class="value" th:text="${kmActuales}">---</span></td>
             </tr>
             <tr>
-                <td><span class="label">Informe ITV nº:</span><span class="value" th:text="${numInforme}">1</span></td>
-                <td><span class="label">Tarifa:</span><span class="value" th:text="${tarifa}">58,73€</span></td>
-                <td><span class="label">(4) Fecha de la Inspección:</span><span class="value"
-                        th:text="${fechaInspeccion}">27/04/2026</span></td>
-                <td><span class="label">(8) Fecha de la Siguiente Inspección:</span><span class="value"
-                        th:text="${fechaProximaInspeccion}">27/04/2027</span>
-                </td>
+                <td><span class="label">Informe ITV nº:</span><span class="value" th:text="${numInforme}">---</span></td>
+                <td><span class="label">Tarifa:</span><span class="value" th:text="${tarifa}">---</span></td>
+                <td><span class="label">(4) Fecha Inspección:</span><span class="value" th:text="${fechaInspeccion}">---</span></td>
+                <td colspan="2"><span class="label">(8) Fecha Próxima Inspección:</span><span class="value" th:text="${fechaProximaInspeccion}">---</span></td>
             </tr>
         </table>
     </div>
@@ -162,158 +141,82 @@
     <div class="data-container" style="padding: 0;">
         <table class="grid-inspeccion">
             <tr>
-                <td style="width: 33%; vertical-align: top;">
+                <td>
                     <span class="sub-titulo">0.1 IDENTIFICACIÓN</span>
-                    <span class="item-inspeccion">01.01 Documentación
-						<b>A/B</b>
-					</span>
-					
-                    <span class="item-inspeccion">01.02 Placa Matrícula
-						<b>A/B</b>
-					</span>
-					
-                    <span class="item-inspeccion">01.03 Kilómetros Actuales
-						<b>A/B</b>
-					</span>
+                    <table class="tabla-items">
+                        <tr><td>01.01 Documentación</td><td class="item-val">B</td></tr>
+                        <tr><td>01.02 Placa Matrícula</td><td class="item-val">B</td></tr>
+                        <tr><td>01.03 Kilómetros Actuales</td><td class="item-val">B</td></tr>
+                    </table>
+                    
+                    <span class="sub-titulo">0.2 ACOND. EXTERIOR</span>
+                    <table class="tabla-items">
+                        <tr><td>02.01 Retrovisores</td><td class="item-val" th:text="${detalles.retrovisores ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>02.02 Chasis</td><td class="item-val" th:text="${detalles.chasis ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>02.03 Limpia y Lavaparabr.</td><td class="item-val" th:text="${detalles.limpia ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>02.04 Protecciones</td><td class="item-val" th:text="${detalles.protecciones ? 'X' : 'N/A'}">N/A</td></tr>
+                    </table>
 
-                    <span class="sub-titulo" style="margin-top:10px;">0.2 ACOND. EXTERIOR</span>
-                    <span class="item-inspeccion">02.01 Retrovisores
-                        <b
-                            th:text="${detalles.retrovisores != null ? (detalles.retrovisores ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">02.02 Chasis
-                        <b th:text="${detalles.chasis != null ? (detalles.chasis ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">02.03 Limpia y Lavaparabr
-                        <b th:text="${detalles.limpia != null ? (detalles.limpia ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">02.04 Protecciones
-                        <b
-                            th:text="${detalles.protecciones != null ? (detalles.protecciones ? 'X' : 'N/A') : 'N/A'}">N/A</b>
-                    </span>
-
-                    <span class="sub-titulo" style="margin-top:10px;">0.3 ACONDICIONAMIENTO INTERIOR</span>
-                    <span class="item-inspeccion">03.01 Asientos y Anclajes
-                        <b th:text="${detalles.asientos != null ? (detalles.asientos ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">03.02 Cinturones
-                        <b
-                            th:text="${detalles.cinturones != null ? (detalles.cinturones ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">03.03 Indicador Velo Cuenta
-                        <b th:text="${detalles.indicador != null ? (detalles.indicador ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">03.04 Retención Carga
-                        <b th:text="${detalles.retencion != null ? (detalles.retencion ? 'X' : 'N/A') : 'N/A'}">N/A</b>
-                    </span>
+                    <span class="sub-titulo">0.3 ACOND. INTERIOR</span>
+                    <table class="tabla-items">
+                        <tr><td>03.01 Asientos y Anclajes</td><td class="item-val" th:text="${detalles.asientos ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>03.02 Cinturones</td><td class="item-val" th:text="${detalles.cinturones ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>03.03 Velocímetro</td><td class="item-val" th:text="${detalles.indicador ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>03.04 Retención Carga</td><td class="item-val" th:text="${detalles.retencion ? 'X' : 'N/A'}">N/A</td></tr>
+                    </table>
                 </td>
 
-                <td style="width: 33%; vertical-align: top;">
-                    <span class="sub-titulo">0.4 ALUMBRADO Y SEÑALIZACIÓN</span>
-                    <span class="item-inspeccion">04.01 Luz de cruce
-                        <b th:text="${detalles.luzCruce != null ? (detalles.luzCruce ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">04.02 Luz de carretera
-                        <b
-                            th:text="${detalles.luzCarretera != null ? (detalles.luzCarretera  ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">04.03 Intermitentes
-                        <b
-                            th:text="${detalles.intermitentes != null ? (detalles.intermitentes ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">04.04 Luces Antiniebla
-                        <b
-                            th:text="${detalles.luzAntiniebla != null ? (detalles.luzAntiniebla ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">04.05 Luz de Marcha Atrás
-                        <b
-                            th:text="${detalles.luzMarchaAtras != null ? (detalles.luzMarchaAtras ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">04.06 Luz de Freno
-                        <b th:text="${detalles.luzFreno != null ? (detalles.luzFreno ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
+                <td>
+                    <span class="sub-titulo">0.4 ALUMBRADO</span>
+                    <table class="tabla-items">
+                        <tr><td>04.01 Luz de cruce</td><td class="item-val" th:text="${detalles.luzCruce ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>04.02 Luz de carretera</td><td class="item-val" th:text="${detalles.luzCarretera ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>04.03 Intermitentes</td><td class="item-val" th:text="${detalles.intermitentes ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>04.04 Antiniebla</td><td class="item-val" th:text="${detalles.luzAntiniebla ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>04.05 Marcha Atrás</td><td class="item-val" th:text="${detalles.luzMarchaAtras ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>04.06 Luz de Freno</td><td class="item-val" th:text="${detalles.luzFreno ? 'X' : 'B'}">B</td></tr>
+                    </table>
 
-                    <span class="sub-titulo" style="margin-top:10px;">0.5 EMISIONES CONTAMINANTES</span>
-                    <span class="item-inspeccion">05.01 Opacidad
-                        <b th:text="${resOpacidad}"
-                            th:style="${resOpacidad == 'X' ? 'color: red;' : (resOpacidad == 'S' ? 'color: green;' : 'color: #999;')}">N/A</b>
-                    </span>
-                    <span class="item-inspeccion">05.02 CO Ralentí
-                        <b th:text="${resRalenti}"
-                            th:style="${resRalenti == 'X' ? 'color: red;' : (resRalenti == 'S' ? 'color: green;' : 'color: #999;')}">N/A</b>
-                    </span>
-                    <span class="item-inspeccion">05.02 CO Ralentí Aced.
-                        <b th:text="${resRalentiAcelerado}"
-                            th:style="${resRalentiAcelerado == 'X' ? 'color: red;' : (resRalentiAcelerado == 'S' ? 'color: green;' : 'color: #999;')}">N/A</b>
-                    </span>
+                    <span class="sub-titulo">0.5 EMISIONES</span>
+                    <table class="tabla-items">
+                        <tr><td>05.01 Opacidad</td><td class="item-val" th:text="${opacidad}">N/A</td></tr>
+                        <tr><td>05.02 CO Ralentí</td><td class="item-val" th:text="${resRalenti}">N/A</td></tr>
+                        <tr><td>05.03 CO Ralentí Acc.</td><td class="item-val" th:text="${resRalentiAcelerado}">N/A</td></tr>
+                    </table>
 
-                    <span class="sub-titulo" style="margin-top:10px;">0.6 FRENOS</span>
-                    <span class="item-inspeccion">06.01 Tambores Discos
-                        <b th:text="${detalles.tambores != null ? (detalles.tambores ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">06.02 Freno Estacionamiento
-                        <b
-                            th:text="${detalles.estacionamiento != null ? (detalles.estacionamiento ? 'X' : 'N/A') : 'N/A'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">06.03 Freno de Servicio
-                        <b th:text="${detalles.servicio != null ? (detalles.servicio ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">06.04 Pedal Disp. Frenado
-                        <b
-                            th:text="${detalles.dispoFrenado != null ? (detalles.dispoFrenado ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
+                    <span class="sub-titulo">0.6 FRENOS</span>
+                    <table class="tabla-items">
+                        <tr><td>06.01 Tambores/Discos</td><td class="item-val" th:text="${detalles.tambores ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>06.02 Estacionamiento</td><td class="item-val" th:text="${detalles.estacionamiento ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>06.03 Servicio</td><td class="item-val" th:text="${detalles.servicio ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>06.04 Pedal Disp. Frenado</td><td class="item-val" th:text="${detalles.dispoFrenado ? 'X' : 'B'}">B</td></tr>
+                    </table>
                 </td>
 
-                <td style="width: 33%; vertical-align: top;">
+                <td>
                     <span class="sub-titulo">0.7 DIRECCIÓN</span>
-                    <span class="item-inspeccion">07.01 Desviación de Ruedas
-                        <b
-                            th:text="${detalles.desviacion != null ? (detalles.desviacion ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">07.02 Volante Columna Direc.
-                        <b th:text="${detalles.volante != null ? (detalles.volante ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">07.03 Caja de Dirección
-                        <b th:text="${detalles.caja != null ? (detalles.caja ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">07.04 Servodirección
-                        <b
-                            th:text="${detalles.servodireccion != null ? (detalles.servodireccion ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
+                    <table class="tabla-items">
+                        <tr><td>07.01 Desviación Ruedas</td><td class="item-val" th:text="${detalles.desviacion ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>07.02 Volante Columna</td><td class="item-val" th:text="${detalles.volante ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>07.03 Caja Dirección</td><td class="item-val" th:text="${detalles.caja ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>07.04 Servodirección</td><td class="item-val" th:text="${detalles.servodireccion ? 'X' : 'B'}">B</td></tr>
+                    </table>
 
-                    <span class="sub-titulo" style="margin-top:10px;">0.8 EJES, RUEDAS, NEUMÁTICOS</span>
-                    <span class="item-inspeccion">08.01 Ejes
-                        <b th:text="${detalles.ejes != null ? (detalles.ejes ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">08.02 Ruedas
-                        <b th:text="${detalles.ruedas != null ? (detalles.ruedas ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">08.03 Neumáticos
-                        <b
-                            th:text="${detalles.neumaticos != null ? (detalles.neumaticos ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">08.04 Suspensión
-                        <b
-                            th:text="${detalles.suspension != null ? (detalles.suspension ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
+                    <span class="sub-titulo">0.8 EJES Y RUEDAS</span>
+                    <table class="tabla-items">
+                        <tr><td>08.01 Ejes</td><td class="item-val" th:text="${detalles.ejes ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>08.02 Ruedas</td><td class="item-val" th:text="${detalles.ruedas ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>08.03 Neumáticos</td><td class="item-val" th:text="${detalles.neumaticos ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>08.04 Suspensión</td><td class="item-val" th:text="${detalles.suspension ? 'X' : 'B'}">B</td></tr>
+                    </table>
 
-                    <span class="sub-titulo" style="margin-top:10px;">0.9 MOTOR Y TRANSMISIÓN</span>
-                    <span class="item-inspeccion">09.01 Estado del Motor
-                        <b
-                            th:text="${detalles.estadoMotor != null ? (detalles.estadoMotor ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">09.02 Sistema de Escape
-                        <b
-                            th:text="${detalles.sistemaEscape != null ? (detalles.sistemaEscape ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">09.03 Transmisión
-                        <b
-                            th:text="${detalles.transmision != null ? (detalles.transmision ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
-                    <span class="item-inspeccion">09.04 Alimentación
-                        <b
-                            th:text="${detalles.alimentacion != null ? (detalles.alimentacion ? 'X' : 'B') : 'B'}">B</b>
-                    </span>
+                    <span class="sub-titulo">0.9 MOTOR</span>
+                    <table class="tabla-items">
+                        <tr><td>09.01 Estado Motor</td><td class="item-val" th:text="${detalles.estadoMotor ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>09.02 Escape</td><td class="item-val" th:text="${detalles.sistemaEscape ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>09.03 Transmisión</td><td class="item-val" th:text="${detalles.transmision ? 'X' : 'B'}">B</td></tr>
+                        <tr><td>09.04 Alimentación</td><td class="item-val" th:text="${detalles.alimentacion ? 'X' : 'B'}">B</td></tr>
+                    </table>
                 </td>
             </tr>
         </table>
@@ -323,11 +226,9 @@
     <div class="data-container">
         <table class="tabla-datos">
             <tr>
-                <td><span class="label">Opacidad:</span><span class="value" th:text="${opacidad}">0,03 m-1</span></td>
-                <td><span class="label">CO Ralentí:</span><span class="value"
-                        th:text="${resRalenti}"></span>>0,01%</span></td>
-                <td><span class="label">CO Ralentí Acelerado:</span><span class="value"
-                        th:text="${resRalentiAcelerado}">---</span></td>
+                <td><span class="label">Opacidad:</span><span class="value" th:text="${opacidad}">---</span></td>
+                <td><span class="label">CO Ralentí:</span><span class="value" th:text="${resRalenti}">---</span></td>
+                <td><span class="label">CO Ralentí Acelerado:</span><span class="value" th:text="${resRalentiAcelerado}">---</span></td>
             </tr>
         </table>
     </div>
@@ -338,54 +239,38 @@
             <thead>
                 <tr style="background-color: #f2f2f2;">
                     <th style="border: 0.5px solid #000; padding: 4px; text-align: left; width: 15%;">Unidad</th>
-                    <th style="border: 0.5px solid #000; padding: 4px; text-align: left; width: 65%;">Descripción del
-                        defecto</th>
+                    <th style="border: 0.5px solid #000; padding: 4px; text-align: left; width: 65%;">Descripción del defecto</th>
                     <th style="border: 0.5px solid #000; padding: 4px; text-align: left; width: 20%;">Calificación</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td style="border: 0.5px solid #000; padding: 4px;" th:text="${defectoCodigo}">02.01</td>
-                    <td style="border: 0.5px solid #000; padding: 4px;" th:text="${defectoDescripcion}">Carcasa de
-                        retrovisor izquierdo con fijación deficiente.</td>
-                    <td style="border: 0.5px solid #000; padding: 4px; font-weight: bold;"
-                        th:text="${defectoCalificacion}">LEVE</td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(defectos)}">
-                    <td colspan="3" style="border: 0.5px solid #000; padding: 10px; text-align: center; color: #666;">
-                        No se han detectado defectos en la inspección.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                <tr th:each="def : ${defectos}">
+                <td style="border: 0.5px solid #000; padding: 4px;" th:text="${def.unidad}">---</td>
+                <td style="border: 0.5px solid #000; padding: 4px;" th:text="${def.descripcion}">---</td>
+                <td style="border: 0.5px solid #000; padding: 4px; font-weight: bold;" th:text="${def.calificacion}">---</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(defectos)}">
+                <td colspan="3" style="border: 0.5px solid #000; padding: 4px; text-align: center;">Sin defectos detectados</td>
+            </tr>
+                    </tbody>
+                </table>
+            </div>
 
-    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+    <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
         <tr>
-            <td
-                style="background-color: #e0e0e0; border: 1px solid #000; padding: 3px 10px; font-weight: bold; font-size: 8.5pt; width: auto; white-space: nowrap;">
+            <td style="width: 60%; background-color: #e0e0e0; border: 1px solid #000; padding: 4px; font-weight: bold;">
                 E Resultado de la Inspección
             </td>
-
-            <td style="width: 15px;"></td>
-
-            <td th:text="${resultadoFinal}"
-                style="border: 2px solid #000; background-color: #ffffff; color: #000; padding: 2px 20px; font-size: 10pt; font-weight: bold; text-align: center; width: 100px;">
-                FAVORABLE
+            <td style="width: 20px; border: none;"></td>
+            <td style="border: 2.5px solid #000; padding: 6px 30px; text-align: center; width: 40%;">
+                <span style="font-size: 13pt; font-weight: bold;" th:text="${resultadoFinal}">FAVORABLE</span>
             </td>
-
-            <td></td>
-        </tr>
+            <td></td> </tr>
     </table>
 
+    <div class="section-header">(10) Observaciones</div>
     <div class="data-container">
-        <div style="font-size: 8pt;">
-            <span class="label">(10) Observaciones:</span>
-            <div style="min-height: 40px; padding-top: 5px;" th:text="${observaciones}">
-                Freno de estacionamiento eléctrico comprobado en placa de holguras.
-            </div>
-        </div>
+        <div style="min-height: 35px; font-size: 8pt;" th:utext="${observaciones}">Ninguna</div>
     </div>
 </body>
-
 </html>

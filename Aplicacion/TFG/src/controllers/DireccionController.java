@@ -30,6 +30,7 @@ public class DireccionController {
 
     @FXML
     public void initialize() {
+        
         // Cargar datos del buffer
         if (BufferInspeccion.getVehiculoActual() != null) {
             lblMatricula.setText(BufferInspeccion.getVehiculoActual().getMatricula());
@@ -43,10 +44,10 @@ public class DireccionController {
 
     private boolean hayFallos(){
         
-        //Variable para almacenar si ha seleccionado alguno
+        // Variable para almacenar si ha seleccionado alguno
         boolean fallos = false;
 
-        //Comprobar si hay check seleccionados
+        // Comprobar si hay check seleccionados
         if(chkDesviacion.isSelected() || chkDireccion.isSelected() || chkVolanteColumna.isSelected() || chkServoDireccion.isSelected()){
             fallos = true;
         }
@@ -61,15 +62,15 @@ public class DireccionController {
     @FXML
     private void gestionarCheck() {
 
-        //Variable para almacenar si ha seleccionado alguno
+        // Variable para almacenar si ha seleccionado alguno
         boolean fallos = hayFallos();
 
-        //Si hay fallos habilitamos la caja de texto
+        // Si hay fallos habilitamos la caja de texto
         if(fallos){
             txtObservaciones.setDisable(false);
         }
 
-        //Si desmarca todos los checkboxs volvemos a deshabilitar
+        // Si desmarca todos los checkboxs volvemos a deshabilitar
         if(!fallos){
             txtObservaciones.setDisable(true);
         }
@@ -82,19 +83,26 @@ public class DireccionController {
     @FXML
     private void accionSiguiente(ActionEvent event) {
 
-        //Si se han marcado checkboxs guardamos el resultado como false
-        BufferInspeccion.getInspeccionActual().setDireccion(hayFallos());
+        // Si se han marcado checkboxs guardamos el resultado como false
+        BufferInspeccion.getInspeccionActual().setDireccion(!hayFallos());
 
-        //Guardamos las observaciones
+        // Guardamos los checkboxs
+        BufferInspeccion.getChecksMarcados().put("desviacion", chkDesviacion.isSelected());
+        BufferInspeccion.getChecksMarcados().put("direccion", chkDireccion.isSelected());
+        BufferInspeccion.getChecksMarcados().put("volanteColumna", chkVolanteColumna.isSelected());
+        BufferInspeccion.getChecksMarcados().put("servoDireccion", chkServoDireccion.isSelected());
+
+        
+        // Guardamos las observaciones
         String texto = txtObservaciones.getText().trim();
     
         if (!texto.isEmpty()) {
-            BufferInspeccion.getInspeccionActual().setObservaciones("[DIRECCION]: " + texto);
+            BufferInspeccion.guardarObservacion(5,"[DIRECCION]: " +texto);
         } else {
-            BufferInspeccion.getInspeccionActual().setObservaciones("");
+            BufferInspeccion.guardarObservacion(5,"");
         }
 
-        //Cambiamos de ventana
+        // Cambiamos de ventana
         Utilities.abrirVentana("/vistas/EjesRuedasNeumaticosSuspension.fxml", "Ejes Ruedas Neumaticos y Suspensión");
 
         Utilities.cerrarVentana(event);   

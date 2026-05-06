@@ -22,7 +22,7 @@
             <Font size="50.0" />
          </font>
       </Label>
-      <Button fx:id="btn_nuevoUsuario" layoutX="497.0" layoutY="576.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="312.0" style="-fx-background-radius: 40px; -fx-background-color: #00ab4b;" text="Confirmar Cambios" textFill="#fcfcfc">
+      <Button fx:id="btn_nuevoUsuario" onAction="#accionActualizar" layoutX="497.0" layoutY="576.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="312.0" style="-fx-background-radius: 40px; -fx-background-color: #00ab4b;" text="Confirmar Cambios" textFill="#fcfcfc">
          <font>
             <Font size="30.0" />
          </font>
@@ -34,13 +34,13 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <TextField fx:id="txt_nomUsuario" layoutX="272.0" layoutY="70.0" prefHeight="37.0" prefWidth="348.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
+            <TextField fx:id="txtCorreo" layoutX="272.0" layoutY="70.0" prefHeight="37.0" prefWidth="348.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
             <Label layoutX="32.0" layoutY="147.0" text="Nuevo Rol">
                <font>
                   <Font size="25.0" />
                </font>
             </Label>
-            <ChoiceBox id="sp_rolUsuario" layoutX="272.0" layoutY="147.0" prefHeight="36.0" prefWidth="348.0" style="-fx-background-color: white; -fx-border-color: black; border-ra: 5;" />
+            <ChoiceBox fx:id="spRolUsuario" layoutX="272.0" layoutY="147.0" prefHeight="36.0" prefWidth="348.0" style="-fx-background-color: white; -fx-border-color: black; border-ra: 5;" />
             <Label layoutX="32.0" layoutY="235.0" text="Nueva Contraseña">
                <font>
                   <Font size="25.0" />
@@ -49,7 +49,7 @@
             <PasswordField fx:id="txtContrasenia" layoutX="272.0" layoutY="235.0" prefHeight="36.0" prefWidth="348.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
          </children>
       </Pane>
-      <Button fx:id="btn_cancelar" layoutX="114.0" layoutY="576.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="312.0" style="-fx-background-radius: 40px; -fx-background-color: #8F8282;" text="Cancelar" textFill="#fcfcfc">
+      <Button fx:id="btn_cancelar" onAction="#accionCancelar" layoutX="114.0" layoutY="576.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="312.0" style="-fx-background-radius: 40px; -fx-background-color: #8F8282;" text="Cancelar" textFill="#fcfcfc">
          <font>
             <Font size="30.0" />
          </font>

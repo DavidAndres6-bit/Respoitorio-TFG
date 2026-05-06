@@ -43,10 +43,10 @@ public class AlumbradoySenializacionController {
 
     private boolean hayFallos(){
         
-        //Variable para almacenar si ha seleccionado alguno
+        // Variable para almacenar si ha seleccionado alguno
         boolean fallos = false;
 
-        //Comprobar si hay check seleccionados
+        // Comprobar si hay check seleccionados
         if(chkCruce.isSelected() || chkLargas.isSelected() || chkIntermitentes.isSelected() || chkAntinieblas.isSelected() || chkPosicion.isSelected() || chkMarchaAtras.isSelected() || chkFreno.isSelected()){
             fallos = true;
         }
@@ -61,15 +61,15 @@ public class AlumbradoySenializacionController {
     @FXML
     private void gestionarCheck() {
 
-        //Variable para almacenar si ha seleccionado alguno
+        // Variable para almacenar si ha seleccionado alguno
         boolean fallos = hayFallos();
 
-        //Si hay fallos habilitamos la caja de texto
+        // Si hay fallos habilitamos la caja de texto
         if(fallos){
             txtObservaciones.setDisable(false);
         }
 
-        //Si desmarca todos los checkboxs volvemos a deshabilitar
+        // Si desmarca todos los checkboxs volvemos a deshabilitar
         if(!fallos){
             txtObservaciones.setDisable(true);
         }
@@ -82,19 +82,28 @@ public class AlumbradoySenializacionController {
     @FXML
     private void accionSiguiente(ActionEvent event) {
 
-        //Si se han marcado checkboxs guardamos el resultado como false
-        BufferInspeccion.getInspeccionActual().setAlumbradoSenializacion(hayFallos());
+        // Si se han marcado checkboxs guardamos el resultado como false
+        BufferInspeccion.getInspeccionActual().setAlumbradoSenializacion(!hayFallos());
 
-        //Guardamos las observaciones
+        // Guardamos los checkboxs
+        BufferInspeccion.getChecksMarcados().put("cruce", chkCruce.isSelected());
+        BufferInspeccion.getChecksMarcados().put("largas", chkLargas.isSelected());
+        BufferInspeccion.getChecksMarcados().put("intermitentes", chkIntermitentes.isSelected());
+        BufferInspeccion.getChecksMarcados().put("antinieblas", chkAntinieblas.isSelected());
+        BufferInspeccion.getChecksMarcados().put("posicion", chkPosicion.isSelected());
+        BufferInspeccion.getChecksMarcados().put("marchaAtras", chkMarchaAtras.isSelected());
+        BufferInspeccion.getChecksMarcados().put("freno", chkFreno.isSelected());
+
+        // Guardamos las observaciones
         String texto = txtObservaciones.getText().trim();
     
         if (!texto.isEmpty()) {
-            BufferInspeccion.getInspeccionActual().setObservaciones("[ALUMBRADO Y SEÑALIZACIÓN]: " + texto);
+            BufferInspeccion.guardarObservacion(2,"[ALUMBRADO Y SEÑIALIZACIÓN]: " +texto);
         } else {
-            BufferInspeccion.getInspeccionActual().setObservaciones("");
+            BufferInspeccion.guardarObservacion(2,"");
         }
 
-        //Cambiamos de ventana        
+        // Cambiamos de ventana        
         Utilities.abrirVentana("/vistas/EmisionesContaminantes.fxml", "Emisiones Contaminantes");
 
         Utilities.cerrarVentana(event);      

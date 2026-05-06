@@ -1,7 +1,9 @@
 package controllers;
+
 import clases.POJOS.Vehiculo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -44,6 +46,7 @@ public class EmisionesController {
 
         // Recuperamos el vehiculo para coger el distintivo ambiental
         Vehiculo v = BufferInspeccion.getVehiculoActual();
+
         // Cargar datos del buffer
         if (BufferInspeccion.getVehiculoActual() != null) {
             lblMatricula.setText(BufferInspeccion.getVehiculoActual().getMatricula());
@@ -51,6 +54,9 @@ public class EmisionesController {
 
             //Llamamos al metodo que calcular los limites de emisiones
             calcularLimites(v);
+
+            // Llamamos al metodo que controla que pruebas debe pasar
+            manejarPruebas(v);
         }
 
         // Igual que hicimos en la ventana de identificación usamos estos escuchadores para habilitar o deshabilitar
@@ -89,6 +95,29 @@ public class EmisionesController {
         }
     }
 
+    /*
+    *   Funcion que maneja para cada tipo de vehiculo cuales son las pruebas que se le deben realizar
+    */
+
+    private void manejarPruebas(Vehiculo v){
+        String distintivo = v.getTipoDgt().toUpperCase();
+
+        // Por defecto deshabilitamos todo
+        habilitarCampo(txtOpacidad);
+        habilitarCampo(txtRalenti);
+        habilitarCampo(txtRalentiAcelerado);
+
+        // Segun el distintivo habilitamos los correspondientes
+        if (distintivo.contains("SIN DISTINTIVO")) {
+            // Para los antiguos el acelerado no suele aplicar
+            deshabilitarCampo(txtRalentiAcelerado);
+        } else if (distintivo.contains("0 EMISIONES")) {
+            // Para los electricos deshabilitamos todas las pruebas
+            deshabilitarCampo(txtOpacidad);
+            deshabilitarCampo(txtRalenti);
+            deshabilitarCampo(txtRalentiAcelerado);
+        }
+    }
 
     /*
     *   Funcion que comprueba si los valores indicados son mayores a los permitidos
@@ -104,27 +133,63 @@ public class EmisionesController {
         String ralentiStr = txtRalenti.getText().replace(",", ".");
         String aceleradoStr = txtRalentiAcelerado.getText().replace(",", ".");
 
-        //Convertir los valores a double controlando posibles valores vacios 
-        double opacidad = 0;
-        double coRalenti = 0;
-        double coRalentiAcelerado = 0;
 
-        if(!opacidadStr.isEmpty()){
-            opacidad = Double.parseDouble(opacidadStr);
+        // COMPROBACIÓN DE OPACIDAD
+        if(!opacidadStr.isEmpty() && !opacidadStr.equalsIgnoreCase("N/A")){
+            double opacidad = Double.parseDouble(opacidadStr);
+            BufferInspeccion.getValoresEmisiones().put("opacidad", opacidadStr);
+
+            if(opacidad > limiteOpacidad){
+                correctos = false;
+                BufferInspeccion.getValoresEmisiones().put("resOpacidad", "X");
+                txtOpacidad.setStyle("-fx-background-color: #ff9999;");
+            } else {
+                BufferInspeccion.getValoresEmisiones().put("resOpacidad", "S");
+                txtOpacidad.setStyle("-fx-background-color: #99ff99;");
+            }
+
+        } else {
+            BufferInspeccion.getValoresEmisiones().put("opacidad", "N/A");
+            BufferInspeccion.getValoresEmisiones().put("resOpacidad", "N/A");
         }
 
-        if(!ralentiStr.isEmpty()){
-            coRalenti = Double.parseDouble(ralentiStr);
+        // COMPROBACIÓN DE CO RALENTÍ 
+        if(!ralentiStr.isEmpty() && !ralentiStr.equalsIgnoreCase("N/A")){
+            double coRalenti = Double.parseDouble(ralentiStr);
+            BufferInspeccion.getValoresEmisiones().put("coRalenti", ralentiStr);
+
+            if(coRalenti > limiteRalenti){
+                correctos = false;
+                BufferInspeccion.getValoresEmisiones().put("resCoRalenti", "X");
+                txtRalenti.setStyle("-fx-background-color: #ff9999;");
+            } else {
+                BufferInspeccion.getValoresEmisiones().put("resCoRalenti", "S");
+                txtRalenti.setStyle("-fx-background-color: #99ff99;");
+            }
+
+        } else {
+            BufferInspeccion.getValoresEmisiones().put("coRalenti", "N/A");
+            BufferInspeccion.getValoresEmisiones().put("resCoRalenti", "N/A");
         }
 
-        if(!aceleradoStr.isEmpty()){
-            coRalentiAcelerado = Double.parseDouble(aceleradoStr);
-        }
+        // COMPROBACIÓN DE CO ACELERADO
 
+        if(!aceleradoStr.isEmpty() && !aceleradoStr.equalsIgnoreCase("N/A")){
+            double coRalentiAcelerado = Double.parseDouble(aceleradoStr);
+            BufferInspeccion.getValoresEmisiones().put("coRalentiAcelerado", aceleradoStr);
 
-        //Comprobamos si se han superado los limites en algun valor
-        if(opacidad > limiteOpacidad || coRalenti >  limiteRalenti || coRalentiAcelerado > limiteAcelerado){
-            correctos = false;
+            if(coRalentiAcelerado > limiteAcelerado){
+                correctos = false;
+                BufferInspeccion.getValoresEmisiones().put("resRalentiAcelerado", "X");
+                txtRalentiAcelerado.setStyle("-fx-background-color: #ff9999;");
+            } else {
+                BufferInspeccion.getValoresEmisiones().put("resRalentiAcelerado", "S");
+                txtRalentiAcelerado.setStyle("-fx-background-color: #99ff99;");
+            }
+        
+        } else {
+            BufferInspeccion.getValoresEmisiones().put("coRalentiAcelerado", "N/A");
+            BufferInspeccion.getValoresEmisiones().put("resRalentiAcelerado", "N/A");
         }
 
         return correctos;
@@ -144,9 +209,43 @@ public class EmisionesController {
             txtObservaciones.setDisable(false);
         } else {
             txtObservaciones.setDisable(true);
+            txtObservaciones.clear();
         }
     }
 
+    /*
+    *   Funcion para validar que campos debe rellenar obligatoriamente segun la etiqueta
+    */
+    
+    private boolean validarCamposSegunEtiqueta() {
+        boolean todoRelleno = true;
+
+        // Validación de Opacidad
+        if (!txtOpacidad.isDisable()) {
+            String val = txtOpacidad.getText().trim();
+            if (val.isEmpty() || val.equalsIgnoreCase("N/A")) {
+                todoRelleno = false;
+            }
+        }
+
+        // Validación de Ralentí 
+        if (todoRelleno && !txtRalenti.isDisable()) {
+            String val = txtRalenti.getText().trim();
+            if (val.isEmpty() || val.equalsIgnoreCase("N/A")) {
+                todoRelleno = false;
+            }
+        }
+
+        // Validación de Ralentí Acelerado
+        if (todoRelleno && !txtRalentiAcelerado.isDisable()) {
+            String val = txtRalentiAcelerado.getText().trim();
+            if (val.isEmpty() || val.equalsIgnoreCase("N/A")) {
+                todoRelleno = false;
+            }
+        }
+
+        return todoRelleno;
+    }
 
     /*
     *   Funcion para cambiar a la siguiente ventana
@@ -155,21 +254,50 @@ public class EmisionesController {
     @FXML
     private void accionSiguiente(ActionEvent event) {
 
-        //Si se han introducido valores superiores a los maximos permitidos marcamos el resultado del apartado como false
-        BufferInspeccion.getInspeccionActual().setEmisiones(nivelesCorrectos());
+        // Validamos si ha rellenado los campos que debe rellenar
+        boolean puedeAvanzar = validarCamposSegunEtiqueta();
 
-        //Guardamos las observaciones
-        String texto = txtObservaciones.getText().trim();
-    
-        if (!texto.isEmpty()) {
-            BufferInspeccion.getInspeccionActual().setObservaciones("[EMISIONES]: " + texto);
+        // Si los ha rellenado todos
+        if(puedeAvanzar){
+            //Si se han introducido valores superiores a los maximos permitidos marcamos el resultado del apartado como false
+            BufferInspeccion.getInspeccionActual().setEmisiones(nivelesCorrectos());
+
+            //Guardamos las observaciones
+            String texto = txtObservaciones.getText().trim();
+        
+            if (!texto.isEmpty()) {
+                BufferInspeccion.guardarObservacion(3,"[EMISIONES]: " +texto);
+            } else {
+                BufferInspeccion.guardarObservacion(3,"");
+            }
+
+            //Cambiamos de ventana
+            Utilities.abrirVentana("/vistas/Frenos.fxml", "Frenos");
+
+            Utilities.cerrarVentana(event);
         } else {
-            BufferInspeccion.getInspeccionActual().setObservaciones("");
+            Utilities.mostrarAlerta("Campos incompletos",   "Debe introducir los valores de las pruebas habilitadas para este vehículo.", Alert.AlertType.WARNING);
         }
+        
+    }
 
-        //Cambiamos de ventana
-        Utilities.abrirVentana("/vistas/Frenos.fxml", "Frenos");
+    /*
+    *   Funcion para deshabilitar el campo
+    */
 
-        Utilities.cerrarVentana(event);
+    private void deshabilitarCampo(TextField campo){
+        campo.setText("N/A");
+        campo.setDisable(true);
+        campo.setStyle("-fx-background-color: #eeeeee;");
+    }
+
+    /*
+    *   Funcion para habilitar el campo
+    */
+
+    private void habilitarCampo(TextField campo){
+        campo.clear();
+        campo.setDisable(false);
+        campo.setStyle(" ");
     }
 }

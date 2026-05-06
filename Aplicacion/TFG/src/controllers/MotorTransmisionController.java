@@ -84,19 +84,26 @@ public class MotorTransmisionController {
     @FXML
     private void accionSiguiente(ActionEvent event) {
 
-        //Si se han marcado checkboxs guardamos el resultado como false
-        BufferInspeccion.getInspeccionActual().setMotorTransmision(hayFallos());
+        // Si se han marcado checkboxs guardamos el resultado como false
+        BufferInspeccion.getInspeccionActual().setMotorTransmision(!hayFallos());
 
-        //Guardamos las observaciones
+        // Guardamos los checkboxs
+        BufferInspeccion.getChecksMarcados().put("estadoMotor", chkEstadoMotor.isSelected());
+        BufferInspeccion.getChecksMarcados().put("sistemaEscape", chkSistemaEscape.isSelected());
+        BufferInspeccion.getChecksMarcados().put("transmision", chkTransmision.isSelected());
+        BufferInspeccion.getChecksMarcados().put("alimentacion", chkAlimentacion.isSelected());
+
+
+        // Guardamos las observaciones
         String texto = txtObservaciones.getText().trim();
     
         if (!texto.isEmpty()) {
-            BufferInspeccion.getInspeccionActual().setObservaciones("[MOTOR Y TRANSMISIÓN]: " + texto);
+            BufferInspeccion.guardarObservacion(7,"[MOTOR Y TRANSMISION]: " +texto);
         } else {
-            BufferInspeccion.getInspeccionActual().setObservaciones("");
+            BufferInspeccion.guardarObservacion(7,"");
         }
-
-        //Cambiamos de ventana
+          
+        // Cambiamos de ventana
         Utilities.abrirVentana("/vistas/Defectos.fxml", "Defectos Encontrados");
 
         Utilities.cerrarVentana(event);

@@ -1,5 +1,6 @@
 package controllers;
 
+import clases.DAOS.InspeccionDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -36,9 +37,23 @@ public class IdentificacionController {
             lblMatricula.setText(BufferInspeccion.getVehiculoActual().getMatricula());
             lblModelo.setText(BufferInspeccion.getVehiculoActual().getModeloCompleto());
             
-            // Aquí podrías llamar a un DAO para buscar la última inspección de este coche
-            // y poner los KM en txtKmAnteriores. De momento lo dejamos a 0 o vacío.
-            txtKmAnteriores.setText("0"); 
+            // Recuperamos los kilometros de la anterior revision y los setteamos
+            // si es la primera vez que pasa inspeccion dejamos en disable el input
+
+            int kilometros_previos = InspeccionDAO.obtenerKmUltimaInspeccion(lblMatricula.getText());
+
+            if(kilometros_previos > 0){
+                // Lo ponemos como valor    
+                txtKmAnteriores.setText(String.valueOf(kilometros_previos));
+
+                txtKmAnteriores.setEditable(false);
+            } else {
+               txtKmAnteriores.setText("0");
+               txtKmAnteriores.setDisable(true);
+            }
+
+            txtKmActuales.setText("");
+            txtKmActuales.requestFocus(); // Ponemos el cursor aquí para ahorrar un clic al técnico
 
             // Esto lo hemos buscado son propiedades para que los campos hagan un efecto parecido al del autocompleteTextView
             // y se mantenga validación si borra y vuelve a escribir
@@ -55,33 +70,43 @@ public class IdentificacionController {
     */
 
     private void validarCampos() {
-       
-        //Recogemos los valores
+    
+        // Recogemos los valores de los campos de texto
         String antStr = txtKmAnteriores.getText().trim();
         String actStr = txtKmActuales.getText().trim();
 
         try {
-        
-            // Comprobamos que no estén vacíos
-            if (antStr.isEmpty() || actStr.isEmpty()) {
-                btnSiguiente.setDisable(true); 
+            
+            // El campo actual siempre debe tener contenido para poder avanzar
+            if (actStr.isEmpty()) {
+                btnSiguiente.setDisable(true);
+                btnSiguiente.setOpacity(0.5);
             } else {
-                // Comprobamos que sean números válidos
-                int kmAnt = Integer.parseInt(antStr);
+                
+                // Parseamos el valor actual
                 int kmAct = Integer.parseInt(actStr);
+                int kmAnt = 0;
 
-                // Solo habilitar si el actual es >= al anterior
-                if (kmAct >= kmAnt) {
+                // Solo parseamos el anterior si tiene algo y no es N/A
+                if (!antStr.isEmpty() && !antStr.equalsIgnoreCase("N/A")) {
+                    kmAnt = Integer.parseInt(antStr);
+                }
+
+                // Aplicamos la lógica de coherencia y el límite de 999.999
+                if (kmAct >= kmAnt && kmAct <= 999999) {
                     btnSiguiente.setDisable(false);
-                    btnSiguiente.setOpacity(1.0); // Se ve brillante
+                    btnSiguiente.setOpacity(1.0);
                 } else {
                     btnSiguiente.setDisable(true);
-                    btnSiguiente.setOpacity(0.5); // Se ve "apagado"
+                    btnSiguiente.setOpacity(0.5);
                 }
             }
+            
         } catch (NumberFormatException e) {
-            // Si meten letras, deshabilitamos el botón
+            
+            // Si hay letras en los campos, el botón se deshabilita
             btnSiguiente.setDisable(true);
+            btnSiguiente.setOpacity(0.5);
         }
     }
 
@@ -95,24 +120,35 @@ public class IdentificacionController {
         try {
 
             //Recoger los valores de los campos
-            int kmAnt = Integer.parseInt(txtKmAnteriores.getText());
+            int kmAnt = 0;
+            
+            if (txtKmAnteriores.isDisable() || txtKmAnteriores.getText().trim().isEmpty()) {
+                kmAnt = 0; // Si está deshabilitado o vacío, asumimos 0
+            } else {
+                kmAnt = Integer.parseInt(txtKmAnteriores.getText().trim());
+            }
+
             int kmAct = Integer.parseInt(txtKmActuales.getText());
 
             //Validar que los datos introducidos sean coherentes
             if (kmAct < kmAnt) {
                 Utilities.mostrarAlerta("Error", "Los KM actuales no pueden ser menores a los de la inpección anterior.", Alert.AlertType.WARNING);
+            } else if(kmAct > 999999) {
+                Utilities.mostrarAlerta("Valor excesivo", "Los kilómetros no pueden superar 999.999", Alert.AlertType.ERROR);
             } else {
                 // Guardar y pasar de página
                 BufferInspeccion.getInspeccionActual().setKmActuales(kmAct);
+                BufferInspeccion.getInspeccionActual().setKmAnteriorInspeccion(kmAnt);
+
+                // Guardamos la fecha de la inspeccion
+                BufferInspeccion.getInspeccionActual().setFechaInspeccion(java.time.LocalDate.now());
                 
                 Utilities.abrirVentana("/vistas/AcondicionamientoExterior.fxml", "Acondicionamiento Exterior, Carroceria y Chasis");
-            
                 Utilities.cerrarVentana(event);
             }
 
         } catch (NumberFormatException e) {
             Utilities.mostrarAlerta("Error", "Introduce solo números.", Alert.AlertType.ERROR);
         }
-
     }
 }

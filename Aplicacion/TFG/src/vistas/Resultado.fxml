@@ -41,13 +41,13 @@
                </font>
             </Label>
             <DatePicker fx:id="dpFecha" layoutX="336.0" layoutY="106.0" prefHeight="25.0" prefWidth="371.0" style="-fx-border-color: black;" />
-            <ComboBox fx:id="spResultado" layoutX="279.0" layoutY="301.0" prefHeight="37.0" prefWidth="341.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
+            <ComboBox fx:id="spResultado" layoutX="336.0" layoutY="57.0" prefHeight="37.0" prefWidth="371.0" style="-fx-background-color: #d8d8d8; -fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
          </children>
          <effect>
             <DropShadow />
          </effect>
       </Pane>
-      <Button fx:id="btnInforme" onAction="#accionGenerarInforme" layoutX="264.0" layoutY="538.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="417.0" style="-fx-background-radius: 10px; -fx-background-color: #BF820D;" text="Generar Informe " />
+      <Button fx:id="btnInforme" layoutX="264.0" layoutY="538.0" mnemonicParsing="false" onAction="#accionGenerarInforme" prefHeight="53.0" prefWidth="417.0" style="-fx-background-radius: 10px; -fx-background-color: #BF820D;" text="Generar Informe " />
       <Label layoutX="307.0" layoutY="24.0" prefHeight="53.0" prefWidth="389.0" text="Inspección Técnica" textFill="#bf820d">
          <font>
             <Font size="36.0" />
@@ -65,12 +65,12 @@
                   <Font name="Century Schoolbook" size="17.0" />
                </font>
             </Label>
-            <Label fx:id="lblMatricula" layoutX="121.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0">
+            <Label fx:id="lblMatricula" layoutX="121.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0" textFill="WHITE">
                <font>
                   <Font size="17.0" />
                </font>
             </Label>
-            <Label fx:id="lblModelo" layoutX="371.0" layoutY="9.0" prefHeight="26.0" prefWidth="223.0">
+            <Label fx:id="lblModelo" layoutX="371.0" layoutY="9.0" prefHeight="26.0" prefWidth="223.0" textFill="WHITE">
                <font>
                   <Font size="17.0" />
                </font>

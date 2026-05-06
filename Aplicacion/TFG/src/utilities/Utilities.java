@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Utilities {
@@ -31,6 +32,7 @@ public class Utilities {
             Stage stage = new Stage();
             stage.setTitle(titulo);
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
             stage.showAndWait(); // Pausar el codigo para que se reflejen los cambios en la tabla
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,6 +50,11 @@ public class Utilities {
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle(titulo);
+
+            // Añadir el logo de la aplicación a las ventanas
+            Image icon = new Image(Utilities.class.getResourceAsStream("/img/Logo_app.png"));
+            stage.getIcons().add(icon);
+
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show(); 

@@ -26,7 +26,6 @@ public class PanelAdminController {
     */
 
     @FXML private TableColumn<Usuario, String> colUsuario;
-    @FXML private TableColumn<Usuario, String> colContrasenia;
     @FXML private TableColumn<Usuario, String> colCorreo;
     @FXML private TableColumn<Usuario, Integer> colTelefono;
     @FXML private TableColumn<Usuario, String> colRol;
@@ -41,9 +40,8 @@ public class PanelAdminController {
         //Asociamos cada columna de la tabla con su atributo del POJO de Usuario correspondiente
         //setCellValueFactory -> le indica a la columna de donde va a sacar la informacion para mostrarla
         //new PropertyValueFactory -> accede al metodo get del POJO de Usuario y recupera el valor del atributo
-
+        
         colUsuario.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colContrasenia.setCellValueFactory(new PropertyValueFactory<>("contrasenia"));
         colCorreo.setCellValueFactory(new PropertyValueFactory<>("correo"));
         colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         colRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
