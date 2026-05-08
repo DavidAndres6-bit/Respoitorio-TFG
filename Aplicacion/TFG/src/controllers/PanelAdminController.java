@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -25,11 +26,26 @@ public class PanelAdminController {
     *   Definimos las columnas de la tabla que corresponden con el id que les hemos asignado en Scene Builder
     */
 
-    @FXML private TableColumn<Usuario, String> colUsuario;
-    @FXML private TableColumn<Usuario, String> colCorreo;
-    @FXML private TableColumn<Usuario, Integer> colTelefono;
-    @FXML private TableColumn<Usuario, String> colRol;
+    @FXML 
+    private TableColumn<Usuario, String> colUsuario;
     
+    @FXML 
+    private TableColumn<Usuario, String> colCorreo;
+    
+    @FXML 
+    private TableColumn<Usuario, Integer> colTelefono;
+    
+    @FXML 
+    private TableColumn<Usuario, String> colRol;
+    
+    /*
+    *   Label para el nombre del tecnico
+    */
+    
+    @FXML 
+    private Label lblNombreAdmin;
+
+
     /*
     *   Inicializar la tabla y rellenarla
     */
@@ -48,6 +64,13 @@ public class PanelAdminController {
 
         //Lamamos al metodo que rellena la tabla
         rellenarTabla();
+
+        // Mostramos el nombre del administrador
+        // Comprobamos si hay un usuario en esta inspeccion
+        if (utilities.Sesion.getUsuario() != null) {
+            String nombre = utilities.Sesion.getUsuario().getNombre();
+            lblNombreAdmin.setText(nombre);
+        }
 
     }
 
@@ -99,6 +122,23 @@ public class PanelAdminController {
     private void abrirEliminarUsuario(ActionEvent event) {
        Utilities.abrirVentanaWait("/vistas/EliminarUsuario.fxml", "Dar de baja Usuario");
        rellenarTabla();
+    }
+
+    /*
+    *   Función para cerrar la sesion
+    */
+   
+    @FXML
+    private void cerrarSesion(ActionEvent event){
+
+        // Limpiamos el usuario de la sesion
+        utilities.Sesion.setUsuario(null);
+
+        // Volvemos al Login
+        Utilities.abrirVentana("/vistas/Login.fxml", "Cyl-ITV Digital - Acceso");
+
+        // Cerramos la ventana
+        Utilities.cerrarVentana(event);
     }
 
 }

@@ -1,6 +1,9 @@
 package controllers;
 
+import java.util.List;
+
 import clases.DAOS.ClienteDAO;
+import clases.DAOS.InspeccionDAO;
 import clases.DAOS.VehiculoDAO;
 import clases.POJOS.Cliente;
 import clases.POJOS.Inspeccion;
@@ -12,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import utilities.BufferInspeccion;
 import utilities.Utilities;
 
@@ -28,11 +32,16 @@ public class PanelTecnicoController {
     private Pane panelInicial, panelDatos, panelFormularioCliente;
 
     @FXML
-    private Label lblMatricula, lblMarca, lblModelo, lblFechaMatriculacion, lblCliente;
+    private Label lblMatricula, lblMarca, lblModelo, lblFechaMatriculacion, lblCliente, lblNombreTecnico;
 
     @FXML
     private Button btnIniciarInspeccion, btnRegistrarCliente;
 
+    @FXML
+    private Pane paneConHistorial, paneSinHistorial;
+    
+    @FXML
+    private VBox vboxListaInspecciones;
 
     /*
     *   Variable para guardar el vehiculo si lo encontramos
@@ -43,6 +52,19 @@ public class PanelTecnicoController {
     /**
      * Funcion para buscar el vehículo por matrícula
     */
+
+    /*
+    *   Inicializamos el nombre del tecnico
+    */
+
+    @FXML
+    public void initialize() {
+        // Comprobamos si hay un usuario en esta inspeccion
+        if (utilities.Sesion.getUsuario() != null) {
+            String nombre = utilities.Sesion.getUsuario().getNombre();
+            lblNombreTecnico.setText(nombre);
+        }
+    }
 
     @FXML
     private void accionBuscar(ActionEvent event) {
@@ -57,6 +79,9 @@ public class PanelTecnicoController {
 
         } else {
             
+            // Mostramos sus posibles inspecciones previas
+            mostrarInspeccionesVehiculo(matricula);
+
             //Cremamos un instancia del DAO de vehiculo para usar el metodo de bucar vehiculo
             VehiculoDAO vehiculoDAO = new VehiculoDAO();
 
@@ -93,7 +118,7 @@ public class PanelTecnicoController {
 
                         // Dejamos el boton activo
                         btnRegistrarCliente.setVisible(true);
-                        btnRegistrarCliente.setText("Cambiar/Nuevo Cliente");
+                        btnRegistrarCliente.setText("Cambiar/Añadir Cliente");
                         
                         // Cambiamos la visibilidad de los paneles
                         panelInicial.setVisible(false);
@@ -114,6 +139,43 @@ public class PanelTecnicoController {
                 }
             }
         }
+
+    /*
+    *   Funcion para cargar las inspecciones previas de un vehiculo
+    */
+
+    public void mostrarInspeccionesVehiculo(String matricula){
+      
+        InspeccionDAO inspeccionDAO = new InspeccionDAO();
+
+        // Lista para guardar las inspecciones
+        List<String> inspecciones = inspeccionDAO.obtenerHistorialPorMatricula(matricula);
+
+        // Si no hay inspecciones mostramos el panel que informa sobre ello
+        if (inspecciones.isEmpty()) {
+            paneSinHistorial.setVisible(true);
+            paneConHistorial.setVisible(false);
+        } else {
+            paneSinHistorial.setVisible(false);
+            paneConHistorial.setVisible(true);
+
+            // Limpiamos primero el vbox para evitar mostrar posibles datos previos
+            vboxListaInspecciones.getChildren().clear();
+
+            // Recorremos la lista de Strings y creamos un Label para cada una
+            for (String dato : inspecciones) {
+                Label lblInspeccion = new Label(dato);
+
+                // Estilo para que quede bien dentro del panel
+                lblInspeccion.setStyle("-fx-font-size: 14px; -fx-padding: 8px; -fx-border-color: #616161; -fx-border-width: 0 0 1 0;");
+                lblInspeccion.setPrefWidth(220);
+
+                // Añadimos el Label al VBox
+                vboxListaInspecciones.getChildren().add(lblInspeccion);
+            }
+        }
+    }
+
 
     /*
     *   Accion del boton añadir cliente
@@ -143,4 +205,27 @@ public class PanelTecnicoController {
 
         Utilities.cerrarVentana(event);
     }
+
+    /*
+    *   Función para cerrar la sesion
+    */
+   
+    @FXML
+    private void cerrarSesion(ActionEvent event){
+
+        // Limpiamos el usuario de la sesion
+        utilities.Sesion.setUsuario(null);
+
+        // Volvemos al Login
+        Utilities.abrirVentana("/vistas/Login.fxml", "Cyl-ITV Digital - Acceso");
+
+        // Cerramos la ventana
+        Utilities.cerrarVentana(event);
+    }
+
+
+
+
+
+
 }

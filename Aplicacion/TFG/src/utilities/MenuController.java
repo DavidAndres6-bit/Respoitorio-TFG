@@ -1,6 +1,13 @@
 package utilities;
 
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class MenuController {
 
@@ -46,6 +53,26 @@ public class MenuController {
                 ruta = "/vistas/MotoryTransmision.fxml";
                 titulo = "Motor y Transmisión";
                 break;
+        }
+    
+    
+        // Abrimos la ventana correspondiente
+        try {
+        
+            // Cargar el nuevo FXML
+            FXMLLoader loader = new FXMLLoader(MenuController.class.getResource(ruta));
+            Parent root = loader.load();
+            
+            // Conseguir el Stage desde el evento
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            
+            // Cambiar la escena
+            stage.setScene(new Scene(root));
+            stage.setTitle("ITV - " + titulo);
+            stage.show();
+            
+        } catch (IOException e) {
+            System.out.println("Error al cargar la ventana " + ventana + ": " + e.getMessage());
         }
     }
 }

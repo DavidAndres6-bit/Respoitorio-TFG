@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import clases.CONNECTION.Conexion;
@@ -148,8 +149,8 @@ public class InspeccionDAO {
         Conexion c = new Conexion();
 
         //Consulta
-        //String sql = "SELECT km_actuales FROM inspecciones WHERE matricula_coche = ? ORDER BY fecha_inspeccion DESC LIMIT 1";
         String sql = "SELECT km_actuales FROM inspecciones WHERE matricula_coche = ? ORDER BY id DESC LIMIT 1";
+        
         //ResultSet y PreparedStatement para la consulta
         ResultSet rs = null;
         PreparedStatement select = null;
@@ -196,5 +197,72 @@ public class InspeccionDAO {
             }
         }    
         return km;
+    }
+
+    /*
+    *   Metodo para buscar el historial de inspecciones de un coche
+    */
+
+    public List<String> obtenerHistorialPorMatricula(String matricula) {
+        
+        // Lista para almacenar las inspecciones
+        List<String> historial = new ArrayList<>();
+
+        // Consulta
+       String sql = "SELECT fecha_inspeccion, resultado_inspeccion FROM inspecciones WHERE matricula_coche = ? ORDER BY fecha_inspeccion DESC";
+
+        //Conexion a la base de datos
+        Connection con = null;
+
+        //Instancia de la clase conexion
+        Conexion c = new Conexion();
+
+        //ResultSet y PreparedStatement para la consulta
+        ResultSet rs = null;
+        PreparedStatement select = null;
+
+        //Recorremos la consulta y buscamos las inspecciones
+        try {
+            con = c.conexion();
+
+            if (con != null) {
+                select = con.prepareStatement(sql);
+                select.setString(1, matricula);
+                rs = select.executeQuery();
+            }
+
+
+            // Mientras que encuntre inspecciones guardar los valores
+            while (rs != null && rs.next()) {
+                String linea = rs.getString("fecha_inspeccion") + " - " + rs.getString("resultado_inspeccion");
+                historial.add(linea);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error en la consulta: " + e.getMessage());
+        } finally{
+            //Cerrar los recursos abiertos
+           try {
+                
+            //Cerrar el ResultSet
+            if (rs != null) {
+                 rs.close();
+            }
+                
+            //Cerrar el preparedStatement
+            if (select != null){
+                select.close();
+            }
+                
+            //Cerrar la conexion
+            if (con != null) {
+                con.close();
+            }
+                
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }   
+        return historial;
     }
 }

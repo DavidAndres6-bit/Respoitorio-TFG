@@ -1,58 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PanelAdminController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1450.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PanelAdminController">
    <children>
-      <ImageView fitHeight="710.0" fitWidth="900.0" layoutY="-5.0" pickOnBounds="true">
-         <image>
-            <Image url="@../img/Fondo_Ventanas.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="155.0" layoutY="14.0" prefHeight="80.0" prefWidth="656.0" text="Panel del Administrador" textFill="#bf820d">
-         <font>
-            <Font size="54.0" />
-         </font>
-      </Label>
-      <StackPane layoutX="48.0" layoutY="176.0" prefHeight="377.0" prefWidth="804.0">
+      
+      <VBox prefHeight="750.0" prefWidth="300.0" style="-fx-background-color: #4D4D4D; -fx-background-radius: 0 30 30 0;">
          <children>
-            <TableView fx:id="tablaUsuarios" prefHeight="341.0" prefWidth="804.0" style="-fx-background-color: #E0E0E0;">
-            <columns>
-               <TableColumn fx:id="colUsuario" prefWidth="198.39998626708984" text="Usuario" />
-               <TableColumn fx:id="colCorreo" minWidth="5.60003662109375" prefWidth="204.0" text="Correo Electrónico" />
-               <TableColumn fx:id="colTelefono" minWidth="0.0" prefWidth="168.80001831054688" text="Telefono" />
-               <TableColumn fx:id="colRol" prefWidth="231.199951171875" text="Rol" />
-            </columns>
-            </TableView>
+            <VBox alignment="CENTER" prefHeight="200.0" spacing="10.0">
+               <children>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image><Image url="@../img/usuario.png" /></image>
+                  </ImageView>
+                  <Label text="ADMINISTRADOR" textFill="#bf820d">
+                     <font><Font name="System Bold" size="22.0" /></font>
+                  </Label>
+               </children>
+            </VBox>
+
+            <VBox spacing="15.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#abrirAniadirUsuario" prefHeight="60.0" prefWidth="290.0" style="-fx-background-color: #00ab4b; -fx-background-radius: 0 30 30 0; -fx-cursor: hand;" text="  Añadir Usuario" textFill="WHITE">
+                     <font><Font name="System Bold" size="18.0" /></font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#abrirActualizarUsuario" prefHeight="60.0" prefWidth="290.0" style="-fx-background-color: orange; -fx-background-radius: 0 30 30 0; -fx-cursor: hand;" text="  Actualizar Usuario" textFill="WHITE">
+                     <font><Font name="System Bold" size="18.0" /></font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#abrirEliminarUsuario" prefHeight="60.0" prefWidth="291.0" style="-fx-background-color: red; -fx-background-radius: 0 30 30 0; -fx-cursor: hand;" text="  Eliminar Usuario" textFill="WHITE">
+                     <font><Font name="System Bold" size="18.0" /></font>
+                  </Button>
+               </children>
+               <VBox.margin><Insets top="20.0" /></VBox.margin>
+            </VBox>
+            <VBox alignment="BOTTOM_CENTER" prefHeight="214.0" prefWidth="250.0" spacing="15.0">
+               <children>
+                  <Separator opacity="0.2" prefWidth="200.0" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="15.0">
+                     <children>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/usuario%20(1).png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="lblNombreAdmin" style="-fx-text-fill: white;" text="Cargando..." textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="20.0" left="25.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
          </children>
-      </StackPane>
-      <Label layoutX="64.0" layoutY="109.0" prefHeight="39.0" prefWidth="460.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="     Usuarios del sistema" textFill="WHITE">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
-      <Button id="btn_aniadirUsuario" layoutX="75.0" layoutY="605.0" mnemonicParsing="false" onAction="#abrirAniadirUsuario" prefHeight="39.0" prefWidth="252.0" style="-fx-background-radius: 40px; -fx-background-color: #00ab4b;" text="Añadir Usuario" textFill="#fcfcfc">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Button>
-      <Button id="btn_eliminarUsuario" layoutX="632.0" layoutY="605.0" mnemonicParsing="false" onAction="#abrirEliminarUsuario" prefHeight="32.0" prefWidth="243.0" style="-fx-background-radius: 40px; -fx-background-color: red;" text="Eliminar Usuario" textFill="WHITE">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Button>
-      <Button id="btn_actualizarUsuario" layoutX="354.0" layoutY="605.0" mnemonicParsing="false" onAction="#abrirActualizarUsuario" prefHeight="39.0" prefWidth="252.0" style="-fx-background-radius: 40px; -fx-background-color: orange;" text="Actualizar Usuario" textFill="#fcfcfc">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Button>
+      </VBox>
+
+      <VBox layoutX="330.0" prefHeight="750.0" prefWidth="1090.0" spacing="30.0">
+         <padding><Insets bottom="40.0" left="20.0" right="40.0" /></padding>
+         <children>
+            
+            <Label alignment="CENTER" prefHeight="80.0" prefWidth="1030.0" text="Panel del Administrador" textFill="#bf820d">
+               <font><Font name="Century Schoolbook" size="64.0" /></font>
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+            </Label>
+
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1030.0" style="-fx-background-color: #616161; -fx-background-radius: 40; -fx-padding: 0 30 0 30;">
+               <children>
+                  <Label text="Usuarios registrados en el sistema" textFill="WHITE">
+                     <font><Font name="System Bold" size="20.0" /></font>
+                  </Label>
+               </children>
+               <effect><DropShadow color="#00000033" /></effect>
+            </HBox>
+
+            <TableView fx:id="tablaUsuarios" prefHeight="480.0" prefWidth="1030.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #CCCCCC; -fx-border-radius: 15; -fx-table-cell-border-color: black; -fx-table-header-border-color: black; -fx-font-size: 18px;">
+               <columns>
+                  <TableColumn fx:id="colUsuario" prefWidth="250.0" text="Usuario" />
+                  <TableColumn fx:id="colCorreo" prefWidth="300.0" text="Correo Electrónico" />
+                  <TableColumn fx:id="colTelefono" prefWidth="200.0" text="Teléfono" />
+                  <TableColumn fx:id="colRol" prefWidth="275.0" text="Rol" />
+               </columns>
+               <effect><DropShadow color="#00000011" radius="10.0" /></effect>
+            </TableView>
+
+         </children>
+      </VBox>
+      <HBox alignment="CENTER_LEFT" layoutX="7.0" layoutY="593.0" prefHeight="77.0" prefWidth="299.0" spacing="15.0" style="-fx-cursor: hand;">
+         <children>
+            <ImageView fitHeight="49.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+               <image>
+                  <Image url="@../img/cerrarsesion.png" />
+               </image>
+            </ImageView>
+            <Button mnemonicParsing="false" prefHeight="90.0" prefWidth="195.0" style="-fx-background-color: transparent;" text="Cerrar Sesión" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+         </children>
+         <padding>
+            <Insets left="25.0" />
+         </padding>
+      </HBox>
    </children>
 </Pane>

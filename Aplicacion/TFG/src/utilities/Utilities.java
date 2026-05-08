@@ -25,6 +25,7 @@ public class Utilities {
     /*
     *   Metodo para abrir una nueva ventana para el admin
     */
+   
     public static void abrirVentanaWait(String rutaFXML, String titulo) {
         try {
             FXMLLoader loader = new FXMLLoader(Utilities.class.getResource(rutaFXML));
@@ -49,7 +50,7 @@ public class Utilities {
             FXMLLoader loader = new FXMLLoader(Utilities.class.getResource(rutaFXML));
             Parent root = loader.load();
             Stage stage = new Stage();
-            stage.setTitle(titulo);
+            stage.setTitle("ITV - " + titulo);
 
             // Añadir el logo de la aplicación a las ventanas
             Image icon = new Image(Utilities.class.getResourceAsStream("/img/Logo_app.png"));

@@ -2,10 +2,12 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import utilities.BufferInspeccion;
+import utilities.MenuController;
 import utilities.Utilities;
 
 public class AcondicionamientoExteriorController {
@@ -73,9 +75,28 @@ public class AcondicionamientoExteriorController {
         // Si desmarca todos los checkboxs volvemos a deshabilitar
         if(!fallos){
             txtObservaciones.setDisable(true);
+            txtObservaciones.setText("");
         }
     }
 
+    /*
+    *   ActionEvent que maneja las opciones del menu
+    */
+    
+    @FXML
+    public void CambiarVentana(ActionEvent event){
+        // Obtenemos el botón 
+        Button btnPulsado = (Button) event.getSource();
+        
+        // Obtenemos su ID
+        String seccion = btnPulsado.getId(); 
+        
+        // Llamamos al metodo de utilities
+        MenuController.abrirVentana(seccion, event);
+    }
+    
+    
+    
     /*
     *   Funcion para cambiar a la siguiente ventana
     */
