@@ -201,9 +201,24 @@ public class PanelTecnicoController {
    
     @FXML
     private void accionIniciarInspeccion(ActionEvent event) {
-        Utilities.abrirVentana("/vistas/Identificacion.fxml", "Identificación del Vehiculo");
 
-        Utilities.cerrarVentana(event);
+        // Recogemos la matricula
+        String matricula = txtBuscarMatricula.getText().toUpperCase().trim();
+
+        // Comprobar que no este vacia
+        if (matricula.isEmpty()) {
+            Utilities.mostrarAlerta("Error", "Introduce una matrícula.", Alert.AlertType.ERROR);
+        } else {
+            if (InspeccionDAO.existeInspeccionHoy(matricula)) {
+                Utilities.mostrarAlerta("Inspeccion ya realizada", 
+                "El vehículo con matrícula " + matricula + " ya ha realizado una inspección en el día de hoy.\n\nNo se permiten duplicados diarios.", 
+                Alert.AlertType.WARNING); 
+            } else {
+                Utilities.abrirVentana("/vistas/Identificacion.fxml", "Identificación del Vehiculo");
+
+                Utilities.cerrarVentana(event);
+            }
+        }
     }
 
     /*

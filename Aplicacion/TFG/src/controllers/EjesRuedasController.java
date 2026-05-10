@@ -1,11 +1,15 @@
 package controllers;
 
+import java.util.Map;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import utilities.BufferInspeccion;
+import utilities.MenuController;
 import utilities.Utilities;
 
 public class EjesRuedasController {
@@ -34,6 +38,20 @@ public class EjesRuedasController {
         if (BufferInspeccion.getVehiculoActual() != null) {
             lblMatricula.setText(BufferInspeccion.getVehiculoActual().getMatricula());
             lblModelo.setText(BufferInspeccion.getVehiculoActual().getModeloCompleto());
+        }
+
+        // Recuperamos los posibles checks marcados previamente para que no se pierda la informacion al volver
+        Map<String, Boolean> checks = BufferInspeccion.getChecksMarcados();
+        chkEjes.setSelected(checks.getOrDefault("ejes", false));
+        chkNeumaticos.setSelected(checks.getOrDefault("neumaticos", false));
+        chkRuedas.setSelected(checks.getOrDefault("ruedas", false));
+        chkSuspension.setSelected(checks.getOrDefault("suspension", false));
+    
+        // Recuperamos las posibles observaciones que ubiese escrito
+        String obsGuardada = BufferInspeccion.getObservacionPosicion(6);
+        if (obsGuardada != null && !obsGuardada.isEmpty()) {
+            String textoLimpio = obsGuardada.replace("[EJES RUEDAS NEUMATICOS SUSPENSION]: ", "");
+            txtObservaciones.setText(textoLimpio);
         }
     }
 
@@ -76,12 +94,11 @@ public class EjesRuedasController {
     }
 
     /*
-    *   Funcion para cambiar a la siguiente ventana
+    *   Metodo para guardar los datos en el Buffer al cambiar de ventana desde el boton o desde el menu
     */
 
-    @FXML
-    private void accionSiguiente(ActionEvent event) {
-
+    private void guardarDatosEnBuffer() {
+       
         // Si se han marcado checkboxs guardamos el resultado como false
         BufferInspeccion.getInspeccionActual().setEjesRuedasNeumaticos(!hayFallos());
 
@@ -99,14 +116,38 @@ public class EjesRuedasController {
         } else {
             BufferInspeccion.guardarObservacion(6,"");
         }
+    }
+    
+    /*
+    *   ActionEvent que maneja las opciones del menu
+    */
+    
+    @FXML
+    public void CambiarVentana(ActionEvent event){
 
-        // --- DEBUG ---
-System.out.println("========================================");
-System.out.println("PANTALLA: Acondicionamiento Exterior");
-System.out.println("¿APARTADO APTO?: " + !hayFallos()); // Si no hay fallos, es true (apto)
-System.out.println("MAPA DE CHECKS (Tamaño): " + BufferInspeccion.getChecksMarcados().size());
-System.out.println("DETALLE CHECKS: " + BufferInspeccion.getChecksMarcados().toString());
-System.out.println("========================================");
+        // Guardar los datos en el buffer
+        guardarDatosEnBuffer();
+
+        // Obtenemos el botón 
+        Button btnPulsado = (Button) event.getSource();
+        
+        // Obtenemos su ID
+        String seccion = btnPulsado.getId(); 
+        
+        // Llamamos al metodo de utilities
+        MenuController.abrirVentana(seccion, event);
+    }
+    
+
+    /*
+    *   Funcion para cambiar a la siguiente ventana
+    */
+
+    @FXML
+    private void accionSiguiente(ActionEvent event) {
+
+        // Guardar en el buffer
+        guardarDatosEnBuffer();
 
         // Cambiamos de ventana
         Utilities.abrirVentana("/vistas/MotoryTransmision.fxml", "MOTOR Y TRANSMISIÓN");

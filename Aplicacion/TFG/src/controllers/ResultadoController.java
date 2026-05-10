@@ -11,6 +11,7 @@ import clases.POJOS.Cliente;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -94,10 +95,27 @@ public class ResultadoController {
                 
                 // Pasamos los datos a la clase que genera el informe
                 generador.generarInformeITV(BufferInspeccion.getInspeccionActual(), BufferInspeccion.getDefectosActuales(), carpetaDescargas);
-            
-                // Limpiamos el buffer de la inspeccion actual
-                BufferInspeccion.limpiarBuffer();
+        
+
+                // Mostrarmos ventana emergente informando al tecnico y redirigimos al panel
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                alerta.setTitle("Inspección Finalizada");
+                alerta.setHeaderText("PDF Generado con Éxito");
+                alerta.setContentText("El informe técnico se ha guardado en la carpeta 'Descargas'.\n\nAl aceptar, volverá al panel principal.");
                 
+                // Si pulsa aceptar redirigimos al panel
+                alerta.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    
+                    // Limpiamos el buffer de la inspeccion actual
+                    BufferInspeccion.limpiarBuffer();
+
+                    // Abrimos el panel del tecnico
+                    Utilities.abrirVentana("/vistas/PanelTecnico.fxml", "Panel de Gestión - ITV");
+
+                    Utilities.cerrarVentanaComodin(dpFecha);
+                }
+            });
             } else {
                 Utilities.mostrarAlerta("Error", "No se ha podido insertar la inspeccion.", Alert.AlertType.ERROR);
             }

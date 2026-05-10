@@ -5,148 +5,156 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.EjesRuedasController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.EjesRuedasController">
    <children>
-      <ImageView fitHeight="709.0" fitWidth="900.0" layoutY="-3.0" pickOnBounds="true">
-         <image>
-            <Image url="@../img/Fondo_Ventanas.png" />
-         </image>
-      </ImageView>
-      <Pane id="panel-datos" layoutX="51.0" layoutY="267.0" prefHeight="323.0" prefWidth="798.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15; -fx-border-width: 1;">
+      <Label layoutX="560.0" layoutY="7.0" prefHeight="107.0" prefWidth="897.0" text="Inspección Técnica del Vehiculo" textFill="#bf820d">
+         <font><Font size="60.0" /></font>
+      </Label>
+      
+      <Pane layoutX="455.0" layoutY="117.0" prefHeight="85.0" prefWidth="992.0" style="-fx-background-radius: 10; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-border-width: 3;">
          <children>
-            <Label layoutX="-8.0" layoutY="-5.0" prefHeight="39.0" prefWidth="826.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="  2,7 Ejes, ruedas, neumaticos y suspensión" textFill="#fcf9f9">
-               <font>
-                  <Font name="Century Schoolbook" size="20.0" />
-               </font>
+            <Label layoutX="25.0" layoutY="9.0" prefHeight="66.0" prefWidth="228.0" text="Matricula:">
+               <font><Font name="System Bold" size="36.0" /></font>
             </Label>
-            <Label layoutX="14.0" layoutY="94.0" prefHeight="34.0" prefWidth="171.0" text="Observaciones">
-               <font>
-                  <Font name="Century Schoolbook" size="21.0" />
-               </font>
+            <Label layoutX="428.0" layoutY="4.0" prefHeight="74.0" prefWidth="158.0" text="Modelo:">
+               <font><Font name="System Bold" size="36.0" /></font>
             </Label>
-            <TextArea fx:id="txtObservaciones" disable="true" layoutX="79.0" layoutY="138.0" prefHeight="156.0" prefWidth="639.0" style="-fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" />
-            <HBox layoutX="127.0" layoutY="60.0" prefHeight="34.0" prefWidth="544.0">
+            <Label fx:id="lblMatricula" layoutX="201.0" layoutY="3.0" prefHeight="80.0" prefWidth="205.0" textFill="#bf820d">
+               <font><Font size="30.0" /></font>
+            </Label>
+            <Label fx:id="lblModelo" layoutX="571.0" layoutY="5.0" prefHeight="73.0" prefWidth="440.0" textFill="#bf820d">
+               <font><Font size="30.0" /></font>
+            </Label>
+         </children>
+      </Pane>
+
+      <Button fx:id="btnSiguiente" layoutX="552.0" layoutY="685.0" mnemonicParsing="false" onAction="#accionSiguiente" prefHeight="43.0" prefWidth="851.0" style="-fx-background-radius: 10px; -fx-background-color: #bf820d;" text="Siguiente " textFill="WHITE">
+         <font><Font size="20.0" /></font>
+      </Button>
+
+      <Label layoutX="431.0" layoutY="251.0" prefHeight="58.0" prefWidth="1038.0" style="-fx-background-color: #616161; -fx-background-radius: 30px; -fx-padding: 4px; -fx-text-fill: white;" text="  2.7  Ejes, Ruedas, Neumáticos y Suspensión" textFill="#fcf9f9">
+         <font><Font name="Century Schoolbook" size="34.0" /></font>
+      </Label>
+
+      <TextArea fx:id="txtObservaciones" disable="true" layoutX="1095.0" layoutY="377.0" prefHeight="266.0" prefWidth="384.0" style="-fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" wrapText="true">
+         <font><Font size="20.0" /></font>
+      </TextArea>
+      <Label layoutX="1125.0" layoutY="330.0" prefHeight="47.0" prefWidth="309.0" text="Observaciones">
+         <font><Font name="Century Schoolbook" size="37.0" /></font>
+      </Label>
+
+      <VBox layoutX="464.0" layoutY="381.0" prefHeight="260.0" prefWidth="600.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="65.0">
                <children>
-                  <Label prefHeight="22.0" prefWidth="41.0" text="Ejes">
-                     <font>
-                        <Font name="Century Schoolbook" size="15.0" />
-                     </font>
+                  <Label prefHeight="36.0" prefWidth="509.0" text="07.01 Ejes">
+                     <font><Font name="Century Schoolbook" size="28.0" /></font>
+                     <HBox.margin><Insets left="20.0" /></HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkEjes" mnemonicParsing="false" onAction="#gestionarCheck" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </CheckBox>
-                  <Label prefHeight="22.0" prefWidth="102.0" text="Neumaticos">
-                     <font>
-                        <Font name="Century Schoolbook" size="15.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="30.0" />
-                     </HBox.margin>
+                  <CheckBox fx:id="chkEjes" onAction="#gestionarCheck" scaleX="2.0" scaleY="2.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="65.0">
+               <children>
+                  <Label prefHeight="36.0" prefWidth="509.0" text="07.02 Neumáticos">
+                     <font><Font name="Century Schoolbook" size="28.0" /></font>
+                     <HBox.margin><Insets left="20.0" /></HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkNeumaticos" mnemonicParsing="false" onAction="#gestionarCheck" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </CheckBox>
-                  <Label prefHeight="22.0" prefWidth="68.0" text="Ruedas">
-                     <font>
-                        <Font name="Century Schoolbook" size="15.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="30.0" />
-                     </HBox.margin>
+                  <CheckBox fx:id="chkNeumaticos" onAction="#gestionarCheck" scaleX="2.0" scaleY="2.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="65.0">
+               <children>
+                  <Label prefHeight="36.0" prefWidth="509.0" text="07.03 Ruedas">
+                     <font><Font name="Century Schoolbook" size="28.0" /></font>
+                     <HBox.margin><Insets left="20.0" /></HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkRuedas" mnemonicParsing="false" onAction="#gestionarCheck" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </CheckBox>
-                  <Label prefHeight="22.0" prefWidth="87.0" text="Suspensión">
-                     <font>
-                        <Font name="Century Schoolbook" size="15.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="30.0" />
-                     </HBox.margin>
+                  <CheckBox fx:id="chkRuedas" onAction="#gestionarCheck" scaleX="2.0" scaleY="2.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="65.0">
+               <children>
+                  <Label prefWidth="509.0" text="07.04 Suspensión">
+                     <font><Font name="Century Schoolbook" size="28.0" /></font>
+                     <HBox.margin><Insets left="20.0" /></HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkSuspension" mnemonicParsing="false" onAction="#gestionarCheck" prefHeight="26.0" prefWidth="22.0" style="-fx-font-style: 24;">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </CheckBox>
+                  <CheckBox fx:id="chkSuspension" onAction="#gestionarCheck" scaleX="2.0" scaleY="2.0" />
                </children>
             </HBox>
          </children>
-         <effect>
-            <DropShadow />
-         </effect>
-      </Pane>
-      <HBox layoutX="31.0" layoutY="179.0" prefHeight="43.0" prefWidth="847.0" style="-fx-background-radius: 5; -fx-padding: 5;">
-         <children>
-            <Label disable="true" prefHeight="34.0" prefWidth="226.0" style="-fx-background-radius: 10; -fx-background-color: gray; -fx-alignment: center;" text="1) Identificación" textFill="#f4f1f1">
-               <font>
-                  <Font name="Century Schoolbook" size="12.0" />
-               </font>
-            </Label>
-            <Label prefHeight="34.0" prefWidth="241.0" style="-fx-background-radius: 6; -fx-border-color: #bf820d; -fx-border-radius: 10; -fx-alignment: center; -fx-text-fill: white;" text="2) Pruebas Mecánicas" textFill="#404040">
-               <font>
-                  <Font name="Century Schoolbook" size="12.0" />
-               </font>
-            </Label>
-            <Label disable="true" prefHeight="34.0" prefWidth="217.0" style="-fx-background-color: gray; -fx-background-radius: 10; -fx-alignment: center;" text="3) Defectos" textFill="WHITE">
-               <font>
-                  <Font name="Century Schoolbook" size="12.0" />
-               </font>
-            </Label>
-            <Label disable="true" prefHeight="34.0" prefWidth="159.0" style="-fx-background-color: gray; -fx-background-radius: 10; -fx-alignment: center;" text="4) Resultado" textFill="WHITE">
-               <font>
-                  <Font name="Century Schoolbook" size="12.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
-      <Label layoutX="242.0" layoutY="14.0" prefHeight="64.0" prefWidth="463.0" text="Inspección Técnica" textFill="#bf820d">
-         <font>
-            <Font name="Century Schoolbook" size="50.0" />
-         </font>
+      </VBox>
+
+      <Label layoutX="479.0" layoutY="327.0" prefHeight="47.0" prefWidth="538.0" text="Seleccione las pruebas fallidas">
+         <font><Font name="Century Schoolbook" size="37.0" /></font>
       </Label>
-      <Pane layoutX="167.0" layoutY="114.0" prefHeight="43.0" prefWidth="601.0" style="-fx-background-radius: 10; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-border-width: 3;">
+
+      <AnchorPane layoutX="-1.0" prefHeight="750.0" prefWidth="411.0" style="-fx-background-color: #bf820d;">
          <children>
-            <Label layoutX="25.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0" style="-fx-text-fill: white;" text="Matricula:">
-               <font>
-                  <Font name="Century Schoolbook" size="17.0" />
-               </font>
-            </Label>
-            <Label layoutX="265.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0" style="-fx-text-fill: white;" text="Modelo:">
-               <font>
-                  <Font name="Century Schoolbook" size="17.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblMatricula" layoutX="121.0" layoutY="9.0" prefHeight="18.0" prefWidth="113.0" textFill="WHITE">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblModelo" layoutX="371.0" layoutY="9.0" prefHeight="26.0" prefWidth="223.0" textFill="WHITE">
-               <font>
-                  <Font size="17.0" />
-               </font>
-            </Label>
+            <VBox layoutX="-9.0" layoutY="1.0" prefHeight="748.0" prefWidth="419.0">
+               <children>
+                  <Pane prefHeight="68.0" prefWidth="419.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="70.0" prefWidth="411.0" text="  Menú Inspección" textFill="BLACK">
+                           <font><Font size="35.0" /></font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Button fx:id="exterior" alignment="BOTTOM_LEFT" onAction="#CambiarVentana" prefHeight="63.0" prefWidth="378.0" style="-fx-background-color: #ADA1A1;" text="    Acondicionamiento Exterior" textFill="WHITE">
+                     <VBox.margin><Insets left="25.0" /></VBox.margin>
+                     <font><Font size="20.0" /></font>
+                     <graphic><ImageView fitHeight="43.0" fitWidth="77.0" preserveRatio="true"><image><Image url="@../img/coche.png" /></image></ImageView></graphic>
+                  </Button>
+                  <Button fx:id="interior" alignment="BOTTOM_LEFT" onAction="#CambiarVentana" prefHeight="63.0" prefWidth="378.0" style="-fx-background-color: #ADA1A1;" text="   Acondicionamiento Interior" textFill="WHITE">
+                     <VBox.margin><Insets left="25.0" top="12.0" /></VBox.margin>
+                     <font><Font size="20.0" /></font>
+                     <graphic><ImageView fitHeight="53.0" fitWidth="50.0" preserveRatio="true"><image><Image url="@../img/asiento.png" /></image></ImageView></graphic>
+                  </Button>
+                  <Button fx:id="luces" alignment="BOTTOM_LEFT" onAction="#CambiarVentana" prefHeight="63.0" prefWidth="378.0" style="-fx-background-color: #ADA1A1;" text="         Alumbrado y Señalización" textFill="WHITE">
+                     <VBox.margin><Insets left="25.0" top="12.0" /></VBox.margin>
+                     <font><Font size="20.0" /></font>
+                     <graphic><ImageView fitHeight="47.0" fitWidth="77.0" preserveRatio="true"><image><Image url="@../img/luces.png" /></image></ImageView></graphic>
+                  </Button>
+                  <Button fx:id="emisiones" onAction="#CambiarVentana" prefHeight="63.0" prefWidth="378.0" style="-fx-background-color: #ADA1A1;" text="       Emisiones Contaminantes     " textFill="WHITE">
+                     <VBox.margin><Insets left="25.0" top="12.0" /></VBox.margin>
+                     <font><Font size="20.0" /></font>
+                     <graphic><ImageView fitHeight="45.0" fitWidth="47.0" preserveRatio="true"><image><Image url="@../img/gas.png" /></image></ImageView></graphic>
+                  </Button>
+                  <Button fx:id="frenos" alignment="BOTTOM_LEFT" onAction="#CambiarVentana" prefHeight="63.0" prefWidth="378.0" style="-fx-background-color: #ADA1A1;" text="                    Frenos" textFill="WHITE">
+                     <VBox.margin><Insets left="25.0" top="12.0" /></VBox.margin>
+                     <font><Font size="20.0" /></font>
+                     <graphic><ImageView fitHeight="43.0" fitWidth="67.0" preserveRatio="true"><image><Image url="@../img/frenos.png" /></image></ImageView></graphic>
+                  </Button>
+                  <Button fx:id="direccion" alignment="BOTTOM_LEFT" onAction="#CambiarVentana" prefHeight="63.0" prefWidth="378.0" style="-fx-background-color: #ADA1A1;" text="                 Dirección" textFill="WHITE">
+                     <VBox.margin><Insets left="25.0" top="12.0" /></VBox.margin>
+                     <font><Font size="20.0" /></font>
+                     <graphic><ImageView fitHeight="76.0" fitWidth="44.0" preserveRatio="true"><image><Image url="@../img/volante.png" /></image></ImageView></graphic>
+                  </Button>
+                  <Button fx:id="ejes" prefHeight="63.0" prefWidth="378.0" style="-fx-background-color: #666666;" text="                Ejes y Suspensión         " textFill="WHITE">
+                     <VBox.margin><Insets left="25.0" top="12.0" /></VBox.margin>
+                     <font><Font size="20.0" /></font>
+                     <graphic><ImageView fitHeight="53.0" fitWidth="47.0" preserveRatio="true"><image><Image url="@../img/muelle.png" /></image></ImageView></graphic>
+                  </Button>
+                  <Button fx:id="motor" alignment="BOTTOM_LEFT" onAction="#CambiarVentana" prefHeight="63.0" prefWidth="378.0" style="-fx-background-color: #ADA1A1;" text="            Motor y Transmisión" textFill="WHITE">
+                     <VBox.margin><Insets left="25.0" top="12.0" /></VBox.margin>
+                     <font><Font size="20.0" /></font>
+                     <graphic><ImageView fitHeight="43.0" fitWidth="43.0" preserveRatio="true"><image><Image url="@../img/motor.png" /></image></ImageView></graphic>
+                  </Button>
+                  <Button fx:id="defectos" alignment="BOTTOM_LEFT" onAction="#CambiarVentana" prefHeight="63.0" prefWidth="378.0" style="-fx-background-color: #ADA1A1;" text="                  Defectos" textFill="WHITE">
+                     <VBox.margin><Insets left="25.0" top="12.0" /></VBox.margin>
+                     <font><Font size="20.0" /></font>
+                     <graphic><ImageView fitHeight="42.0" fitWidth="56.0" preserveRatio="true"><image><Image url="@../img/defecto.png" /></image></ImageView></graphic>
+                  </Button>
+               </children>
+            </VBox>
          </children>
-      </Pane>
-      <Button fx:id="btnSiguiente" layoutX="217.0" layoutY="633.0" mnemonicParsing="false" onAction="#accionSiguiente" prefHeight="33.0" prefWidth="488.0" style="-fx-background-radius: 10px; -fx-background-color: #bf820d;" text="Siguiente -&gt;" textFill="WHITE">
-         <font>
-            <Font name="Century Schoolbook" size="21.0" />
-         </font>
-      </Button>
+      </AnchorPane>
    </children>
 </Pane>

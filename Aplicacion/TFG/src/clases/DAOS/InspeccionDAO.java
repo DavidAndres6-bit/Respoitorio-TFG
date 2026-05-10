@@ -265,4 +265,75 @@ public class InspeccionDAO {
         }   
         return historial;
     }
+
+    /*
+    *   Metodo para buscar si el vehiculo ya ha pasado ua itv en el dia actual
+    */
+
+    public static boolean existeInspeccionHoy(String matricula){
+
+        boolean existe = false;
+
+        // Consulta usando curdate para pasar el dia actual
+        String sql = "SELECT COUNT(*) FROM inspecciones WHERE matricula_coche = ? AND DATE(fecha_inspeccion) = CURDATE()";
+        
+        //Conexion a la base de datos
+        Connection con = null;
+
+        //Instancia de la clase conexion
+        Conexion c = new Conexion();
+
+        //ResultSet y PreparedStatement para la consulta
+        ResultSet rs = null;
+        PreparedStatement select = null;
+
+        //Recorremos la consulta y buscamos las inspecciones
+        try {
+            con = c.conexion();
+
+            if (con != null) {
+                select = con.prepareStatement(sql);
+                select.setString(1, matricula);
+                rs = select.executeQuery();
+            
+                // Comprobamos si hemos encontrado algun resultado
+                if (rs.next()) {
+                    int total = rs.getInt(1); // Recogemos el valor del count
+
+                    if (total > 0) {
+                        existe = true;
+                    }
+                }
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error en la consulta: " + e.getMessage());
+            e.printStackTrace();
+        } finally{
+            //Cerrar los recursos abiertos
+           try {
+                
+            //Cerrar el ResultSet
+            if (rs != null) {
+                 rs.close();
+            }
+                
+            //Cerrar el preparedStatement
+            if (select != null){
+                select.close();
+            }
+                
+            //Cerrar la conexion
+            if (con != null) {
+                con.close();
+            }
+                
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }  
+
+        return existe;
+    }
 }

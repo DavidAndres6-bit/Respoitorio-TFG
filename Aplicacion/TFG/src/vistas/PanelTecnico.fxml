@@ -53,7 +53,7 @@
       <Pane layoutX="250.0" prefHeight="750.0" prefWidth="1200.0">
          <children>
             <Label layoutX="317.0" layoutY="-10.0" prefHeight="100.0" prefWidth="772.0" style="-fx-text-fill: #bf820d;" text="Panel del Técnico">
-               <font><Font name="Century Schoolbook" size="80.0" /></font>
+               <font><Font size="80.0" /></font>
             </Label>
 
             <Pane layoutX="47.0" layoutY="131.0" prefHeight="151.0" prefWidth="632.0" style="-fx-background-color: #DBDBDB; -fx-background-radius: 15; -fx-border-color: #cccccc; -fx-border-radius: 15;">
@@ -134,7 +134,7 @@
                   <Image url="@../img/cerrarsesion.png" />
                </image>
             </ImageView>
-            <Button mnemonicParsing="false" prefHeight="90.0" prefWidth="195.0" style="-fx-background-color: transparent;" text="Cerrar Sesión" textFill="WHITE">
+            <Button mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="90.0" prefWidth="195.0" style="-fx-background-color: transparent;" text="Cerrar Sesión" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>

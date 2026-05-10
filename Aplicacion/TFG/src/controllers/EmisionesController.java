@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.Map;
+
 import clases.POJOS.Vehiculo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import utilities.BufferInspeccion;
+import utilities.MenuController;
 import utilities.Utilities;
 
 public class EmisionesController {
@@ -48,17 +51,46 @@ public class EmisionesController {
         Vehiculo v = BufferInspeccion.getVehiculoActual();
 
         // Cargar datos del buffer
-        if (BufferInspeccion.getVehiculoActual() != null) {
-            lblMatricula.setText(BufferInspeccion.getVehiculoActual().getMatricula());
-            lblModelo.setText(BufferInspeccion.getVehiculoActual().getModeloCompleto());
-
+       if (v != null) {
+            lblMatricula.setText(v.getMatricula());
+            lblModelo.setText(v.getModeloCompleto());
+            
             //Llamamos al metodo que calcular los limites de emisiones
             calcularLimites(v);
 
             // Llamamos al metodo que controla que pruebas debe pasar
             manejarPruebas(v);
-        }
 
+            // Recuperamos las posibles observaciones anteriores y los valores de emisiones
+            Map<String, String> valoresPrevios = BufferInspeccion.getValoresEmisiones();
+        
+
+            if (valoresPrevios != null) {
+                // Rellenamos los campos solo si el campo no está deshabilitado por la etiqueta
+                if (!txtOpacidad.isDisable()) {
+                    String val = valoresPrevios.getOrDefault("opacidad", "");
+                    txtOpacidad.setText(val);           
+                }
+                if (!txtRalenti.isDisable()) {
+                    String val = valoresPrevios.getOrDefault("coRalenti", "");
+                    txtRalenti.setText(val);
+                }
+                if (!txtRalentiAcelerado.isDisable()) {
+                    String val = valoresPrevios.getOrDefault("coRalentiAcelerado", "");
+                    txtRalentiAcelerado.setText(val);
+                }
+            }
+
+            // Actualizar los valores
+            gestionarValores();
+
+            String obs = BufferInspeccion.getObservacionPosicion(3);
+            if (obs != null && !obs.isEmpty()) {
+                txtObservaciones.setText(obs.replace("[EMISIONES]: ", ""));
+                System.out.println(" > Observaciones recuperadas: " + obs);
+            }
+        
+        }
         // Igual que hicimos en la ventana de identificación usamos estos escuchadores para habilitar o deshabilitar
         // para habilitar o deshabilitar el textarea
         txtOpacidad.textProperty().addListener((obs, oldV, newV) -> gestionarValores());
@@ -125,74 +157,79 @@ public class EmisionesController {
 
     private boolean nivelesCorrectos(){
 
-        //Variable para guardar si son correctos
-        boolean correctos = true;
+        // Variable que almacena el resultado global
+        boolean correcto = true;
 
-        //Recoger los valores introducidos
-        String opacidadStr = txtOpacidad.getText().replace(",", ".");
-        String ralentiStr = txtRalenti.getText().replace(",", ".");
-        String aceleradoStr = txtRalentiAcelerado.getText().replace(",", ".");
+        // Empezamos con todos correctos
+        boolean c1 = true;
+        boolean c2 = true;
+        boolean c3 = true;
 
+        // Estilos fijos para mantener el diseño 
+        String estiloFallo = "-fx-background-color: #ff9999; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 20;";
+        String estiloOk = "-fx-background-color: #99ff99; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 20;";
+        String estiloActivo = "-fx-background-color: white; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 20;";
+        String estiloBloqueado = "-fx-background-color: #eeeeee; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 20;";
 
-        // COMPROBACIÓN DE OPACIDAD
-        if(!opacidadStr.isEmpty() && !opacidadStr.equalsIgnoreCase("N/A")){
-            double opacidad = Double.parseDouble(opacidadStr);
-            BufferInspeccion.getValoresEmisiones().put("opacidad", opacidadStr);
+        // Validamos cada campo por separado
+        c1 = validarUnicoCampo(txtOpacidad, limiteOpacidad, "opacidad", "resOpacidad", estiloFallo, estiloOk, estiloActivo, estiloBloqueado);
+        c2 = validarUnicoCampo(txtRalenti, limiteRalenti, "coRalenti", "resCoRalenti", estiloFallo, estiloOk, estiloActivo, estiloBloqueado);
+        c3 = validarUnicoCampo(txtRalentiAcelerado, limiteAcelerado, "coRalentiAcelerado", "resRalentiAcelerado", estiloFallo, estiloOk, estiloActivo, estiloBloqueado);
 
-            if(opacidad > limiteOpacidad){
-                correctos = false;
-                BufferInspeccion.getValoresEmisiones().put("resOpacidad", "X");
-                txtOpacidad.setStyle("-fx-background-color: #ff9999;");
-            } else {
-                BufferInspeccion.getValoresEmisiones().put("resOpacidad", "S");
-                txtOpacidad.setStyle("-fx-background-color: #99ff99;");
-            }
-
-        } else {
-            BufferInspeccion.getValoresEmisiones().put("opacidad", "N/A");
-            BufferInspeccion.getValoresEmisiones().put("resOpacidad", "N/A");
+        // Si alguno falla devolvemos false
+        if(c1 == false || c2 == false || c3 == false){
+            correcto = false;
         }
 
-        // COMPROBACIÓN DE CO RALENTÍ 
-        if(!ralentiStr.isEmpty() && !ralentiStr.equalsIgnoreCase("N/A")){
-            double coRalenti = Double.parseDouble(ralentiStr);
-            BufferInspeccion.getValoresEmisiones().put("coRalenti", ralentiStr);
+        return correcto;
+    }
 
-            if(coRalenti > limiteRalenti){
-                correctos = false;
-                BufferInspeccion.getValoresEmisiones().put("resCoRalenti", "X");
-                txtRalenti.setStyle("-fx-background-color: #ff9999;");
-            } else {
-                BufferInspeccion.getValoresEmisiones().put("resCoRalenti", "S");
-                txtRalenti.setStyle("-fx-background-color: #99ff99;");
-            }
+    /*
+    *   Funcion para validar cada campo
+    */
 
-        } else {
-            BufferInspeccion.getValoresEmisiones().put("coRalenti", "N/A");
-            BufferInspeccion.getValoresEmisiones().put("resCoRalenti", "N/A");
+    private boolean validarUnicoCampo(TextField campo, double limite, String valor, String resultado, String fallo, String ok, String activo, String bloqueado) {
+
+        // Variable para guardar el resultado
+        boolean correcto = false;
+    
+        // Si esta deshabilitado por la etiqueta aplicamos el estilo
+        if (campo.isDisable()) {
+            campo.setStyle(bloqueado);
+            correcto = true;
         }
 
-        // COMPROBACIÓN DE CO ACELERADO
+        // Recogemos el valore del campo
+        String texto = campo.getText().replace(",", ".").trim();
 
-        if(!aceleradoStr.isEmpty() && !aceleradoStr.equalsIgnoreCase("N/A")){
-            double coRalentiAcelerado = Double.parseDouble(aceleradoStr);
-            BufferInspeccion.getValoresEmisiones().put("coRalentiAcelerado", aceleradoStr);
-
-            if(coRalentiAcelerado > limiteAcelerado){
-                correctos = false;
-                BufferInspeccion.getValoresEmisiones().put("resRalentiAcelerado", "X");
-                txtRalentiAcelerado.setStyle("-fx-background-color: #ff9999;");
-            } else {
-                BufferInspeccion.getValoresEmisiones().put("resRalentiAcelerado", "S");
-                txtRalentiAcelerado.setStyle("-fx-background-color: #99ff99;");
-            }
-        
-        } else {
-            BufferInspeccion.getValoresEmisiones().put("coRalentiAcelerado", "N/A");
-            BufferInspeccion.getValoresEmisiones().put("resRalentiAcelerado", "N/A");
+        // Si el tecnico borra el texto volvemos al estilo original
+        if (texto.isEmpty()) {
+            campo.setStyle(activo); // Vuelve a blanco con borde dorado
+            BufferInspeccion.getValoresEmisiones().put(valor, "");
+            BufferInspeccion.getValoresEmisiones().put(resultado, "");
+            correcto = true;
         }
 
-        return correctos;
+        // Comprobamos el valor con su limite establecido por el tipo de etiqueta
+        try {
+            double emisiones = Double.parseDouble(texto);
+            BufferInspeccion.getValoresEmisiones().put(valor, texto);
+            
+            if (emisiones > limite) {
+                campo.setStyle(fallo); // Fondo rojo, borde dorado
+                BufferInspeccion.getValoresEmisiones().put(resultado, "X");
+                correcto =  false;
+            } else {
+                campo.setStyle(ok); // Fondo verde, borde dorado
+                BufferInspeccion.getValoresEmisiones().put(resultado, "S");
+                correcto =  true;
+            }
+
+        } catch (Exception e) {
+            // Si mete letras o caracteres raros, lo dejamos en blanco
+            campo.setStyle(activo);
+        }
+        return correcto;
     }
 
     /*
@@ -247,6 +284,45 @@ public class EmisionesController {
         return todoRelleno;
     }
 
+    private void guardarDatosEnBuffer() {
+    
+        // Comprobamos el resultado del apartado
+        boolean resultadoGlobal = nivelesCorrectos(); 
+        
+        // Guardamos el resultado del apartado
+        BufferInspeccion.getInspeccionActual().setEmisiones(resultadoGlobal);
+
+        // Guardamos las observaciones
+        String texto = txtObservaciones.getText().trim();
+        if (!texto.isEmpty()) {
+            BufferInspeccion.guardarObservacion(3, "[EMISIONES]: " + texto);
+        } else {
+            BufferInspeccion.guardarObservacion(3, "");
+        }
+    }
+
+
+    /*
+    *   ActionEvent que maneja las opciones del menu
+    */
+    
+    @FXML
+    public void CambiarVentana(ActionEvent event){
+
+        // Guardar los datos en el buffer
+        guardarDatosEnBuffer();
+
+        // Obtenemos el botón 
+        Button btnPulsado = (Button) event.getSource();
+        
+        // Obtenemos su ID
+        String seccion = btnPulsado.getId(); 
+        
+        // Llamamos al metodo de utilities
+        MenuController.abrirVentana(seccion, event);
+    }
+
+
     /*
     *   Funcion para cambiar a la siguiente ventana
     */
@@ -259,17 +335,8 @@ public class EmisionesController {
 
         // Si los ha rellenado todos
         if(puedeAvanzar){
-            //Si se han introducido valores superiores a los maximos permitidos marcamos el resultado del apartado como false
-            BufferInspeccion.getInspeccionActual().setEmisiones(nivelesCorrectos());
-
-            //Guardamos las observaciones
-            String texto = txtObservaciones.getText().trim();
-        
-            if (!texto.isEmpty()) {
-                BufferInspeccion.guardarObservacion(3,"[EMISIONES]: " +texto);
-            } else {
-                BufferInspeccion.guardarObservacion(3,"");
-            }
+            // Guardar los datos en el buffer
+            guardarDatosEnBuffer();
 
             //Cambiamos de ventana
             Utilities.abrirVentana("/vistas/Frenos.fxml", "Frenos");
@@ -288,7 +355,8 @@ public class EmisionesController {
     private void deshabilitarCampo(TextField campo){
         campo.setText("N/A");
         campo.setDisable(true);
-        campo.setStyle("-fx-background-color: #eeeeee;");
+        // Mantenemos el borde gris suave para campos deshabilitados
+        campo.setStyle("-fx-background-color: #eeeeee; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5;");
     }
 
     /*
@@ -298,6 +366,7 @@ public class EmisionesController {
     private void habilitarCampo(TextField campo){
         campo.clear();
         campo.setDisable(false);
-        campo.setStyle(" ");
+        // Restauramos el borde dorado original del diseño
+        campo.setStyle("-fx-background-color: white; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-background-radius: 5;");
     }
 }

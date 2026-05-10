@@ -53,6 +53,10 @@ public class MenuController {
                 ruta = "/vistas/MotoryTransmision.fxml";
                 titulo = "Motor y Transmisión";
                 break;
+            case "defectos":
+                ruta = "/vistas/Defectos.fxml";
+                titulo = "Defectos Encontrados";
+                break;
         }
     
     

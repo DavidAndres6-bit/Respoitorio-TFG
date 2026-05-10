@@ -143,6 +143,8 @@ public class IdentificacionController {
                 // Guardamos la fecha de la inspeccion
                 BufferInspeccion.getInspeccionActual().setFechaInspeccion(java.time.LocalDate.now());
                 
+                System.out.println("DEBUG ID: Vehículo guardado -> " + BufferInspeccion.getVehiculoActual().getMatricula());
+
                 Utilities.abrirVentana("/vistas/AcondicionamientoExterior.fxml", "Acondicionamiento Exterior, Carroceria y Chasis");
                 Utilities.cerrarVentana(event);
             }

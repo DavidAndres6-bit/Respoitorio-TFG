@@ -77,6 +77,16 @@ public class BufferInspeccion {
             observaciones[posicion] = texto;
         }
     }
+
+    // Recuperar las observaciones de una posicion concreta
+    public static String getObservacionPosicion(int posicion) {
+        String obs = "";
+        if (posicion >= 0 && posicion < observaciones.length) {
+            obs= observaciones[posicion];
+        }
+
+        return obs;
+    }
     
     // Metodo para juntar las observaciones recogidas durante la inspeccion
     public static String juntarObservaciones() {

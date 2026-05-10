@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.Map;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,11 +34,32 @@ public class AcondicionamientoExteriorController {
 
     @FXML
     public void initialize() {
+        
         // Cargar datos del buffer
         if (BufferInspeccion.getVehiculoActual() != null) {
             lblMatricula.setText(BufferInspeccion.getVehiculoActual().getMatricula());
             lblModelo.setText(BufferInspeccion.getVehiculoActual().getModeloCompleto());
+            System.out.println("DEBUG 2: El vehículo sigue en el buffer: " + BufferInspeccion.getVehiculoActual().getMatricula());
         }
+
+        // Recuperamos los posibles checks marcados previamente para que no se pierda la informacion al volver
+        Map<String, Boolean> checks = BufferInspeccion.getChecksMarcados();
+        chkRetrovisores.setSelected(checks.getOrDefault("retrovisores", false));
+        chkLimpia.setSelected(checks.getOrDefault("limpia", false));
+        chkChasis.setSelected(checks.getOrDefault("chasis", false));
+        chkProtecciones.setSelected(checks.getOrDefault("protecciones", false));
+    
+        // Recuperamos las posibles observaciones que ubiese escrito
+        String obsGuardada = BufferInspeccion.getObservacionPosicion(0);
+        if (obsGuardada != null && !obsGuardada.isEmpty()) {
+            // Quitamos el prefijo "[ACONDICIONAMIENTO EXTERIOR]: " para mostrarlo en el TextArea
+            String textoLimpio = obsGuardada.replace("[ACONDICIONAMIENTO EXTERIOR]: ", "");
+            txtObservaciones.setText(textoLimpio);
+        }
+        
+        
+        gestionarCheck();
+
     }
 
     /*
@@ -77,7 +100,35 @@ public class AcondicionamientoExteriorController {
             txtObservaciones.setDisable(true);
             txtObservaciones.setText("");
         }
+       
+
     }
+
+    /*
+    *   Metodo para guardar los datos en el Buffer al cambiar de ventana desde el boton o desde el menu
+    */
+
+    private void guardarDatosEnBuffer() {
+        // Guardamos el estado de la inspección
+        BufferInspeccion.getInspeccionActual().setAcondicionamientoExterior(!hayFallos());
+
+
+        // Guardamos los checks en el Map
+        BufferInspeccion.getChecksMarcados().put("retrovisores", chkRetrovisores.isSelected());
+        BufferInspeccion.getChecksMarcados().put("limpia", chkLimpia.isSelected());
+        BufferInspeccion.getChecksMarcados().put("chasis", chkChasis.isSelected());
+        BufferInspeccion.getChecksMarcados().put("protecciones", chkProtecciones.isSelected());
+
+        // Guardamos las observaciones
+        String texto = txtObservaciones.getText().trim();
+        if (!texto.isEmpty()) {
+            BufferInspeccion.guardarObservacion(0, "[ACONDICIONAMIENTO EXTERIOR]: " + texto);
+        } else {
+            BufferInspeccion.guardarObservacion(0, "");
+        }
+
+    }
+
 
     /*
     *   ActionEvent que maneja las opciones del menu
@@ -85,6 +136,10 @@ public class AcondicionamientoExteriorController {
     
     @FXML
     public void CambiarVentana(ActionEvent event){
+
+        // Guardar los datos en el buffer
+        guardarDatosEnBuffer();
+
         // Obtenemos el botón 
         Button btnPulsado = (Button) event.getSource();
         
@@ -104,28 +159,11 @@ public class AcondicionamientoExteriorController {
     @FXML
     private void accionSiguiente(ActionEvent event) {
 
-        // Si se han marcado checkboxs guardamos el resultado como false
-        BufferInspeccion.getInspeccionActual().setAcondicionamientoExterior(!hayFallos());
+        // Guardamos los datos
+        guardarDatosEnBuffer();
 
-        // Guardamos los checkboxs
-        BufferInspeccion.getChecksMarcados().put("retrovisores", chkRetrovisores.isSelected());
-        BufferInspeccion.getChecksMarcados().put("limpia", chkLimpia.isSelected());
-        BufferInspeccion.getChecksMarcados().put("chasis", chkChasis.isSelected());
-        BufferInspeccion.getChecksMarcados().put("protecciones", chkProtecciones.isSelected());
-
-
-        // Guardamos las observaciones
-        String texto = txtObservaciones.getText().trim();
-    
-        if (!texto.isEmpty()) {
-            BufferInspeccion.guardarObservacion(0,"[ACONDICIONAMIENTO EXTERIOR]: " +texto);
-        } else {
-            BufferInspeccion.guardarObservacion(0,"");
-        }
-       
-        // Cambiamos de ventana        
+        // Cambiamos de ventana
         Utilities.abrirVentana("/vistas/AcondicionamientoInterior.fxml", "Acondicionamiento Interior");
-
         Utilities.cerrarVentana(event);
     }
 

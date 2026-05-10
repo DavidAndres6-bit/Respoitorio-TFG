@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import utilities.Utilities;
 
@@ -17,8 +18,11 @@ public class AltaUsuarioController {
     */
 
     @FXML 
-    private TextField txtNombre, txtCorreo, txtTelefono, txtContrasenia;
+    private TextField txtNombre, txtCorreo, txtTelefono;
     
+    @FXML
+    private PasswordField txtContrasenia;
+
     @FXML 
     private ComboBox<String> spRolUsuario;
 
@@ -108,16 +112,19 @@ public class AltaUsuarioController {
     private String validarFormatos() {
         String respuesta = null;
         
+        // Validamos el correo
         if (!Utilities.correoValido(txtCorreo.getText())) {
-            respuesta =  "El formato del correo electrónico no es válido.";
+            return "El formato del correo electrónico no es válido (ejemplo@dominio.com).";
         }
 
+        // Validamos el teléfono
         if (!Utilities.telefonoValido(txtTelefono.getText())) {
-            respuesta =  "El teléfono debe tener 9 dígitos y empezar por 6, 7, 8 o 9.";
+            return "El teléfono no es válido. Debe tener 9 dígitos y empezar por 6, 7, 8 o 9.";
         }
 
+        // Validamos la contraseña 
         if (!Utilities.contraseniaValida(txtContrasenia.getText())) {
-            respuesta =  "La contraseña debe tener al menos 4 caracteres.";
+            return "La contraseña es demasiado corta. Debe tener al menos 6 caracteres.";
         }
 
         return respuesta; 

@@ -1,11 +1,15 @@
 package controllers;
 
+import java.util.Map;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import utilities.BufferInspeccion;
+import utilities.MenuController;
 import utilities.Utilities;
 
 public class AlumbradoySenializacionController {
@@ -19,7 +23,7 @@ public class AlumbradoySenializacionController {
     private Label lblMatricula, lblModelo;
     
     @FXML 
-    private CheckBox chkCruce, chkLargas, chkIntermitentes, chkAntinieblas, chkPosicion, chkMarchaAtras, chkFreno;
+    private CheckBox chkCruce, chkIntermitentes, chkAntinieblas, chkPosicion, chkMarchaAtras, chkFreno;
     
     @FXML 
     private TextArea txtObservaciones;
@@ -35,6 +39,25 @@ public class AlumbradoySenializacionController {
             lblMatricula.setText(BufferInspeccion.getVehiculoActual().getMatricula());
             lblModelo.setText(BufferInspeccion.getVehiculoActual().getModeloCompleto());
         }
+
+        // Recuperamos los posibles checks marcados previamente para que no se pierda la informacion al volver
+        Map<String, Boolean> checks = BufferInspeccion.getChecksMarcados();
+        chkCruce.setSelected(checks.getOrDefault("cruce", false));
+        chkIntermitentes.setSelected(checks.getOrDefault("intermitentes", false));
+        chkAntinieblas.setSelected(checks.getOrDefault("antinieblas", false));
+        chkPosicion.setSelected(checks.getOrDefault("posicion", false));
+        chkMarchaAtras.setSelected(checks.getOrDefault("marchaAtras", false));
+        chkFreno.setSelected(checks.getOrDefault("freno",false));
+
+
+        // Recuperamos las posibles observaciones que ubiese escrito quitando el prefijo
+        String obsGuardada = BufferInspeccion.getObservacionPosicion(2);
+        if (obsGuardada != null && !obsGuardada.isEmpty()) {
+            String textoLimpio = obsGuardada.replace("[ALUMBRADO Y SEÑALIZACIÓN]: ", "");
+            txtObservaciones.setText(textoLimpio);
+        }
+           
+        gestionarCheck();
     }
 
     /*
@@ -47,7 +70,7 @@ public class AlumbradoySenializacionController {
         boolean fallos = false;
 
         // Comprobar si hay check seleccionados
-        if(chkCruce.isSelected() || chkLargas.isSelected() || chkIntermitentes.isSelected() || chkAntinieblas.isSelected() || chkPosicion.isSelected() || chkMarchaAtras.isSelected() || chkFreno.isSelected()){
+        if(chkCruce.isSelected() || chkIntermitentes.isSelected() || chkAntinieblas.isSelected() || chkPosicion.isSelected() || chkMarchaAtras.isSelected() || chkFreno.isSelected()){
             fallos = true;
         }
 
@@ -76,32 +99,62 @@ public class AlumbradoySenializacionController {
     }
 
     /*
-    *   Funcion para cambiar a la siguiente ventana
+    *   Metodo para guardar los datos en el Buffer al cambiar de ventana desde el boton o desde el menu
     */
 
-    @FXML
-    private void accionSiguiente(ActionEvent event) {
+    private void guardarDatosEnBuffer() {
 
-        // Si se han marcado checkboxs guardamos el resultado como false
+        // Guardamos el estado de la inspección
         BufferInspeccion.getInspeccionActual().setAlumbradoSenializacion(!hayFallos());
 
-        // Guardamos los checkboxs
+        // Guardar estado de cada check
         BufferInspeccion.getChecksMarcados().put("cruce", chkCruce.isSelected());
-        BufferInspeccion.getChecksMarcados().put("largas", chkLargas.isSelected());
+        BufferInspeccion.getChecksMarcados().put("largas", chkCruce.isSelected()); // Unificado
         BufferInspeccion.getChecksMarcados().put("intermitentes", chkIntermitentes.isSelected());
         BufferInspeccion.getChecksMarcados().put("antinieblas", chkAntinieblas.isSelected());
         BufferInspeccion.getChecksMarcados().put("posicion", chkPosicion.isSelected());
         BufferInspeccion.getChecksMarcados().put("marchaAtras", chkMarchaAtras.isSelected());
         BufferInspeccion.getChecksMarcados().put("freno", chkFreno.isSelected());
 
-        // Guardamos las observaciones
+        // Guardar observaciones
         String texto = txtObservaciones.getText().trim();
-    
         if (!texto.isEmpty()) {
-            BufferInspeccion.guardarObservacion(2,"[ALUMBRADO Y SEÑIALIZACIÓN]: " +texto);
+            BufferInspeccion.guardarObservacion(2, "[ALUMBRADO Y SEÑALIZACIÓN]: " + texto);
         } else {
-            BufferInspeccion.guardarObservacion(2,"");
+            BufferInspeccion.guardarObservacion(2, "");
         }
+    }
+
+    /*
+    *   ActionEvent que maneja las opciones del menu
+    */
+    
+    @FXML
+    public void CambiarVentana(ActionEvent event){
+
+        // Guardar los datos en el buffer
+        guardarDatosEnBuffer();
+
+        // Obtenemos el botón 
+        Button btnPulsado = (Button) event.getSource();
+        
+        // Obtenemos su ID
+        String seccion = btnPulsado.getId(); 
+        
+        // Llamamos al metodo de utilities
+        MenuController.abrirVentana(seccion, event);
+    }
+
+    
+    /*
+    *   Funcion para cambiar a la siguiente ventana
+    */
+
+    @FXML
+    private void accionSiguiente(ActionEvent event) {
+
+        // Guardamos los datos
+        guardarDatosEnBuffer();
 
         // Cambiamos de ventana        
         Utilities.abrirVentana("/vistas/EmisionesContaminantes.fxml", "Emisiones Contaminantes");

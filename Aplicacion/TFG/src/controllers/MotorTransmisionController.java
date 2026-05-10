@@ -1,11 +1,15 @@
 package controllers;
 
+import java.util.Map;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import utilities.BufferInspeccion;
+import utilities.MenuController;
 import utilities.Utilities;
 
 public class MotorTransmisionController {
@@ -32,12 +36,32 @@ public class MotorTransmisionController {
 
     @FXML
     public void initialize() {
+
+        System.out.println("Datos en buffer: " + BufferInspeccion.getInspeccionActual().getObservaciones());
+         System.out.println("Datos en buffer: " + BufferInspeccion.getInspeccionActual().getListaDefectos());
+
         // Cargar datos del buffer
         if (BufferInspeccion.getVehiculoActual() != null) {
             lblMatricula.setText(BufferInspeccion.getVehiculoActual().getMatricula());
             lblModelo.setText(BufferInspeccion.getVehiculoActual().getModeloCompleto());
         }
+        
+        // Recuperamos los posibles checks marcados previamente para que no se pierda la informacion al volver
+        Map<String, Boolean> checks = BufferInspeccion.getChecksMarcados();
+        chkEstadoMotor.setSelected(checks.getOrDefault("estadoMotor", false));
+        chkSistemaEscape.setSelected(checks.getOrDefault("sistemaEscape", false));
+        chkTransmision.setSelected(checks.getOrDefault("transmision", false));
+        chkAlimentacion.setSelected(checks.getOrDefault("alimentacion", false));
+    
+        // Recuperamos las posibles observaciones que ubiese escrito
+        String obsGuardada = BufferInspeccion.getObservacionPosicion(7);
+        if (obsGuardada != null && !obsGuardada.isEmpty()) {
+            String textoLimpio = obsGuardada.replace("[MOTOR Y TRANSMISION]: ", "");
+            txtObservaciones.setText(textoLimpio);
+        }
+
     }
+        
 
     /*
     *   Funcion que comprueba si hay checkboxs marcados
@@ -78,12 +102,12 @@ public class MotorTransmisionController {
     }
 
     /*
-    *   Funcion para cambiar a la siguiente ventana
+    *   Metodo para guardar los datos en el Buffer al cambiar de ventana desde el boton o desde el menu
     */
 
-    @FXML
-    private void accionSiguiente(ActionEvent event) {
-
+    private void guardarDatosEnBuffer() {
+       
+       
         // Si se han marcado checkboxs guardamos el resultado como false
         BufferInspeccion.getInspeccionActual().setMotorTransmision(!hayFallos());
 
@@ -103,6 +127,39 @@ public class MotorTransmisionController {
             BufferInspeccion.guardarObservacion(7,"");
         }
           
+    }
+
+    /*
+    *   ActionEvent que maneja las opciones del menu
+    */
+    
+    @FXML
+    public void CambiarVentana(ActionEvent event){
+
+        // Guardar los datos en el buffer
+        guardarDatosEnBuffer();
+
+        // Obtenemos el botón 
+        Button btnPulsado = (Button) event.getSource();
+        
+        // Obtenemos su ID
+        String seccion = btnPulsado.getId(); 
+        
+        // Llamamos al metodo de utilities
+        MenuController.abrirVentana(seccion, event);
+    }
+    
+
+    /*
+    *   Funcion para cambiar a la siguiente ventana
+    */
+
+    @FXML
+    private void accionSiguiente(ActionEvent event) {
+        
+        // Guardar los datos en el buffer
+        guardarDatosEnBuffer();
+
         // Cambiamos de ventana
         Utilities.abrirVentana("/vistas/Defectos.fxml", "Defectos Encontrados");
 

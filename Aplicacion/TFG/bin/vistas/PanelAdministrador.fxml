@@ -108,7 +108,7 @@
                   <Image url="@../img/cerrarsesion.png" />
                </image>
             </ImageView>
-            <Button mnemonicParsing="false" prefHeight="90.0" prefWidth="195.0" style="-fx-background-color: transparent;" text="Cerrar Sesión" textFill="WHITE">
+            <Button mnemonicParsing="false" onAction="#cerrarSesion" prefHeight="90.0" prefWidth="195.0" style="-fx-background-color: transparent;" text="Cerrar Sesión" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>
