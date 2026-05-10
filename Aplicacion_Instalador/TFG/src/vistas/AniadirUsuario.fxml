@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1450.0" style="-fx-background-color: #F4F4F4;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AltaUsuarioController">
+   <children>
+      
+      <VBox alignment="TOP_CENTER" layoutX="225.0" layoutY="40.0" prefHeight="670.0" prefWidth="1000.0" spacing="30.0">
+         <children>
+            
+            <Label text="Dar de Alta Usuario" textFill="#bf820d">
+               <font><Font name="System Bold" size="60.0" /></font>
+            </Label>
+
+            <VBox prefHeight="450.0" prefWidth="1000.0" spacing="25.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 40;">
+               <children>
+                  
+                  <HBox alignment="CENTER_LEFT" spacing="30.0">
+                     <children>
+                        <Label prefWidth="350.0" text="Nombre de usuario:">
+                           <font><Font name="System" size="28.0" /></font>
+                        </Label>
+                        <TextField fx:id="txtNombre" prefHeight="50.0" prefWidth="500.0" style="-fx-background-radius: 10; -fx-border-color: #bf820d; -fx-border-radius: 10; -fx-font-size: 20;" />
+                     </children>
+                  </HBox>
+
+                  <HBox alignment="CENTER_LEFT" spacing="30.0">
+                     <children>
+                        <Label prefWidth="350.0" text="Correo electrónico:">
+                           <font><Font name="System" size="28.0" /></font>
+                        </Label>
+                        <TextField fx:id="txtCorreo" prefHeight="50.0" prefWidth="500.0" style="-fx-background-radius: 10; -fx-border-color: #bf820d; -fx-border-radius: 10; -fx-font-size: 20;" />
+                     </children>
+                  </HBox>
+
+                  <HBox alignment="CENTER_LEFT" spacing="30.0">
+                     <children>
+                        <Label prefWidth="350.0" text="Número de teléfono:">
+                           <font><Font name="System" size="28.0" /></font>
+                        </Label>
+                        <TextField fx:id="txtTelefono" prefHeight="50.0" prefWidth="500.0" style="-fx-background-radius: 10; -fx-border-color: #bf820d; -fx-border-radius: 10; -fx-font-size: 20;" />
+                     </children>
+                  </HBox>
+
+                  <HBox alignment="CENTER_LEFT" spacing="30.0">
+                     <children>
+                        <Label prefWidth="350.0" text="Contraseña:">
+                           <font><Font name="System" size="28.0" /></font>
+                        </Label>
+                        <PasswordField fx:id="txtContrasenia" prefHeight="50.0" prefWidth="500.0" style="-fx-background-radius: 10; -fx-border-color: #bf820d; -fx-border-radius: 10; -fx-font-size: 20;" />
+                     </children>
+                  </HBox>
+
+                  <HBox alignment="CENTER_LEFT" spacing="30.0">
+                     <children>
+                        <Label prefWidth="350.0" text="Rol del usuario:">
+                           <font><Font name="System" size="28.0" /></font>
+                        </Label>
+                        <ComboBox fx:id="spRolUsuario" prefHeight="50.0" prefWidth="500.0" style="-fx-background-radius: 10; -fx-border-color: #bf820d; -fx-border-radius: 10; -fx-font-size: 20;" />
+                     </children>
+                  </HBox>
+
+               </children>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" color="#00000026" radius="15.0" />
+               </effect>
+            </VBox>
+
+            <HBox alignment="CENTER" spacing="100.0">
+               <children>
+                  <Button fx:id="btn_cancelar" mnemonicParsing="false" onAction="#accionCancelar" prefHeight="61.0" prefWidth="398.0" style="-fx-background-color: #616161; -fx-background-radius: 15; -fx-cursor: hand;" text="Cancelar" textFill="WHITE">
+                     <font><Font name="System Bold" size="28.0" /></font>
+                     <effect><DropShadow color="#00000044" /></effect>
+                  </Button>
+                  <Button fx:id="btn_nuevoUsuario" mnemonicParsing="false" onAction="#accionGuardar" prefHeight="59.0" prefWidth="410.0" style="-fx-background-color: #00ab4b; -fx-background-radius: 15; -fx-cursor: hand;" text="Registrar Usuario" textFill="WHITE">
+                     <font><Font name="System Bold" size="28.0" /></font>
+                     <effect><DropShadow color="#00000044" /></effect>
+                  </Button>
+               </children>
+               <VBox.margin><Insets top="20.0" /></VBox.margin>
+            </HBox>
+
+         </children>
+      </VBox>
+   </children>
+</Pane>

@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "EJECUTAR TFG",
+            "request": "launch",
+            "mainClass": "clases.UI.Login",
+           "vmArgs": "-Djava.library.path=\"${workspaceFolder}/bin\" --module-path \"${workspaceFolder}/lib\" --add-modules javafx.controls,javafx.fxml -Dprism.order=sw"
+        }
+    ]
+}
