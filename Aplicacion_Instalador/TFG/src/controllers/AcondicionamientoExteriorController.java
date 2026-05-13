@@ -1,13 +1,11 @@
 package controllers;
 
-import java.util.Map;
-
+import clases.POJOS.Defecto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import utilities.BufferInspeccion;
 import utilities.MenuController;
 import utilities.Utilities;
@@ -15,146 +13,107 @@ import utilities.Utilities;
 public class AcondicionamientoExteriorController {
 
     /*
-    *   Recoger los valores del formulario
-    */
+     * Recoger los valores del formulario
+     */
 
-    @FXML 
+    @FXML
     private Label lblMatricula, lblModelo;
-    
-    @FXML 
-    private CheckBox chkRetrovisores, chkLimpia, chkChasis, chkProtecciones;
-    
-    @FXML 
-    private TextArea txtObservaciones;
 
+    @FXML
+    private ChoiceBox<String> cbRetrovisores, cbLimpia, cbChasis, cbProtecciones;
 
     /*
-    *   Metodo para inicializar los valores de matricula modelo
-    */
+     * Metodo para inicializar los valores de matricula modelo
+     */
 
     @FXML
     public void initialize() {
-        
+
         // Cargar datos del buffer
         if (BufferInspeccion.getVehiculoActual() != null) {
             lblMatricula.setText(BufferInspeccion.getVehiculoActual().getMatricula());
             lblModelo.setText(BufferInspeccion.getVehiculoActual().getModeloCompleto());
-            System.out.println("DEBUG 2: El vehículo sigue en el buffer: " + BufferInspeccion.getVehiculoActual().getMatricula());
         }
 
-        // Recuperamos los posibles checks marcados previamente para que no se pierda la informacion al volver
-        Map<String, Boolean> checks = BufferInspeccion.getChecksMarcados();
-        chkRetrovisores.setSelected(checks.getOrDefault("retrovisores", false));
-        chkLimpia.setSelected(checks.getOrDefault("limpia", false));
-        chkChasis.setSelected(checks.getOrDefault("chasis", false));
-        chkProtecciones.setSelected(checks.getOrDefault("protecciones", false));
-    
-        // Recuperamos las posibles observaciones que ubiese escrito
-        String obsGuardada = BufferInspeccion.getObservacionPosicion(0);
-        if (obsGuardada != null && !obsGuardada.isEmpty()) {
-            // Quitamos el prefijo "[ACONDICIONAMIENTO EXTERIOR]: " para mostrarlo en el TextArea
-            String textoLimpio = obsGuardada.replace("[ACONDICIONAMIENTO EXTERIOR]: ", "");
-            txtObservaciones.setText(textoLimpio);
-        }
-        
-        
-        gestionarCheck();
+        // Configuramos los choicebox con sus codigos de defecto
+        Utilities.configurarChoiceBox(cbRetrovisores, "01.01");
+        Utilities.configurarChoiceBox(cbLimpia, "01.02");
+        Utilities.configurarChoiceBox(cbChasis, "01.03");
+        Utilities.configurarChoiceBox(cbProtecciones, "01.04");
 
+        // Cargamos los posibles valores previos
+        recuperarValoresPrevios();
     }
 
     /*
-    *   Funcion que comprueba si hay checkboxs marcados
-    */
+     * Metodo para recuperar valores previos
+     */
 
-    private boolean hayFallos(){
-        
-        // Variable para almacenar si ha seleccionado alguno
+    private void recuperarValoresPrevios() {
+
+        for (Defecto d : BufferInspeccion.getDefectosActuales()) {
+
+            if (d.getUnidad().equalsIgnoreCase("01.01")) {
+                cbRetrovisores.setValue(d.getCalificacion());
+            }
+
+            if (d.getUnidad().equalsIgnoreCase("01.02")) {
+                cbLimpia.setValue(d.getCalificacion());
+            }
+
+            if (d.getUnidad().equalsIgnoreCase("01.03")) {
+                cbChasis.setValue(d.getCalificacion());
+            }
+
+            if (d.getUnidad().equalsIgnoreCase("01.04")) {
+                cbProtecciones.setValue(d.getCalificacion());
+            }
+        }
+    }
+
+    /*
+     * Metodo para guardar los datos en el Buffer al cambiar de ventana desde el
+     * boton o desde el menu
+     */
+
+    private void guardarDatosEnBuffer() {
+        // Comprobar si hay fallos
         boolean fallos = false;
 
-        // Comprobar si hay check seleccionados
-        if(chkRetrovisores.isSelected() || chkLimpia.isSelected() || chkChasis.isSelected() || chkProtecciones.isSelected()){
+        if (BufferInspeccion.getDefectos().isEmpty()) {
+            fallos = false;
+        } else {
             fallos = true;
         }
 
-        return fallos;
+        // Guardamos el estado de la inspeccion
+        BufferInspeccion.getInspeccionActual().setAcondicionamientoExterior(!fallos);
+
     }
 
-
     /*
-    *   Metodo para gestionar cuando el tecnico marca los checkboxs
-    */
+     * ActionEvent que maneja las opciones del menu
+     */
 
     @FXML
-    private void gestionarCheck() {
-
-        // Variable para almacenar si ha seleccionado alguno
-        boolean fallos = hayFallos();
-
-        // Si hay fallos habilitamos la caja de texto
-        if(fallos){
-            txtObservaciones.setDisable(false);
-        }
-
-        // Si desmarca todos los checkboxs volvemos a deshabilitar
-        if(!fallos){
-            txtObservaciones.setDisable(true);
-            txtObservaciones.setText("");
-        }
-       
-
-    }
-
-    /*
-    *   Metodo para guardar los datos en el Buffer al cambiar de ventana desde el boton o desde el menu
-    */
-
-    private void guardarDatosEnBuffer() {
-        // Guardamos el estado de la inspección
-        BufferInspeccion.getInspeccionActual().setAcondicionamientoExterior(!hayFallos());
-
-
-        // Guardamos los checks en el Map
-        BufferInspeccion.getChecksMarcados().put("retrovisores", chkRetrovisores.isSelected());
-        BufferInspeccion.getChecksMarcados().put("limpia", chkLimpia.isSelected());
-        BufferInspeccion.getChecksMarcados().put("chasis", chkChasis.isSelected());
-        BufferInspeccion.getChecksMarcados().put("protecciones", chkProtecciones.isSelected());
-
-        // Guardamos las observaciones
-        String texto = txtObservaciones.getText().trim();
-        if (!texto.isEmpty()) {
-            BufferInspeccion.guardarObservacion(0, "[ACONDICIONAMIENTO EXTERIOR]: " + texto);
-        } else {
-            BufferInspeccion.guardarObservacion(0, "");
-        }
-
-    }
-
-
-    /*
-    *   ActionEvent que maneja las opciones del menu
-    */
-    
-    @FXML
-    public void CambiarVentana(ActionEvent event){
+    public void CambiarVentana(ActionEvent event) {
 
         // Guardar los datos en el buffer
         guardarDatosEnBuffer();
 
-        // Obtenemos el botón 
+        // Obtenemos el botón
         Button btnPulsado = (Button) event.getSource();
-        
+
         // Obtenemos su ID
-        String seccion = btnPulsado.getId(); 
-        
+        String seccion = btnPulsado.getId();
+
         // Llamamos al metodo de utilities
         MenuController.abrirVentana(seccion, event);
     }
-    
-    
-    
+
     /*
-    *   Funcion para cambiar a la siguiente ventana
-    */
+     * Funcion para cambiar a la siguiente ventana
+     */
 
     @FXML
     private void accionSiguiente(ActionEvent event) {
@@ -166,5 +125,4 @@ public class AcondicionamientoExteriorController {
         Utilities.abrirVentana("/vistas/AcondicionamientoInterior.fxml", "Acondicionamiento Interior");
         Utilities.cerrarVentana(event);
     }
-
 }

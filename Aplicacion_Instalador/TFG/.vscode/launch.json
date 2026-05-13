@@ -5,7 +5,7 @@
             "type": "java",
             "name": "EJECUTAR TFG",
             "request": "launch",
-            "mainClass": "clases.UI.Login",
+            "mainClass": "clases.UI.Lanzador",
            "vmArgs": "-Djava.library.path=\"${workspaceFolder}/bin\" --module-path \"${workspaceFolder}/lib\" --add-modules javafx.controls,javafx.fxml -Dprism.order=sw"
         }
     ]

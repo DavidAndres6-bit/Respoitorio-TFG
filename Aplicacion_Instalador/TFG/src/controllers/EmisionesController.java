@@ -2,13 +2,13 @@ package controllers;
 
 import java.util.Map;
 
+import clases.POJOS.Defecto;
 import clases.POJOS.Vehiculo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import utilities.BufferInspeccion;
 import utilities.MenuController;
@@ -16,33 +16,24 @@ import utilities.Utilities;
 
 public class EmisionesController {
 
-    
     /*
-    *   Recoger los valores del formulario
-    */
+     * Recoger los valores del formulario
+     */
 
-    @FXML 
+    @FXML
     private Label lblMatricula, lblModelo;
-    
-    @FXML 
+
+    @FXML
     private TextField txtOpacidad, txtRalenti, txtRalentiAcelerado;
 
-    @FXML 
-    private TextArea txtObservaciones;
-    
-    @FXML 
-    private Button btnSiguiente;
-
-    //Variables para almacenar los limites de emisiones en función del distintivo ambiental
+    // Variables para almacenar los limites de emisiones en función del distintivo ambiental
     private double limiteOpacidad;
     private double limiteRalenti;
     private double limiteAcelerado;
 
-
-
     /*
-    *   Metodo para inicializar los valores de matricula modelo
-    */
+     * Metodo para inicializar los valores de matricula modelo
+     */
 
     @FXML
     public void initialize() {
@@ -51,11 +42,11 @@ public class EmisionesController {
         Vehiculo v = BufferInspeccion.getVehiculoActual();
 
         // Cargar datos del buffer
-       if (v != null) {
+        if (v != null) {
             lblMatricula.setText(v.getMatricula());
             lblModelo.setText(v.getModeloCompleto());
-            
-            //Llamamos al metodo que calcular los limites de emisiones
+
+            // Llamamos al metodo que calcular los limites de emisiones
             calcularLimites(v);
 
             // Llamamos al metodo que controla que pruebas debe pasar
@@ -63,13 +54,12 @@ public class EmisionesController {
 
             // Recuperamos las posibles observaciones anteriores y los valores de emisiones
             Map<String, String> valoresPrevios = BufferInspeccion.getValoresEmisiones();
-        
 
             if (valoresPrevios != null) {
                 // Rellenamos los campos solo si el campo no está deshabilitado por la etiqueta
                 if (!txtOpacidad.isDisable()) {
                     String val = valoresPrevios.getOrDefault("opacidad", "");
-                    txtOpacidad.setText(val);           
+                    txtOpacidad.setText(val);
                 }
                 if (!txtRalenti.isDisable()) {
                     String val = valoresPrevios.getOrDefault("coRalenti", "");
@@ -81,28 +71,20 @@ public class EmisionesController {
                 }
             }
 
-            // Actualizar los valores
-            gestionarValores();
+            // Listeners para poder controlar el cambio de color de los inputs
+            txtOpacidad.textProperty().addListener((obs, old, newValue) -> nivelesCorrectos());
+            txtRalenti.textProperty().addListener((obs, old, newValue) -> nivelesCorrectos());
+            txtRalentiAcelerado.textProperty().addListener((obs, old, newValue) -> nivelesCorrectos());
 
-            String obs = BufferInspeccion.getObservacionPosicion(3);
-            if (obs != null && !obs.isEmpty()) {
-                txtObservaciones.setText(obs.replace("[EMISIONES]: ", ""));
-                System.out.println(" > Observaciones recuperadas: " + obs);
-            }
-        
+            nivelesCorrectos();
         }
-        // Igual que hicimos en la ventana de identificación usamos estos escuchadores para habilitar o deshabilitar
-        // para habilitar o deshabilitar el textarea
-        txtOpacidad.textProperty().addListener((obs, oldV, newV) -> gestionarValores());
-        txtRalenti.textProperty().addListener((obs, oldV, newV) -> gestionarValores());
-        txtRalentiAcelerado.textProperty().addListener((obs, oldV, newV) -> gestionarValores());
     }
 
-
     /*
-    *   Funcion que calcula los limites de contaminación siguiendo su distintivo y antiguedad
-    */
-    
+     * Funcion que calcula los limites de contaminación siguiendo su distintivo y
+     * antiguedad
+     */
+
     private void calcularLimites(Vehiculo v) {
         String distintivo = v.getTipoDgt().toUpperCase();
         int anio = v.getFechaMatriculacion().getYear();
@@ -128,10 +110,11 @@ public class EmisionesController {
     }
 
     /*
-    *   Funcion que maneja para cada tipo de vehiculo cuales son las pruebas que se le deben realizar
-    */
+     * Funcion que maneja para cada tipo de vehiculo cuales son las pruebas que se
+     * le deben realizar
+     */
 
-    private void manejarPruebas(Vehiculo v){
+    private void manejarPruebas(Vehiculo v) {
         String distintivo = v.getTipoDgt().toUpperCase();
 
         // Por defecto deshabilitamos todo
@@ -152,10 +135,10 @@ public class EmisionesController {
     }
 
     /*
-    *   Funcion que comprueba si los valores indicados son mayores a los permitidos
-    */
+     * Funcion que comprueba si los valores indicados son mayores a los permitidos
+     */
 
-    private boolean nivelesCorrectos(){
+    private boolean nivelesCorrectos() {
 
         // Variable que almacena el resultado global
         boolean correcto = true;
@@ -165,19 +148,26 @@ public class EmisionesController {
         boolean c2 = true;
         boolean c3 = true;
 
-        // Estilos fijos para mantener el diseño 
+        // Estilos fijos para mantener el diseño
         String estiloFallo = "-fx-background-color: #ff9999; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 20;";
         String estiloOk = "-fx-background-color: #99ff99; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 20;";
         String estiloActivo = "-fx-background-color: white; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 20;";
         String estiloBloqueado = "-fx-background-color: #eeeeee; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 20;";
 
         // Validamos cada campo por separado
-        c1 = validarUnicoCampo(txtOpacidad, limiteOpacidad, "opacidad", "resOpacidad", estiloFallo, estiloOk, estiloActivo, estiloBloqueado);
-        c2 = validarUnicoCampo(txtRalenti, limiteRalenti, "coRalenti", "resCoRalenti", estiloFallo, estiloOk, estiloActivo, estiloBloqueado);
-        c3 = validarUnicoCampo(txtRalentiAcelerado, limiteAcelerado, "coRalentiAcelerado", "resRalentiAcelerado", estiloFallo, estiloOk, estiloActivo, estiloBloqueado);
+        c1 = validarUnicoCampo(txtOpacidad, limiteOpacidad, "opacidad", "resOpacidad",
+                estiloFallo, estiloOk, estiloActivo, estiloBloqueado,
+                "04.01", "Opacidad excesiva (Diesel)");
 
+        c2 = validarUnicoCampo(txtRalenti, limiteRalenti, "coRalenti", "resCoRalenti",
+                estiloFallo, estiloOk, estiloActivo, estiloBloqueado,
+                "04.02", "Emisiones CO ralentí superiores a lo permitido");
+
+        c3 = validarUnicoCampo(txtRalentiAcelerado, limiteAcelerado, "coRalentiAcelerado", "resRalentiAcelerado",
+                estiloFallo, estiloOk, estiloActivo, estiloBloqueado,
+                "04.03", "Emisiones CO ralentí acelerado superiores a lo permitido");
         // Si alguno falla devolvemos false
-        if(c1 == false || c2 == false || c3 == false){
+        if (c1 == false || c2 == false || c3 == false) {
             correcto = false;
         }
 
@@ -185,19 +175,23 @@ public class EmisionesController {
     }
 
     /*
-    *   Funcion para validar cada campo
-    */
+     * Funcion para validar cada campo
+     */
 
-    private boolean validarUnicoCampo(TextField campo, double limite, String valor, String resultado, String fallo, String ok, String activo, String bloqueado) {
+    private boolean validarUnicoCampo(TextField campo, double limite, String valor, String resultado, String fallo,
+            String ok, String activo, String bloqueado, String codigoDefecto, String descripcionDefecto) {
 
         // Variable para guardar el resultado
         boolean correcto = false;
-    
+
         // Si esta deshabilitado por la etiqueta aplicamos el estilo
         if (campo.isDisable()) {
             campo.setStyle(bloqueado);
             correcto = true;
         }
+
+        // Limpiamos el defecto por si acaso
+        BufferInspeccion.borrarDefecto(codigoDefecto);
 
         // Recogemos el valore del campo
         String texto = campo.getText().replace(",", ".").trim();
@@ -214,15 +208,17 @@ public class EmisionesController {
         try {
             double emisiones = Double.parseDouble(texto);
             BufferInspeccion.getValoresEmisiones().put(valor, texto);
-            
+
             if (emisiones > limite) {
                 campo.setStyle(fallo); // Fondo rojo, borde dorado
                 BufferInspeccion.getValoresEmisiones().put(resultado, "X");
-                correcto =  false;
+                // Agregampos un defecto automatico
+                BufferInspeccion.getDefectosActuales().add(new Defecto(codigoDefecto, descripcionDefecto, "GRAVE"));
+                correcto = false;
             } else {
                 campo.setStyle(ok); // Fondo verde, borde dorado
                 BufferInspeccion.getValoresEmisiones().put(resultado, "S");
-                correcto =  true;
+                correcto = true;
             }
 
         } catch (Exception e) {
@@ -233,27 +229,10 @@ public class EmisionesController {
     }
 
     /*
-    *   Funcion para gestionar lo niveles introducidos por el tecnico
-    */
+     * Funcion para validar que campos debe rellenar obligatoriamente segun la
+     * etiqueta
+     */
 
-    private void gestionarValores(){
-
-        //Variable para almacenar si hay algun valor superior al permitido
-        boolean superado = nivelesCorrectos();
-
-       // Si se ha superado algun valor habilitamos el campo observaciones
-        if(!superado){
-            txtObservaciones.setDisable(false);
-        } else {
-            txtObservaciones.setDisable(true);
-            txtObservaciones.clear();
-        }
-    }
-
-    /*
-    *   Funcion para validar que campos debe rellenar obligatoriamente segun la etiqueta
-    */
-    
     private boolean validarCamposSegunEtiqueta() {
         boolean todoRelleno = true;
 
@@ -265,7 +244,7 @@ public class EmisionesController {
             }
         }
 
-        // Validación de Ralentí 
+        // Validación de Ralentí
         if (todoRelleno && !txtRalenti.isDisable()) {
             String val = txtRalenti.getText().trim();
             if (val.isEmpty() || val.equalsIgnoreCase("N/A")) {
@@ -285,47 +264,38 @@ public class EmisionesController {
     }
 
     private void guardarDatosEnBuffer() {
-    
+
         // Comprobamos el resultado del apartado
-        boolean resultadoGlobal = nivelesCorrectos(); 
-        
+        boolean resultadoGlobal = nivelesCorrectos();
+
         // Guardamos el resultado del apartado
         BufferInspeccion.getInspeccionActual().setEmisiones(resultadoGlobal);
 
-        // Guardamos las observaciones
-        String texto = txtObservaciones.getText().trim();
-        if (!texto.isEmpty()) {
-            BufferInspeccion.guardarObservacion(3, "[EMISIONES]: " + texto);
-        } else {
-            BufferInspeccion.guardarObservacion(3, "");
-        }
     }
 
-
     /*
-    *   ActionEvent que maneja las opciones del menu
-    */
-    
+     * ActionEvent que maneja las opciones del menu
+     */
+
     @FXML
-    public void CambiarVentana(ActionEvent event){
+    public void CambiarVentana(ActionEvent event) {
 
         // Guardar los datos en el buffer
         guardarDatosEnBuffer();
 
-        // Obtenemos el botón 
+        // Obtenemos el botón
         Button btnPulsado = (Button) event.getSource();
-        
+
         // Obtenemos su ID
-        String seccion = btnPulsado.getId(); 
-        
+        String seccion = btnPulsado.getId();
+
         // Llamamos al metodo de utilities
         MenuController.abrirVentana(seccion, event);
     }
 
-
     /*
-    *   Funcion para cambiar a la siguiente ventana
-    */
+     * Funcion para cambiar a la siguiente ventana
+     */
 
     @FXML
     private void accionSiguiente(ActionEvent event) {
@@ -334,39 +304,43 @@ public class EmisionesController {
         boolean puedeAvanzar = validarCamposSegunEtiqueta();
 
         // Si los ha rellenado todos
-        if(puedeAvanzar){
+        if (puedeAvanzar) {
             // Guardar los datos en el buffer
             guardarDatosEnBuffer();
 
-            //Cambiamos de ventana
+            // Cambiamos de ventana
             Utilities.abrirVentana("/vistas/Frenos.fxml", "Frenos");
 
             Utilities.cerrarVentana(event);
         } else {
-            Utilities.mostrarAlerta("Campos incompletos",   "Debe introducir los valores de las pruebas habilitadas para este vehículo.", Alert.AlertType.WARNING);
+            Utilities.mostrarAlerta("Campos incompletos",
+                    "Debe introducir los valores de las pruebas habilitadas para este vehículo.",
+                    Alert.AlertType.WARNING);
         }
-        
+
     }
 
     /*
-    *   Funcion para deshabilitar el campo
-    */
+     * Funcion para deshabilitar el campo
+     */
 
-    private void deshabilitarCampo(TextField campo){
+    private void deshabilitarCampo(TextField campo) {
         campo.setText("N/A");
         campo.setDisable(true);
         // Mantenemos el borde gris suave para campos deshabilitados
-        campo.setStyle("-fx-background-color: #eeeeee; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5;");
+        campo.setStyle(
+                "-fx-background-color: #eeeeee; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5;");
     }
 
     /*
-    *   Funcion para habilitar el campo
-    */
+     * Funcion para habilitar el campo
+     */
 
-    private void habilitarCampo(TextField campo){
+    private void habilitarCampo(TextField campo) {
         campo.clear();
         campo.setDisable(false);
         // Restauramos el borde dorado original del diseño
-        campo.setStyle("-fx-background-color: white; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-background-radius: 5;");
+        campo.setStyle(
+                "-fx-background-color: white; -fx-border-color: #bf820d; -fx-border-radius: 5; -fx-background-radius: 5;");
     }
 }

@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.List;
 
+
+
 import clases.DAOS.ClienteDAO;
 import clases.DAOS.InspeccionDAO;
 import clases.DAOS.VehiculoDAO;
@@ -14,8 +16,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
 import utilities.BufferInspeccion;
 import utilities.Utilities;
 
@@ -118,7 +122,6 @@ public class PanelTecnicoController {
 
                         // Dejamos el boton activo
                         btnRegistrarCliente.setVisible(true);
-                        btnRegistrarCliente.setText("Cambiar/Añadir Cliente");
                         
                         // Cambiamos la visibilidad de los paneles
                         panelInicial.setVisible(false);
@@ -167,9 +170,9 @@ public class PanelTecnicoController {
                 Label lblInspeccion = new Label(dato);
 
                 // Estilo para que quede bien dentro del panel
-                lblInspeccion.setStyle("-fx-font-size: 14px; -fx-padding: 8px; -fx-border-color: #616161; -fx-border-width: 0 0 1 0;");
-                lblInspeccion.setPrefWidth(220);
-
+                lblInspeccion.setStyle("-fx-font-size: 14px; -fx-padding: 5px; -fx-text-fill: #333333; -fx-alignment: center;");
+                lblInspeccion.setMaxWidth(Double.MAX_VALUE);
+                lblInspeccion.setAlignment(javafx.geometry.Pos.CENTER);
                 // Añadimos el Label al VBox
                 vboxListaInspecciones.getChildren().add(lblInspeccion);
             }
@@ -237,10 +240,4 @@ public class PanelTecnicoController {
         // Cerramos la ventana
         Utilities.cerrarVentana(event);
     }
-
-
-
-
-
-
 }

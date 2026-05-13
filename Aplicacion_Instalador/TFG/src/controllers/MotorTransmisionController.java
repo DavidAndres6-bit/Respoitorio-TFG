@@ -1,162 +1,124 @@
 package controllers;
 
-import java.util.Map;
-
+import clases.POJOS.Defecto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import utilities.BufferInspeccion;
 import utilities.MenuController;
 import utilities.Utilities;
 
 public class MotorTransmisionController {
 
-   
     /*
-    *   Recoger los valores del formulario
-    */
+     * Recoger los valores del formulario
+     */
 
-    @FXML 
+    @FXML
     private Label lblMatricula, lblModelo;
-    
-    @FXML 
-    private CheckBox chkEstadoMotor, chkSistemaEscape, chkTransmision, chkAlimentacion;
-    
-    @FXML 
-    private TextArea txtObservaciones;
 
-
+    @FXML
+    private ChoiceBox<String> cbEstadoMotor, cbSistemaEscape, cbTransmision, cbAlimentacion;
 
     /*
-    *   Metodo para inicializar los valores de matricula modelo
-    */
+     * Metodo para inicializar los valores de matricula modelo
+     */
 
     @FXML
     public void initialize() {
 
-        System.out.println("Datos en buffer: " + BufferInspeccion.getInspeccionActual().getObservaciones());
-         System.out.println("Datos en buffer: " + BufferInspeccion.getInspeccionActual().getListaDefectos());
+        System.out.println("Datos en buffer: " + BufferInspeccion.getInspeccionActual().getListaDefectos());
 
         // Cargar datos del buffer
         if (BufferInspeccion.getVehiculoActual() != null) {
             lblMatricula.setText(BufferInspeccion.getVehiculoActual().getMatricula());
             lblModelo.setText(BufferInspeccion.getVehiculoActual().getModeloCompleto());
         }
-        
-        // Recuperamos los posibles checks marcados previamente para que no se pierda la informacion al volver
-        Map<String, Boolean> checks = BufferInspeccion.getChecksMarcados();
-        chkEstadoMotor.setSelected(checks.getOrDefault("estadoMotor", false));
-        chkSistemaEscape.setSelected(checks.getOrDefault("sistemaEscape", false));
-        chkTransmision.setSelected(checks.getOrDefault("transmision", false));
-        chkAlimentacion.setSelected(checks.getOrDefault("alimentacion", false));
-    
-        // Recuperamos las posibles observaciones que ubiese escrito
-        String obsGuardada = BufferInspeccion.getObservacionPosicion(7);
-        if (obsGuardada != null && !obsGuardada.isEmpty()) {
-            String textoLimpio = obsGuardada.replace("[MOTOR Y TRANSMISION]: ", "");
-            txtObservaciones.setText(textoLimpio);
-        }
 
+        // Configuramos los choicebox con sus codigos de defecto
+        Utilities.configurarChoiceBox(cbEstadoMotor, "08.01");
+        Utilities.configurarChoiceBox(cbSistemaEscape, "08.02");
+        Utilities.configurarChoiceBox(cbTransmision, "08.03");
+        Utilities.configurarChoiceBox(cbAlimentacion, "08.04");
+
+        // Cargamos los posibles valores previos
+        recuperarValoresPrevios();
     }
-        
 
     /*
-    *   Funcion que comprueba si hay checkboxs marcados
-    */
+     * Metodo para recuperar los posibles defectos previos
+     */
 
-    private boolean hayFallos(){
-        
-        //Variable para almacenar si ha seleccionado alguno
+    private void recuperarValoresPrevios() {
+
+        for (Defecto d : BufferInspeccion.getDefectosActuales()) {
+
+            if (d.getUnidad().equals("08.01")) {
+                cbEstadoMotor.setValue(d.getCalificacion());
+            }
+
+            if (d.getUnidad().equals("08.02")) {
+                cbSistemaEscape.setValue(d.getCalificacion());
+            }
+
+            if (d.getUnidad().equals("08.03")) {
+                cbTransmision.setValue(d.getCalificacion());
+            }
+
+            if (d.getUnidad().equals("08.04")) {
+                cbAlimentacion.setValue(d.getCalificacion());
+            }
+        }
+    }
+
+    /*
+     * Metodo para guardar los datos en el Buffer al cambiar de ventana desde el
+     * boton o desde el menu
+     */
+
+    private void guardarDatosEnBuffer() {
+
         boolean fallos = false;
 
-        //Comprobar si hay check seleccionados
-        if(chkEstadoMotor.isSelected() || chkSistemaEscape.isSelected() || chkTransmision.isSelected() || chkAlimentacion.isSelected()){
+        if (BufferInspeccion.getDefectos().isEmpty()) {
+            fallos = false;
+        } else {
             fallos = true;
         }
 
-        return fallos;
+        // Guardamos el estado de la inspeccion
+        BufferInspeccion.getInspeccionActual().setMotorTransmision(!fallos);
     }
 
     /*
-    *   Metodo para gestionar cuando el tecnico marca los checkboxs
-    */
+     * ActionEvent que maneja las opciones del menu
+     */
 
     @FXML
-    private void gestionarCheck() {
-
-        //Variable para almacenar si ha seleccionado alguno
-        boolean fallos = hayFallos();
-
-        //Si hay fallos habilitamos la caja de texto
-        if(fallos){
-            txtObservaciones.setDisable(false);
-        }
-
-        //Si desmarca todos los checkboxs volvemos a deshabilitar
-        if(!fallos){
-            txtObservaciones.setDisable(true);
-        }
-    }
-
-    /*
-    *   Metodo para guardar los datos en el Buffer al cambiar de ventana desde el boton o desde el menu
-    */
-
-    private void guardarDatosEnBuffer() {
-       
-       
-        // Si se han marcado checkboxs guardamos el resultado como false
-        BufferInspeccion.getInspeccionActual().setMotorTransmision(!hayFallos());
-
-        // Guardamos los checkboxs
-        BufferInspeccion.getChecksMarcados().put("estadoMotor", chkEstadoMotor.isSelected());
-        BufferInspeccion.getChecksMarcados().put("sistemaEscape", chkSistemaEscape.isSelected());
-        BufferInspeccion.getChecksMarcados().put("transmision", chkTransmision.isSelected());
-        BufferInspeccion.getChecksMarcados().put("alimentacion", chkAlimentacion.isSelected());
-
-
-        // Guardamos las observaciones
-        String texto = txtObservaciones.getText().trim();
-    
-        if (!texto.isEmpty()) {
-            BufferInspeccion.guardarObservacion(7,"[MOTOR Y TRANSMISION]: " +texto);
-        } else {
-            BufferInspeccion.guardarObservacion(7,"");
-        }
-          
-    }
-
-    /*
-    *   ActionEvent que maneja las opciones del menu
-    */
-    
-    @FXML
-    public void CambiarVentana(ActionEvent event){
+    public void CambiarVentana(ActionEvent event) {
 
         // Guardar los datos en el buffer
         guardarDatosEnBuffer();
 
-        // Obtenemos el botón 
+        // Obtenemos el botón
         Button btnPulsado = (Button) event.getSource();
-        
+
         // Obtenemos su ID
-        String seccion = btnPulsado.getId(); 
-        
+        String seccion = btnPulsado.getId();
+
         // Llamamos al metodo de utilities
         MenuController.abrirVentana(seccion, event);
     }
-    
 
     /*
-    *   Funcion para cambiar a la siguiente ventana
-    */
+     * Funcion para cambiar a la siguiente ventana
+     */
 
     @FXML
     private void accionSiguiente(ActionEvent event) {
-        
+
         // Guardar los datos en el buffer
         guardarDatosEnBuffer();
 

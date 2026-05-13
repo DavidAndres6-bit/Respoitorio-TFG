@@ -22,7 +22,7 @@ public class Login extends Application{
             //Configuramos la ventana con algunas opciones
             Scene scene = new Scene(root);
 
-            //Añadir el log0 de la aplicacion
+            //Añadir el logo de la aplicacion
             InputStream is = getClass().getResourceAsStream("/img/Logo_app.png");
             if (is != null) {
                 arg0.getIcons().add(new Image(is));
