@@ -1,13 +1,11 @@
 package controllers;
 
-import java.util.Map;
-
+import clases.POJOS.Defecto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import utilities.BufferInspeccion;
 import utilities.MenuController;
 import utilities.Utilities;
@@ -15,22 +13,18 @@ import utilities.Utilities;
 public class EjesRuedasController {
 
     /*
-    *   Recoger los valores del formulario
-    */
+     * Recoger los valores del formulario
+     */
 
-    @FXML 
+    @FXML
     private Label lblMatricula, lblModelo;
-    
-    @FXML 
-    private CheckBox chkEjes, chkNeumaticos, chkRuedas, chkSuspension;
-    
-    @FXML 
-    private TextArea txtObservaciones;
-    
+
+    @FXML
+    private ChoiceBox<String> cbEjes, cbNeumaticos, cbRuedas, cbSuspension;
 
     /*
-    *   Metodo para inicializar los valores de matricula modelo
-    */
+     * Metodo para inicializar los valores de matricula modelo
+     */
 
     @FXML
     public void initialize() {
@@ -40,108 +34,84 @@ public class EjesRuedasController {
             lblModelo.setText(BufferInspeccion.getVehiculoActual().getModeloCompleto());
         }
 
-        // Recuperamos los posibles checks marcados previamente para que no se pierda la informacion al volver
-        Map<String, Boolean> checks = BufferInspeccion.getChecksMarcados();
-        chkEjes.setSelected(checks.getOrDefault("ejes", false));
-        chkNeumaticos.setSelected(checks.getOrDefault("neumaticos", false));
-        chkRuedas.setSelected(checks.getOrDefault("ruedas", false));
-        chkSuspension.setSelected(checks.getOrDefault("suspension", false));
-    
-        // Recuperamos las posibles observaciones que ubiese escrito
-        String obsGuardada = BufferInspeccion.getObservacionPosicion(6);
-        if (obsGuardada != null && !obsGuardada.isEmpty()) {
-            String textoLimpio = obsGuardada.replace("[EJES RUEDAS NEUMATICOS SUSPENSION]: ", "");
-            txtObservaciones.setText(textoLimpio);
+        // Configuramos los choicebox con sus codigos de defecto
+        Utilities.configurarChoiceBox(cbEjes, "07.01");
+        Utilities.configurarChoiceBox(cbNeumaticos, "07.02");
+        Utilities.configurarChoiceBox(cbRuedas, "07.03");
+        Utilities.configurarChoiceBox(cbSuspension, "07.04");
+
+        // Cargamos los posibles valores previos
+        recuperarValoresPrevios();
+    }
+
+    /*
+     * Metodo para recuperar los posibles defectos previos
+     */
+
+    private void recuperarValoresPrevios() {
+
+        for (Defecto d : BufferInspeccion.getDefectosActuales()) {
+
+            if (d.getUnidad().equals("07.01")) {
+                cbEjes.setValue(d.getCalificacion());
+            }
+
+            if (d.getUnidad().equals("07.02")) {
+                cbNeumaticos.setValue(d.getCalificacion());
+            }
+
+            if (d.getUnidad().equals("07.03")) {
+                cbRuedas.setValue(d.getCalificacion());
+            }
+
+            if (d.getUnidad().equals("07.04")) {
+                cbSuspension.setValue(d.getCalificacion());
+            }
         }
     }
 
     /*
-    *   Funcion que comprueba si hay checkboxs marcados
-    */
+     * Metodo para guardar los datos en el Buffer al cambiar de ventana desde el
+     * boton o desde el menu
+     */
 
-    private boolean hayFallos(){
-        
-        //Variable para almacenar si ha seleccionado alguno
+    private void guardarDatosEnBuffer() {
+
         boolean fallos = false;
 
-        //Comprobar si hay check seleccionados
-        if(chkEjes.isSelected() || chkNeumaticos.isSelected() || chkRuedas.isSelected() || chkSuspension.isSelected()){
+        if (BufferInspeccion.getDefectos().isEmpty()) {
+            fallos = false;
+        } else {
             fallos = true;
         }
 
-        return fallos;
+        // Guardamos el estado de la inspeccion
+        BufferInspeccion.getInspeccionActual().setEjesRuedasNeumaticos(!fallos);
     }
 
     /*
-    *   Metodo para gestionar cuando el tecnico marca los checkboxs
-    */
+     * ActionEvent que maneja las opciones del menu
+     */
 
     @FXML
-    private void gestionarCheck() {
-
-        //Variable para almacenar si ha seleccionado alguno
-        boolean fallos = hayFallos();
-
-        //Si hay fallos habilitamos la caja de texto
-        if(fallos){
-            txtObservaciones.setDisable(false);
-        }
-
-        //Si desmarca todos los checkboxs volvemos a deshabilitar
-        if(!fallos){
-            txtObservaciones.setDisable(true);
-        }
-    }
-
-    /*
-    *   Metodo para guardar los datos en el Buffer al cambiar de ventana desde el boton o desde el menu
-    */
-
-    private void guardarDatosEnBuffer() {
-       
-        // Si se han marcado checkboxs guardamos el resultado como false
-        BufferInspeccion.getInspeccionActual().setEjesRuedasNeumaticos(!hayFallos());
-
-        // Guardamos los Checkboxs
-        BufferInspeccion.getChecksMarcados().put("ejes", chkEjes.isSelected());
-        BufferInspeccion.getChecksMarcados().put("neumaticos", chkNeumaticos.isSelected());
-        BufferInspeccion.getChecksMarcados().put("ruedas", chkRuedas.isSelected());
-        BufferInspeccion.getChecksMarcados().put("suspension", chkSuspension.isSelected());
-
-        // Guardamos las observaciones
-        String texto = txtObservaciones.getText().trim();
-    
-        if (!texto.isEmpty()) {
-            BufferInspeccion.guardarObservacion(6,"[EJES RUEDAS NEUMATICOS SUSPENSION]: " +texto);
-        } else {
-            BufferInspeccion.guardarObservacion(6,"");
-        }
-    }
-    
-    /*
-    *   ActionEvent que maneja las opciones del menu
-    */
-    
-    @FXML
-    public void CambiarVentana(ActionEvent event){
+    public void CambiarVentana(ActionEvent event) {
 
         // Guardar los datos en el buffer
         guardarDatosEnBuffer();
 
-        // Obtenemos el botón 
+        // Obtenemos el botón
         Button btnPulsado = (Button) event.getSource();
-        
+
         // Obtenemos su ID
-        String seccion = btnPulsado.getId(); 
-        
+        String seccion = btnPulsado.getId();
+
         // Llamamos al metodo de utilities
         MenuController.abrirVentana(seccion, event);
     }
-    
 
     /*
-    *   Funcion para cambiar a la siguiente ventana
-    */
+     * Funcion para cambiar a la siguiente ventana
+     */
 
     @FXML
     private void accionSiguiente(ActionEvent event) {

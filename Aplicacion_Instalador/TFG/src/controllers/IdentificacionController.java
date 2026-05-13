@@ -45,8 +45,8 @@ public class IdentificacionController {
             if(kilometros_previos > 0){
                 // Lo ponemos como valor    
                 txtKmAnteriores.setText(String.valueOf(kilometros_previos));
-
                 txtKmAnteriores.setEditable(false);
+                txtKmActuales.requestFocus();
             } else {
                txtKmAnteriores.setText("0");
                txtKmAnteriores.setDisable(true);
@@ -54,6 +54,8 @@ public class IdentificacionController {
 
             txtKmActuales.setText("");
             txtKmActuales.requestFocus(); // Ponemos el cursor aquí para ahorrar un clic al técnico
+
+
 
             // Esto lo hemos buscado son propiedades para que los campos hagan un efecto parecido al del autocompleteTextView
             // y se mantenga validación si borra y vuelve a escribir

@@ -45,15 +45,23 @@ public class Vehiculo {
     }
 
     public String getMarca() { 
-        return marca; 
+        // Controlamos posibles valores incompletos de la DGT
+        if (this.marca == null || this.marca.equals("0")) {
+            return "Desconocido";
+        }
+        return this.marca;
+
     }
     
     public void setMarca(String marca) { 
         this.marca = marca; 
     }
 
-    public String getModelo() { 
-        return modelo; 
+    public String getModelo() {
+        if (this.modelo == null || this.modelo.equals("0")) {
+            return "Desconocido";
+        }
+        return this.modelo;
     }
     
     public void setModelo(String modelo) { 
@@ -81,7 +89,12 @@ public class Vehiculo {
     */
 
     public String getModeloCompleto() {
-        return this.marca + " " + this.modelo;
+        String mca = getMarca();
+        String mod = getModelo();
+        if (mca.equals("Desconocido") && mod.equals("Desconocido")) {
+            return "Desconocido";
+        }
+        return mca + " " + mod;
     }
 
 }

@@ -2,9 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -44,14 +43,7 @@
          <font><Font name="Century Schoolbook" size="34.0" /></font>
       </Label>
 
-      <TextArea fx:id="txtObservaciones" disable="true" layoutX="1095.0" layoutY="377.0" prefHeight="266.0" prefWidth="384.0" style="-fx-border-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" wrapText="true">
-         <font><Font size="20.0" /></font>
-      </TextArea>
-      <Label layoutX="1125.0" layoutY="330.0" prefHeight="47.0" prefWidth="309.0" text="Observaciones">
-         <font><Font name="Century Schoolbook" size="37.0" /></font>
-      </Label>
-
-      <VBox layoutX="464.0" layoutY="381.0" prefHeight="260.0" prefWidth="600.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;">
+      <VBox layoutX="456.0" layoutY="356.0" prefHeight="260.0" prefWidth="1008.0">
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="65.0">
                <children>
@@ -59,7 +51,10 @@
                      <font><Font name="Century Schoolbook" size="28.0" /></font>
                      <HBox.margin><Insets left="20.0" /></HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkEjes" onAction="#gestionarCheck" scaleX="2.0" scaleY="2.0" />
+                  <ChoiceBox fx:id="cbEjes" prefHeight="42.0" prefWidth="354.0" style="-fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;">
+                     <HBox.margin>
+                        <Insets left="80.0" />
+                     </HBox.margin></ChoiceBox>
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="65.0">
@@ -68,7 +63,10 @@
                      <font><Font name="Century Schoolbook" size="28.0" /></font>
                      <HBox.margin><Insets left="20.0" /></HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkNeumaticos" onAction="#gestionarCheck" scaleX="2.0" scaleY="2.0" />
+                  <ChoiceBox fx:id="cbNeumaticos" prefHeight="42.0" prefWidth="354.0" style="-fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;">
+                     <HBox.margin>
+                        <Insets left="80.0" />
+                     </HBox.margin></ChoiceBox>
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="65.0">
@@ -77,7 +75,10 @@
                      <font><Font name="Century Schoolbook" size="28.0" /></font>
                      <HBox.margin><Insets left="20.0" /></HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkRuedas" onAction="#gestionarCheck" scaleX="2.0" scaleY="2.0" />
+                  <ChoiceBox fx:id="cbRuedas" prefHeight="42.0" prefWidth="354.0" style="-fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;">
+                     <HBox.margin>
+                        <Insets left="80.0" />
+                     </HBox.margin></ChoiceBox>
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="65.0">
@@ -86,15 +87,14 @@
                      <font><Font name="Century Schoolbook" size="28.0" /></font>
                      <HBox.margin><Insets left="20.0" /></HBox.margin>
                   </Label>
-                  <CheckBox fx:id="chkSuspension" onAction="#gestionarCheck" scaleX="2.0" scaleY="2.0" />
+                  <ChoiceBox fx:id="cbSuspension" prefHeight="42.0" prefWidth="354.0" style="-fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;">
+                     <HBox.margin>
+                        <Insets left="80.0" />
+                     </HBox.margin></ChoiceBox>
                </children>
             </HBox>
          </children>
       </VBox>
-
-      <Label layoutX="479.0" layoutY="327.0" prefHeight="47.0" prefWidth="538.0" text="Seleccione las pruebas fallidas">
-         <font><Font name="Century Schoolbook" size="37.0" /></font>
-      </Label>
 
       <AnchorPane layoutX="-1.0" prefHeight="750.0" prefWidth="411.0" style="-fx-background-color: #bf820d;">
          <children>
@@ -156,5 +156,10 @@
             </VBox>
          </children>
       </AnchorPane>
+      <Label layoutX="767.0" layoutY="626.0" prefHeight="47.0" prefWidth="530.0" text="Rellena los defectos encontrados" textFill="#fa0505">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
