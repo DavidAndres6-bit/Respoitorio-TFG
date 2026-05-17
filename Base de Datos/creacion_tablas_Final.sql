@@ -24,9 +24,9 @@ CREATE TABLE vehiculos_cyl (
 /* Tabla para almacenar los usuarios de la aplicación */
 CREATE TABLE usuarios (
     id                  INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nombre_usuario      VARCHAR(100),
+    nombre_usuario      VARCHAR(100) UNIQUE,
     contrasenia         VARCHAR(30),
-    correo_electronico  VARCHAR(200),
+    correo_electronico  VARCHAR(200) UNIQUE,
     telefono            INT,
     rol                 VARCHAR(50)
 );
