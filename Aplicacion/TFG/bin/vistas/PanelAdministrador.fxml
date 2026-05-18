@@ -74,7 +74,7 @@
          <children>
             
             <Label alignment="CENTER" prefHeight="80.0" prefWidth="1030.0" text="Panel del Administrador" textFill="#bf820d">
-               <font><Font name="Century Schoolbook" size="64.0" /></font>
+               <font><Font size="64.0" /></font>
                <VBox.margin>
                   <Insets bottom="30.0" />
                </VBox.margin>

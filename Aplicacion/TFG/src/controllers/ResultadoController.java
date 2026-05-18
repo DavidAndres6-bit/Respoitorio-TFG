@@ -132,8 +132,8 @@ public class ResultadoController {
 
                 // Si se ha insertado correctamente generamos el pdf
                 if (insertado) {
-                    // Obtener la carpeta de descargas del dispositivo
-                    String carpetaDescargas = System.getProperty("user.home") + File.separator + "Downloads";
+                    // Obtener la carpeta de descargas del dispositivo en el que se ejecute la aplicacion
+                    String carpetaDescargas = System.getProperty("user.home") + File.separator + "Downloads"; 
 
                     try{
                         // Pasamos los datos a la clase que genera el informe
@@ -167,9 +167,7 @@ public class ResultadoController {
                             btnInforme.setDisable(false);
                             btnInforme.setText("Generar Informe");
                             
-                            Utilities.mostrarAlerta("Error Crítico PDF", 
-                                "No se pudo crear el archivo.\n\nDetalle técnico: " + e.getMessage(), 
-                                Alert.AlertType.ERROR);
+                            Utilities.mostrarAlerta("Error Crítico PDF", "No se pudo crear el archivo.\n\nDetalle técnico: " + e.getMessage(), Alert.AlertType.ERROR);
                         });
                         e.printStackTrace();
                     } 
@@ -206,7 +204,6 @@ public class ResultadoController {
 
         // Si el id es 0 o -1, comprobamos si ya existe por DNI o lo añadimos
         if (idCliente <= 0) {
-            
             // Instancia de cliente DAO para buscar por DNI
             ClienteDAO clienteDAO = new ClienteDAO();
             Cliente existente = clienteDAO.obtenerClientePorDni(cliente.getDni());

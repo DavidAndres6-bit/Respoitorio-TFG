@@ -37,7 +37,7 @@ public class EmisionesController {
 
     @FXML
     public void initialize() {
-        // Añadido: Limitación estricta de los campos de texto a tres cifras decimales
+        // Limitación estricta de los campos de texto a tres cifras decimales
         limitarDecimales(txtOpacidad);
         limitarDecimales(txtRalenti);
         limitarDecimales(txtRalentiAcelerado);
@@ -85,7 +85,7 @@ public class EmisionesController {
     }
 
     /*
-     * Funcion para limitar a 3 decimales el input de las emisiones y longitud maxima de  5 caracteres.
+     * Funcion para limitar la cantidad decimales el input de las emisiones y la logntidud total maxima.
      */
 
     private void limitarDecimales(TextField textField) {
@@ -93,7 +93,7 @@ public class EmisionesController {
             // Recogemos lo que va a pasar en el cuadro de texto
             String nuevoTexto = change.getControlNewText();
             
-            // Si el texto resultante se pasa de 5 caracteres, bloqueamos la pulsación
+            // Si escribe mas de 5 caracteres bloqueamos
             if (nuevoTexto.length() > 5) {
                 change.setText(""); // Borra lo que el usuario acaba de teclear antes de que aparezca
             }
@@ -103,7 +103,7 @@ public class EmisionesController {
                 change.setText(""); // Borra la letra introducida antes de que aparezca
             }
             
-            // Aplica el cambio limpio 
+            // Aplicamos el cambio 
             return change; 
         }));
     }
@@ -112,97 +112,143 @@ public class EmisionesController {
      * Funcion para mostrar una ventana emergente informativa con los límites calculados para el coche.
      */
     
-    @FXML
+   @FXML
     public void accionMostrarInfoLimites(ActionEvent event) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle("Límites de Emisiones Vigentes");
         alerta.setHeaderText("Criterios de Inspección para este Vehículo");
         
+        // Recogemos el vehiculo y buscamos su informacion
         Vehiculo v = BufferInspeccion.getVehiculoActual();
         if (v != null) {
             calcularLimites(v);
+            manejarPruebas(v);
         }
 
-        String infoOpacidad = txtOpacidad.isDisable() ? "No aplica (N/A)" : limiteOpacidad + " m⁻¹";
-        String infoRalenti = txtRalenti.isDisable() ? "No aplica (N/A)" : limiteRalenti + " %";
-        String infoAcelerado = txtRalentiAcelerado.isDisable() ? "No aplica (N/A)" : limiteAcelerado + " %";
+        // Lee si el switch de arriba ha bloqueado o no las cajas de texto
+        String infoOpacidad = "";
+        if (txtOpacidad.isDisable()) {
+            infoOpacidad = "No aplica (N/A)";
+        } else {
+            infoOpacidad = limiteOpacidad + " m⁻¹";
+        }
+
+        String infoRalenti = "";
+        if (txtRalenti.isDisable()) {
+            infoRalenti = "No aplica (N/A)";
+        } else {
+            infoRalenti = limiteRalenti + " %";
+        }
+
+        String infoAcelerado = "";
+        if (txtRalentiAcelerado.isDisable()) {
+            infoAcelerado = "No aplica (N/A)";
+        } else {
+            infoAcelerado = limiteAcelerado + " %";
+        }
 
         String contenido = "De acuerdo con el distintivo ambiental del vehículo, los límites son:\n\n"
-                + "• Opacidad Máxima (Diésel): " + infoOpacidad + "\n"
+                + "• Opacidad Máxima: " + infoOpacidad + "\n"
                 + "• CO en Ralentí Máximo: " + infoRalenti + "\n"
                 + "• CO en Ralentí Acelerado Máximo: " + infoAcelerado + "\n\n"
-                + "Nota: Las pruebas no aplicables se configuran automáticamente.";
-                
+                + "Nota: Las pruebas no aplicables se configuran automáticamente según su distintivo.";
+           
+        // Configuramos la ventana emergente
         alerta.setContentText(contenido);
-        alerta.getDialogPane().setPrefSize(500, 260);
-        alerta.setGraphic(null); 
+        alerta.getDialogPane().setPrefSize(500, 260); // Tamaño
+        alerta.setGraphic(null);  // Quitar el icono que sal epor defecto
         alerta.showAndWait();
     }
 
     /*
-     * Funcion que calcula los limites de contaminación siguiendo su distintivo y antiguedad
+     * Funcion que calcula los limites de contaminación de un vehiculo segun su distintivo
      */
 
-    private void calcularLimites(Vehiculo v) {
-        String distintivo = v.getTipoDgt().toUpperCase();
+   private void calcularLimites(Vehiculo v) {
+        // Recogemos el distintivo, y el año para los vehiculos sin distintivo ambiental
+        String distintivo = v.getDistintivo().toUpperCase().trim();
         int anio = v.getFechaMatriculacion().getYear();
 
-        // Segun los valores calculamos
-        if (distintivo.contains("SIN DISTINTIVO")) {
-            if (anio < 1980) {
-                limiteOpacidad = 3.5;
-            } else {
-                limiteOpacidad = 2.5;
-            }
-            limiteRalenti = 0.5;
-            limiteAcelerado = 0.3;
-        } else if (distintivo.contains("DISTINTIVO B")) {
-            limiteOpacidad = 1.5;
-            limiteRalenti = 0.3;
-            limiteAcelerado = 0.2;
-        } else if (distintivo.contains("DISTINTIVO C")) {
-            limiteOpacidad = 0.5;
-            limiteRalenti = 0.2;
-            limiteAcelerado = 0.1;
-        } else { // ECO o 0 Emisiones
-            limiteOpacidad = 0.2;
-            limiteRalenti = 0.1;
-            limiteAcelerado = 0.0;
+        // Calculamos segun el distintivo
+        switch (distintivo) {
+            case "SIN DISTINTIVO":
+                if (anio < 1980) {
+                    limiteOpacidad = 3.5;
+                } else {
+                    limiteOpacidad = 2.5;
+                }
+                limiteRalenti = 0.5;
+                limiteAcelerado = 0.3;
+                break;
+
+            case "DISTINTIVO B":
+                limiteOpacidad = 1.5;
+                limiteRalenti = 0.3;
+                limiteAcelerado = 0.2;
+                break;
+
+            case "DISTINTIVO C":
+                limiteOpacidad = 0.5;
+                limiteRalenti = 0.2;
+                limiteAcelerado = 0.1;
+                break;
+
+            case "ECO":
+                limiteOpacidad = 0.2;
+                limiteRalenti = 0.1;
+                limiteAcelerado = 0.1;
+                break;
+
+            case "CERO":
+            default:
+                limiteOpacidad = 0.0;
+                limiteRalenti = 0.0;
+                limiteAcelerado = 0.0;
+                break;
         }
     }
 
     /*
      * Funcion que maneja para cada tipo de vehiculo cuales son las pruebas que se le deben realizar
      */
-    private void manejarPruebas(Vehiculo v) {
-        String distintivo = v.getTipoDgt().toUpperCase();
 
-        // Por defecto, habilitamos los de Gasolina (CO), que es lo más común
+    private void manejarPruebas(Vehiculo v) {
+        // Recogemos el distintivo
+        String distintivo = v.getDistintivo().toUpperCase().trim();
+
+        // Por defecto, dejamos todo libre para que el técnico trabaje
+        habilitarCampo(txtOpacidad);
         habilitarCampo(txtRalenti);
         habilitarCampo(txtRalentiAcelerado);
+        txtOpacidad.setPromptText("");
+        txtRalenti.setPromptText("");
+        txtRalentiAcelerado.setPromptText("");
 
-        // Pero la opacidad (Diesel) suele estar deshabilitada a menos que sea un coche viejo o Diesel
-        deshabilitarCampo(txtOpacidad);
+        // Segun el distintivo configuramos los inputss
+        switch (distintivo) {
+            case "CERO":
+                deshabilitarCampo(txtOpacidad);
+                deshabilitarCampo(txtRalenti);
+                deshabilitarCampo(txtRalentiAcelerado);
+                txtOpacidad.setPromptText("N/A - Exento");
+                txtRalenti.setPromptText("N/A");
+                txtRalentiAcelerado.setPromptText("N/A");
+                break;
 
-        // Segun el distintivo habilitamos los correspondientes
-        if (distintivo.contains("CERO") || distintivo.contains("0 EMISIONES")) {
-            // Eléctricos no pasan pruebas de emisiones
-            deshabilitarCampo(txtOpacidad);
-            deshabilitarCampo(txtRalenti);
-            deshabilitarCampo(txtRalentiAcelerado);
+            case "ECO":
+                deshabilitarCampo(txtOpacidad);
+                txtOpacidad.setPromptText("N/A - ECO");
+                break;
 
-            // Informamos de ello
-            txtOpacidad.setPromptText("N/A - Eléctrico");
-            txtRalenti.setPromptText("N/A");
-            txtRalentiAcelerado.setPromptText("N/A");
-        } else if (distintivo.contains("ECO")) {
-            // Híbridos: Se mide CO (Ralentí) pero NO opacidad
-            deshabilitarCampo(txtOpacidad);
-            txtOpacidad.setPromptText("N/A - ECO");
-        } else if (distintivo.contains("SIN DISTINTIVO")) {
-            // Coches antiguos: Solo Ralentí (normalmente)
-            deshabilitarCampo(txtRalentiAcelerado);
-            deshabilitarCampo(txtOpacidad);
+            case "SIN DISTINTIVO":
+                deshabilitarCampo(txtRalentiAcelerado);
+                txtRalentiAcelerado.setPromptText("N/A");
+                break;
+
+            // Si son B o C pasan todas
+            case "DISTINTIVO B":
+            case "DISTINTIVO C":
+                break;
         }
     }
 
@@ -237,17 +283,14 @@ public class EmisionesController {
         if (c1 == false || c2 == false || c3 == false) {
             correcto = false;
         }
-
         return correcto;
     }
 
     /*
-     * Funcion para validar cada campo
+     * Funcion para validar cada campo de forma individual
      */
 
-    private boolean validarUnicoCampo(TextField campo, double limite, String valor, String resultado, String fallo,
-            String ok, String activo, String bloqueado, String codigoDefecto, String descripcionDefecto) {
-
+    private boolean validarUnicoCampo(TextField campo, double limite, String valor, String resultado, String fallo,String ok, String activo, String bloqueado, String codigoDefecto, String descripcionDefecto) {
         // Variable para guardar el resultado
         boolean correcto = false;
 
@@ -259,7 +302,7 @@ public class EmisionesController {
             // Limpiamos el defecto por si acaso
             BufferInspeccion.borrarDefecto(codigoDefecto);
 
-            // Recogemos el valore del campo
+            // Recogemos el valor del campo
             String texto = campo.getText().replace(",", ".").trim();
 
             // Si el tecnico borra el texto volvemos al estilo original
@@ -269,7 +312,7 @@ public class EmisionesController {
                 BufferInspeccion.getValoresEmisiones().put(resultado, "");
                 correcto = true;
             } else {
-                // Comprobamos el valor con su limite establecido por el tipo de etiqueta
+                // Comparamos el valor con su limite establecido por el tipo de etiqueta
                 try {
                     double emisiones = Double.parseDouble(texto);
                     BufferInspeccion.getValoresEmisiones().put(valor, texto);
@@ -326,7 +369,6 @@ public class EmisionesController {
                 todoRelleno = false;
             }
         }
-
         return todoRelleno;
     }
 
@@ -339,7 +381,7 @@ public class EmisionesController {
     }
 
     /*
-     * ActionEvent que maneja las opciones del menu (Mantiene tu firma intacta con mayúscula)
+     * ActionEvent que maneja las opciones del menu 
      */
 
     @FXML
@@ -375,9 +417,7 @@ public class EmisionesController {
             Utilities.abrirVentana("/vistas/Frenos.fxml", "Frenos");
             Utilities.cerrarVentana(event);
         } else {
-            Utilities.mostrarAlerta("Campos incompletos",
-                    "Debe introducir los valores de las pruebas habilitadas para este vehículo.",
-                    Alert.AlertType.WARNING);
+            Utilities.mostrarAlerta("Campos incompletos","Debe introducir los valores de las pruebas habilitadas para este vehículo.", Alert.AlertType.WARNING);
         }
     }
 

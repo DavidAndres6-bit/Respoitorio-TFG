@@ -82,7 +82,7 @@ public class AltaUsuarioController {
         // Instancia de UsuarioDAO
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         
-        // Varaible para controlar 
+        // Variable para controlar 
         boolean datosValidos = true;
         
         // Validacion de usuarios duplicados

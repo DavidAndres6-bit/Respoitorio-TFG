@@ -14,8 +14,7 @@ public class TarifaDAO {
     */
 
     public double obtenerTarifaPorDistintivo(String distintivo){
-
-        // Fijamos un precio base para si no encuentra el dato del distintivo
+        // Fijamos un precio base por si no encuentra el dato del distintivo
         double precio = 53.00;
 
         // Conexion a la base de datos
@@ -36,6 +35,8 @@ public class TarifaDAO {
 
             con = c.conexion();
             select = con.prepareStatement(sql);
+
+            // Pasamos el distintivo como parametro
             select.setString(1, distintivo);
             rs = select.executeQuery();
 

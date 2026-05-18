@@ -41,8 +41,7 @@ public class GenerarInforme {
         // Codificacion de caracteres
         resolver.setCharacterEncoding("UTF-8");
 
-        // Creamos la instancia para usar la libreria para poder leer el html y escribir
-        // los datos en el
+        // Creamos la instancia para usar la libreria para poder leer el html y escribir los datos en el
         TemplateEngine engine = new TemplateEngine();
 
         // Asignarle a la libreria las caracteristicas de busqueda que hemos definido
@@ -64,8 +63,6 @@ public class GenerarInforme {
         context.setVariable("fechaInspeccion", LocalDateTime.now().format(formatoCyl));
 
         // Convertir fecha de matriculacion para mostrarla
-
-        // Recuperamos la fecha de matriculacion del vehículo
         String fechaMatriStr = "N/A";
         if (BufferInspeccion.getVehiculoActual().getFechaMatriculacion() != null) {
             fechaMatriStr = BufferInspeccion.getVehiculoActual().getFechaMatriculacion()
@@ -78,7 +75,7 @@ public class GenerarInforme {
         String fechaProxStr = "---";
 
         if (inspeccion.getFechaProximaInspeccion() != null) {
-            // Convertimos el java.sql.Date a LocalDate nativo de java.time
+            // Convertimos el java.sql.Date a LocalDate para mostrar en el formato que nos interesa
             java.time.LocalDate localDateProx = inspeccion.getFechaProximaInspeccion().toLocalDate();
             
             // Le aplicamos el formateador moderno igual que a la de matriculación
@@ -88,10 +85,10 @@ public class GenerarInforme {
         // Pasamos la variable formateada de forma limpia
         context.setVariable("fechaProximaInspeccion", fechaProxStr);
 
-    
         // Recoger el cliente
         Cliente cliente = BufferInspeccion.getClienteActual();
 
+        // Recogemos los datos del cliente
         if (cliente != null) {
             String nombre = cliente.getNombre();
             String dni = cliente.getDni();
@@ -130,8 +127,8 @@ public class GenerarInforme {
         context.setVariable("resultadoFinal", inspeccion.getResultadoInspeccion());
 
         // Calcula el precio segun la tarifa
-        double precioITV = obtenerPrecioITV(BufferInspeccion.getVehiculoActual().getTipoDgt());
-        context.setVariable("tarifa", precioITV + " €");
+        double precioITV = obtenerPrecioITV(BufferInspeccion.getVehiculoActual().getDistintivo());
+        context.setVariable("tarifa", String.format("%.2f €", precioITV));
 
         // Datos para el nombre del archivo
         DateTimeFormatter formatoNombreArchivo = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -143,36 +140,80 @@ public class GenerarInforme {
 
         File archivoFinal = new File(rutaSalida, nombreArchivo);
 
-        // Transformamos el HTML a PDF
+       // Procesar la plantilla con el contexto de Thymeleaf
         String htmlProcesado = engine.process("Informe", context);
 
         try (OutputStream os = new FileOutputStream(archivoFinal)) {
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.useFastMode();
             
-            // Ruta a la carpeta para las imagenes
-            String baseUri = getClass().getResource("/img/").toExternalForm();
+            // Obtener la ruta base para las imagenes del documento
+            String baseUri = "";
+            try {
+                if (getClass().getResource("/img/") != null) {
+                    baseUri = getClass().getResource("/img/").toExternalForm();
+                } else {
+                    // Si no encuentra la carpeta de imagenes busca en la raiz
+                    if (getClass().getResource("/") != null) {
+                        baseUri = getClass().getResource("/").toExternalForm();
+                    }
+                }
+            } catch (Exception eImg) {
+                System.err.println("Error al cargar la ruta de los recursos: " + eImg.getMessage());
+            }
 
-            builder.withHtmlContent(htmlProcesado, baseUri);
+            // Si baseUri esta vacio, se le pasa el directorio actual para que no falle
+            builder.withHtmlContent(htmlProcesado, baseUri.isEmpty() ? "." : baseUri);
             builder.toStream(os);
             builder.run();
 
+            System.out.println("-> ¡PDF generado y guardado con éxito en!: " + archivoFinal.getAbsolutePath());
+
         } catch (Exception e) {
-            System.err.println("Error al generar el PDF: " + e.getMessage());
+            System.err.println("Error crítico al renderizar el PDF: " + e.getMessage());
             e.printStackTrace();
+            throw new RuntimeException(e); 
         }
     }
 
-    // Funcion que calcula la tarifa segun la etiqueta
+    // Funcion que calcula la tarifa segun la etiqueta traduciendo los nombres para MySQL
     private double obtenerPrecioITV(String etiqueta) {
+        // Variable para almacenar el resultado
+        double precioFinal = 53.00;
 
-        // Instanciamos el DAO de tarifas
-        TarifaDAO tarifaDAO = new TarifaDAO();
+        if (etiqueta != null) {
+            // Limpiamos el texto por si acaso
+            String distintivoVehiculo = etiqueta.toUpperCase().trim();
+            String nombreTarifa = "";
 
-        // Recogemos el precio de la tarifa
-        double precio = tarifaDAO.obtenerTarifaPorDistintivo(etiqueta);
+            // Hacemos la equivalencia estricta entre los nombres de ambas tablas
+            switch (distintivoVehiculo) {
+                case "DISTINTIVO B":
+                    nombreTarifa = "Vehiculos con etiqueta B";
+                    break;
+                case "DISTINTIVO C":
+                    nombreTarifa = "Vehiculos con etiqueta C";
+                    break;
+                case "ECO":
+                    nombreTarifa = "Vehiculos Electricos e Hibridos";
+                    break;
+                case "CERO":
+                    nombreTarifa = "Vehiculos con etiqueta 0";
+                    break;
+                case "SIN DISTINTIVO":
+                    nombreTarifa = "Vehiculos sin etiqueta";
+                    break;
+                default:
+                    nombreTarifa = "Vehiculos sin etiqueta"; // Fallback por si acaso
+                    break;
+            }
 
-        // Devolvemos el precio
-        return precio;
+            // Instanciamos el DAO de tarifas
+            TarifaDAO tarifaDAO = new TarifaDAO();
+
+            // Asignamos el valor recuperado de la base de datos
+            precioFinal = tarifaDAO.obtenerTarifaPorDistintivo(nombreTarifa);
+        }
+        return precioFinal;
     }
 }
