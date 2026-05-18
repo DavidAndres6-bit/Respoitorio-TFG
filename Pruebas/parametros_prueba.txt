@@ -1,0 +1,81 @@
+PARÁMETROS DE PRUEBA — ITV CyL
+================================
+
+USUARIOS
+--------
+Administrador:
+  Usuario:    David
+  Contraseña: 123456D_a
+
+Técnico:
+  Usuario:    Juanfran
+  Contraseña: 123456J_f
+
+Técnico adicional:
+  Usuario:    Prueba2
+  Contraseña: 12345
+
+
+MATRÍCULAS
+----------
+Vehículos con cliente asociado e historial de inspecciones:
+  ZA9999VE  — cliente: David Andrés
+  5885HFT   — clientes: Jose Manuel Herreros / Juan Francisco Herreros
+  8139THH   — cliente: Musáfira Tami
+
+Vehículos sin cliente asociado:
+  0000BBZ
+  0000FMS
+  0000GJB
+  0000NQK
+  0000PLM
+  0000PBX
+  0000QKV
+  BU0001XT
+
+
+CLIENTES
+--------
+  David Andrés          — DNI: 12345678A  — matrícula: ZA9999VE
+  Jose Manuel Herreros  — DNI: 23456789B  — matrícula: 5885HFT
+  Juan Francisco Herreros — DNI: 34567890C — matrícula: 5885HFT
+  Musáfira Tami         — DNI: 45678901D  — matrícula: 8139THH
+
+
+MATRÍCULAS PARA CASOS DE EMISIONES
+------------------------------------
+  BU0001XT  — SEAT 124, 1975         — SIN DISTINTIVO (anterior a 1980)
+  0000QKV   — Citroën Berlingo, 2003 — SIN DISTINTIVO (desde 1980)
+  0000NQK   — Suzuki Jimny, 2000     — DISTINTIVO B
+  0000PBX   — Nissan Note, 2007      — DISTINTIVO C
+  0000PLM   — Renault Austral, 2024  — ECO
+
+
+LÍMITES DE EMISIONES POR DISTINTIVO
+-------------------------------------
+  SIN DISTINTIVO (antes de 1980): opacidad 3,5 / ralentí 0,5 / acelerado 0,3
+  SIN DISTINTIVO (desde 1980):    opacidad 2,5 / ralentí 0,5 / acelerado 0,3
+  DISTINTIVO B:                   opacidad 1,5 / ralentí 0,3 / acelerado 0,2
+  DISTINTIVO C:                   opacidad 0,5 / ralentí 0,2 / acelerado 0,1
+  ECO o 0 Emisiones:              opacidad 0,2 / ralentí 0,1 / acelerado 0,0
+
+
+TARIFAS ITV CYL 2026
+---------------------
+  Ciclomotor:                    23,03 €
+  Vehículos Eléctricos e Híbridos: 51,00 €
+  Vehículos sin etiqueta:        65,00 €
+  Vehículos con etiqueta B:      55,00 €
+  Vehículos con etiqueta C:      45,00 €
+  Vehículos con etiqueta 0:      35,00 €
+  Vehículos pesados:             81,09 €
+  Tractores:                     81,09 €
+
+
+REGLAS DE VALIDACIÓN
+---------------------
+  Contraseña:  mínimo 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial
+  Teléfono:    9 dígitos, empezando por 6, 7, 8 o 9
+  Correo:      patrón correo@dominio.com
+  DNI:         8 dígitos + letra de control correcta
+  Kilómetros:  no negativos / no menores que los de la última inspección / máximo 999.999
