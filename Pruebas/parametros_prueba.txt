@@ -15,6 +15,19 @@ Técnico adicional:
   Usuario:    Prueba2
   Contraseña: 12345
 
+Usuario a modificar:
+  prueba@gmail.com
+  123456Pp@
+
+Usuarios incorrectos
+  prueba@gmail
+  pruebagmail.com
+  prueba4@gmail.com
+
+Contraseñas incorrectas
+  12345678
+  1234@Jf
+  123456Jf
 
 MATRÍCULAS
 ----------
@@ -24,22 +37,15 @@ Vehículos con cliente asociado e historial de inspecciones:
   8139THH   — cliente: Musáfira Tami
 
 Vehículos sin cliente asociado:
-  0000BBZ
-  0000FMS
   0000GJB
   0000NQK
-  0000PLM
-  0000PBX
-  0000QKV
-  BU0001XT
-
 
 CLIENTES
 --------
-  David Andrés          — DNI: 12345678A  — matrícula: ZA9999VE
-  Jose Manuel Herreros  — DNI: 23456789B  — matrícula: 5885HFT
-  Juan Francisco Herreros — DNI: 34567890C — matrícula: 5885HFT
-  Musáfira Tami         — DNI: 45678901D  — matrícula: 8139THH
+  David Andrés          — DNI: 39539554R  — matrícula: ZA9999VE
+  Jose Manuel Herreros  — DNI: 36451245V  — matrícula: 5885HFT
+  Juan Francisco Herreros — DNI: 02461952D — matrícula: 5885HFT
+  Musáfira Tami         — DNI: 58611124V  — matrícula: 8139THH
 
 
 MATRÍCULAS PARA CASOS DE EMISIONES
@@ -50,6 +56,14 @@ MATRÍCULAS PARA CASOS DE EMISIONES
   0000PBX   — Nissan Note, 2007      — DISTINTIVO C
   0000PLM   — Renault Austral, 2024  — ECO
 
+DNI VÁLIDOS
+------------------------------------
+35881702T
+10996214Y
+65859265F
+93947166D
+07062820A
+77717561D
 
 LÍMITES DE EMISIONES POR DISTINTIVO
 -------------------------------------
