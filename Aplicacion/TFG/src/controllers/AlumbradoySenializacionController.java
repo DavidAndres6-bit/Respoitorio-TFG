@@ -51,7 +51,6 @@ public class AlumbradoySenializacionController {
      */
 
     private void recuperarValoresPrevios() {
-        
         // Recorremos los defectos actuales y comprobamos si hay alguno por su codigo
         for (Defecto d : BufferInspeccion.getDefectosActuales()) {
 
@@ -80,6 +79,7 @@ public class AlumbradoySenializacionController {
             }
         }
     }
+    
     /*
      * Metodo para guardar los datos en el Buffer al cambiar de ventana desde el
      * boton o desde el menu

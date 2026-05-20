@@ -55,4 +55,3 @@ package clases.POJOS;
         this.nombre = nombre;
     }   
 }
-

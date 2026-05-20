@@ -326,7 +326,6 @@ public class UsuarioDAO {
                     actualizado = true;
                 }
             }
-        
         } catch (SQLException e) {
             System.out.println("Error al actualizar usuario: " + e.getMessage());
         } finally {

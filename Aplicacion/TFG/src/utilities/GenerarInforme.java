@@ -65,8 +65,7 @@ public class GenerarInforme {
         // Convertir fecha de matriculacion para mostrarla
         String fechaMatriStr = "N/A";
         if (BufferInspeccion.getVehiculoActual().getFechaMatriculacion() != null) {
-            fechaMatriStr = BufferInspeccion.getVehiculoActual().getFechaMatriculacion()
-                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            fechaMatriStr = BufferInspeccion.getVehiculoActual().getFechaMatriculacion().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         }
 
         context.setVariable("fechaMatriculacion", fechaMatriStr);
@@ -140,7 +139,7 @@ public class GenerarInforme {
 
         File archivoFinal = new File(rutaSalida, nombreArchivo);
 
-       // Procesar la plantilla con el contexto de Thymeleaf
+        // Procesar la plantilla con el contexto de Thymeleaf
         String htmlProcesado = engine.process("Informe", context);
 
         try (OutputStream os = new FileOutputStream(archivoFinal)) {
@@ -166,8 +165,6 @@ public class GenerarInforme {
             builder.withHtmlContent(htmlProcesado, baseUri.isEmpty() ? "." : baseUri);
             builder.toStream(os);
             builder.run();
-
-            System.out.println("-> ¡PDF generado y guardado con éxito en!: " + archivoFinal.getAbsolutePath());
 
         } catch (Exception e) {
             System.err.println("Error crítico al renderizar el PDF: " + e.getMessage());

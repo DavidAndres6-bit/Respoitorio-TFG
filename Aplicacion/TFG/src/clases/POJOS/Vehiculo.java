@@ -18,7 +18,9 @@ public class Vehiculo {
     /* 
     *  Constructor vacio
     */
+
     public Vehiculo() {
+
     }
 
     /*  
@@ -106,5 +108,4 @@ public class Vehiculo {
         }
         return mca + " " + mod;
     }
-
 }

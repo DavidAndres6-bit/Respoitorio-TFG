@@ -147,6 +147,7 @@ public class DefectosController {
         alerta.setHeaderText("¿Estás seguro de que deseas ABORTAR la inspección?");
         alerta.setContentText("Esta acción borrará todos los datos introducidos y no se podrá deshacer.");
         alerta.setGraphic(null); // Quitamos el icono que viene por defecto
+        
         // Si pulsa aceptar redirigimos al panel
         alerta.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {

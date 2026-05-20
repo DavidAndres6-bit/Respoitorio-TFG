@@ -74,7 +74,6 @@ public class Conexion {
                 }
         
          //Tratamiento de errores extenso en el tunel 
-
         } catch (com.jcraft.jsch.JSchException e) {
             System.err.println("ERROR EN EL TÚNEL SSH:");
             if (e.getMessage().contains("Auth fail")) {
@@ -105,5 +104,3 @@ public class Conexion {
         return con;
     }   
 }
-    
-

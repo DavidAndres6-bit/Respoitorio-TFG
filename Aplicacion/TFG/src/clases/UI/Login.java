@@ -44,10 +44,8 @@ public class Login extends Application{
         }
     }
 
-
     //Funcion para mostrar la ventana de login
     public static void main(String[] args) {
         launch(args);
     }
-
 }

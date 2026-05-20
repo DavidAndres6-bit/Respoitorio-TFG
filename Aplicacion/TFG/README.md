@@ -1,18 +1,23 @@
-## Getting Started
+# ITV Digital CYL
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+**ITV Digital CYL** es una aplicación de escritorio diseñada específicamente para optimizar la gestión operativa y el proceso de inspección técnica de vehículos en las estaciones de Castilla y León.
 
-## Folder Structure
+Aplicación desarrollada como trabajo final de grado del ciclo de **Desarrollo de Aplicaciones Multiplataforma** utitlizando JavaFX para su desarrollo
 
-The workspace contains two folders by default, where:
+## Organización y Distribución de Recursos
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+Para mantener la organización y separación de funciones en la aplicación, el codigo se ha organizado siguiendo la siguiente estructura:
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+├── 📁 bin/                  # Binarios nativos y librerías dinámicas (.dll)
+├── 📁 lib/                  # Librerías externas del proyecto (JARs adicionales)
+└── 📁 src/                  # Código fuente principal de la aplicación
+    ├── 📁 clases/           # Lógica de persistencia de datos e interacción con la Base de Datos
+    │   └── 📄 Connection    # Conexión remota al servidor MySQL en PythonAnywhere
+    ├── 📁 controllers/      # Controladores de JavaFX que gestionan la lógica de las ventanas
+    ├── 📁 img/              # Almacenamiento de recursos gráficos e imágenes de la interfaz
+    ├── 📁 resources/        # Plantilla html para el PDF del informe de la inspección
+    ├── 📁 utilities/        # Clases de soporte general (validaciones, aperturas y cierres de ventanas..)
+    └── 📁 vistas/           # Archivos FXML que definen la estructura visual de las interfaces
+    
+    
+ 
