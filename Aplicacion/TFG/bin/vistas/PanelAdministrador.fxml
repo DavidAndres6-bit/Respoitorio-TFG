@@ -51,7 +51,7 @@
                      <children>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../img/usuario%20(1).png" />
+                              <Image url="@../img/usuario_panel.png" />
                            </image>
                         </ImageView>
                         <Label fx:id="lblNombreAdmin" style="-fx-text-fill: white;" text="Cargando..." textFill="WHITE">

@@ -21,7 +21,7 @@
             <VBox alignment="CENTER" prefHeight="180.0" spacing="10.0">
                <children>
                   <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                     <image><Image url="@../img/usuario%20(1).png" /></image>
+                     <image><Image url="@../img/usuario_panel.png" /></image>
                   </ImageView>
                   <Label style="-fx-text-fill: white;" text="Técnico" textFill="WHITE">
                      <font><Font name="System Bold" size="40.0" /></font>
@@ -52,7 +52,7 @@
                   <HBox alignment="CENTER_LEFT" prefHeight="60.0" spacing="15.0">
                      <children>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                           <image><Image url="@../img/usuario%20(1).png" /></image>
+                           <image><Image url="@../img/usuario_panel.png" /></image>
                         </ImageView>
                         <Label fx:id="lblNombreTecnico" style="-fx-text-fill: white;" text="Cargando..." textFill="WHITE">
                            <font><Font name="System Bold" size="20.0" /></font>

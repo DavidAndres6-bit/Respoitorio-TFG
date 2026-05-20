@@ -11,7 +11,6 @@ public class Inspeccion {
      * Atributos de la inspeccion
     */
 
-
     private int id;
     private String matriculaCoche;
     private int kmAnteriorInspeccion;
@@ -33,7 +32,7 @@ public class Inspeccion {
     private List<Defecto> listaDefectos;
 
 
-   /*
+    /*
     * Constructor vacío
     */
    

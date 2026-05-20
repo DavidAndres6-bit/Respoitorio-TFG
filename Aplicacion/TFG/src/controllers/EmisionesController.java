@@ -122,7 +122,6 @@ public class EmisionesController {
         Vehiculo v = BufferInspeccion.getVehiculoActual();
         if (v != null) {
             calcularLimites(v);
-            manejarPruebas(v);
         }
 
         // Lee si el switch de arriba ha bloqueado o no las cajas de texto

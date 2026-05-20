@@ -49,7 +49,6 @@ public class AcondicionamientoInteriorController {
      */
 
     private void recuperarValoresPrevios() {
-        
         // Recorremos los defectos actuales y comprobamos si hay alguno por su codigo
         for (Defecto d : BufferInspeccion.getDefectosActuales()) {
 

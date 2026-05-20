@@ -50,7 +50,7 @@ public class TarifaDAO {
            // Cerrar los recursos abiertos
            try { 
                 
-            // Cerrar el ResultSet
+                // Cerrar el ResultSet
                 if (rs != null) {
                     rs.close();
                 }

@@ -38,9 +38,14 @@ public class ActualizarUsuarioController {
     private void accionActualizar(ActionEvent event) {
         // Validamos que haya al menos un campo para actualizar
         if (txtCorreo.getText().isEmpty() || (spRolUsuario.getValue() == null && txtContrasenia.getText().isEmpty())) {
-            Utilities.mostrarAlerta("Campos vacíos", "Por favor, debes seleccionar al menos un elemneto para actualizar.", Alert.AlertType.WARNING);
+            Utilities.mostrarAlerta("Campos vacíos", "Por favor, debes seleccionar al menos un elemento para actualizar.", Alert.AlertType.WARNING);
         } else {
-            actualizarUsuario();
+            // Validamos el formato de la contraseña solo si el usuario ha escrito una nueva
+            if (!txtContrasenia.getText().isEmpty() && !Utilities.contraseniaValida(txtContrasenia.getText())) {
+                Utilities.mostrarAlerta("Error de formato", "La contraseña debe tener al menos 8 caracteres, incluidos una letra mayúscula, una minúscula, un número y un caracter especial.", Alert.AlertType.ERROR);
+            } else {
+                actualizarUsuario();
+            }
         }
     }
 

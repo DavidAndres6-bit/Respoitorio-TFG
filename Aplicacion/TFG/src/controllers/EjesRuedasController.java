@@ -49,7 +49,6 @@ public class EjesRuedasController {
      */
 
     private void recuperarValoresPrevios() {
-
         // Recorremos los defectos actuales y comprobamos si hay alguno por su codigo
         for (Defecto d : BufferInspeccion.getDefectosActuales()) {
 
@@ -120,7 +119,6 @@ public class EjesRuedasController {
 
         // Cambiamos de ventana
         Utilities.abrirVentana("/vistas/MotoryTransmision.fxml", "MOTOR Y TRANSMISIÓN");
-
         Utilities.cerrarVentana(event);
     }
 }
