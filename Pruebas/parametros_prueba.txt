@@ -40,6 +40,15 @@ Vehículos sin cliente asociado:
   0000GJB
   0000NQK
 
+DNI VÁLIDOS
+------------------------------------
+35881702T
+10996214Y
+65859265F
+93947166D
+07062820A
+77717561D
+
 CLIENTES
 --------
   David Andrés          — DNI: 39539554R  — matrícula: ZA9999VE
@@ -56,22 +65,14 @@ MATRÍCULAS PARA CASOS DE EMISIONES
   0000PBX   — Nissan Note, 2007      — DISTINTIVO C
   0000PLM   — Renault Austral, 2024  — ECO
 
-DNI VÁLIDOS
-------------------------------------
-35881702T
-10996214Y
-65859265F
-93947166D
-07062820A
-77717561D
 
 LÍMITES DE EMISIONES POR DISTINTIVO
 -------------------------------------
-  SIN DISTINTIVO (antes de 1980): opacidad 3,5 / ralentí 0,5 / acelerado 0,3
-  SIN DISTINTIVO (desde 1980):    opacidad 2,5 / ralentí 0,5 / acelerado 0,3
+  SIN DISTINTIVO (antes de 1980): opacidad 3,5 / ralentí 0,5 / acelerado N/A
+  SIN DISTINTIVO (desde 1980):    opacidad 2,5 / ralentí 0,5 / acelerado N/A
   DISTINTIVO B:                   opacidad 1,5 / ralentí 0,3 / acelerado 0,2
   DISTINTIVO C:                   opacidad 0,5 / ralentí 0,2 / acelerado 0,1
-  ECO o 0 Emisiones:              opacidad 0,2 / ralentí 0,1 / acelerado 0,0
+  ECO o 0 Emisiones:              opacidad N/A / ralentí 0,1 / acelerado 0,1
 
 
 TARIFAS ITV CYL 2026
