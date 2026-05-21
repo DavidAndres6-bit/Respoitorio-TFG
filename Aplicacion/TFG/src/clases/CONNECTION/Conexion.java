@@ -17,16 +17,20 @@ public class Conexion {
     private static Session session;
 
     // Configuracion del tunel para el puerto de la conexion
-    private static final String SSH_HOST = "ssh.pythonanywhere.com";
-    private static final String SSH_USER = "DJF";
-    private static final String SSH_PASS = "Dam1234@";
+
+    /*
+    *   Rellenar las variables con nuestros datos de PytonAnywere
+    */
+    private static final String SSH_HOST = "";
+    private static final String SSH_USER = "";
+    private static final String SSH_PASS = "";
 
     
     // Configuracion de la parte de Mysql de python
-    private static final String HOST = "DJF.mysql.pythonanywhere-services.com";
-    private static final String USER= "DJF";
-    private static final String PASS= "DJFTFG1234";
-    private static final String DB= "DJF$TFG";
+    private static final String HOST = "";
+    private static final String USER= "";
+    private static final String PASS= "";
+    private static final String DB= "";
     
 
     // Crear la conexion
