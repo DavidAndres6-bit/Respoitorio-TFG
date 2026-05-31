@@ -3,7 +3,7 @@ import hashlib                      # Genera hashes MD5 a partir de cadenas de t
 import re                           # Limpieza de caracteres no deseados
 import pandas as pd                 # Lectura y procesado de datos en tabla
 from collections import defaultdict # Diccionario con valor por defecto (evita KeyError al incrementar)
-from datetime import date           # Obtiene la fecha actual para el campo fecha_actualizacion
+from datetime import datetime           # Obtiene la fecha y hora actual para el campo fecha_actualizacion
 
 # Carpeta donde están los TXT extraídos de los ZIPs
 RUTA_TXT = "/home/DJF/temp/txt"
@@ -11,10 +11,13 @@ RUTA_TXT = "/home/DJF/temp/txt"
 # Carpeta donde se guardarán los CSVs generados
 RUTA_CSV = "/home/DJF/temp/csv"
 
-# Alfabeto válido para matrículas españolas: 25 letras (sin Ñ)
-LETRAS = "BCDFGHJKLMNPRSTUVWXYZ"   # 21 consonantes
-LETRAS += "AEIOU"                   # + 5 vocales = 26 - 1(Ñ) = 25 letras
-N_LETRAS = len(LETRAS)              # 25 — lo usamos en las funciones de matrícula
+# Alfabeto válido para matrículas españolas a partir del 2000: 21 letras (sin Ñ ni vocales)
+LETRAS = "BCDFGHJKLMNPQRSTVWXYZ"   # 21 consonantes
+N_LETRAS = len(LETRAS)              # 21 — lo usamos en las funciones de matrícula
+
+# Alfabeto válido para matrículas españolas anteriores al 2000: 25 letras (sin Ñ, con vocales)
+LETRAS_ANTIGUA = "BCDFGHJKLMNPQRSTVWXYZAEIOU"
+N_LETRAS_ANTIGUA = len(LETRAS_ANTIGUA)           # 25
 
 # Índices (base 0) de las columnas que usamos para construir el hash
 INDICES_HASH = [
@@ -47,12 +50,12 @@ INDICES_HASH = [
 # Índice de la fecha de primera matriculación — lo usamos en generar_matricula()
 IDX_FEC_PRIM_MATR = 10  # Formato DD/MM/YYYY
 
-# Columnas que incluimos en los CSVs de provincia (sin MATRICULA, que la añadimos nosotros)
+# Columnas que incluimos en los CSVs de provincia (MATRICULA, FECHA_ACTUALIZACION y ESTADO_ACTUAL las añadimos nosotros)
 COLUMNAS_CSV = [
     'PROVINCIA',
     'MARCA',
     'MODELO',
-    'FECHA_MATR',       # fecha de matriculación
+    'FECHA_MATR',
     'PROCEDENCIA',
     'NUEVO_USADO',
     'TIPO_DGT',
@@ -91,8 +94,8 @@ CODIGOS_NUEVO_USADO = {
 # Año de corte: antes de 2000 → formato antiguo LLNNNNLL, desde 2000 → NNNNLLL
 ANYO_CORTE = 2000
 
-# Fecha de hoy — se calcula una sola vez y se añade a todos los CSVs de provincia
-FECHA_ACTUALIZACION = date.today().strftime("%d/%m/%Y")
+# Fecha y hora de hoy — se calcula una sola vez y se añade a todos los CSVs de provincia
+FECHA_ACTUALIZACION = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
 # Patrón de valores vacíos o nulos — compilado una sola vez para reutilizarlo eficientemente
 PATRON_VACIO = re.compile(r"^\s*$|^nan$|^null$|^none$|^n/a$|^-$|^\.$", re.IGNORECASE)
@@ -174,15 +177,15 @@ def hash_a_matricula_moderna(hash_md5):
 
 def hash_a_matricula_antigua(hash_md5, letras_provincia):
     """
-    Convertimos hash MD5 → matrícula LLNNNNLL.
+    Convertimos hash MD5 → matrícula PPNNNNLL.
     Las dos primeras letras son las de la provincia del fichero.
     Si la matrícula ya existe en el mapa global, añadimos sufijo _N
     donde N es el número de veces que ya se ha generado esa matrícula.
     """
     numero         = int.from_bytes(bytes.fromhex(hash_md5), byteorder="big")
     digitos        = str(numero % 10000).zfill(4)
-    letra1         = LETRAS[(numero // 10000) % N_LETRAS]
-    letra2         = LETRAS[(numero // (10000 * N_LETRAS)) % N_LETRAS]
+    letra1         = LETRAS_ANTIGUA[(numero // 10000) % N_LETRAS_ANTIGUA]
+    letra2         = LETRAS_ANTIGUA[(numero // (10000 * N_LETRAS_ANTIGUA)) % N_LETRAS_ANTIGUA]
     matricula_base = f"{letras_provincia}{digitos}{letra1}{letra2}"
 
     # Consultamos cuántas veces se ha generado esta matrícula antes
@@ -238,18 +241,18 @@ def procesar_archivo(ruta_archivo):
     print(f"  · Procesando: {nombre_fichero}")
 
     # Extraemos las 2 letras de provincia del nombre del fichero
-    # Ej: "42.SORIA.txt" → índices 3 y 4 → "SO"
     letras_provincia = nombre_fichero[3:5].upper()
 
     # Leemos el TXT completo con pandas
     df = pd.read_csv(ruta_archivo, sep="|", encoding="latin-1", low_memory=False)
 
-    # Generamos las matrículas con apply() en lugar de iterrows()
-    # apply() recorre las filas internamente de forma más eficiente que iterrows(),
-    # que convierte cada fila en una Series antes de pasarla — con millones de registros
-    # esa conversión acumula un coste significativo. apply() evita esa sobrecarga.
-    # axis=1 indica que aplicamos la función fila a fila (no columna a columna).
-    matriculas = df.apply(lambda fila: generar_matricula(fila, letras_provincia), axis=1)
+    # Generamos las matrículas con iterrows() para garantizar el orden estricto
+    # de ejecución fila a fila. apply() no garantiza ese orden cuando hay efectos
+    # secundarios en variables globales como matriculas_usadas y mapa_hashes,
+    # lo que puede provocar matrículas duplicadas sin sufijo.
+    matriculas = []
+    for _, fila in df.iterrows():
+        matriculas.append(generar_matricula(fila, letras_provincia))
 
     # Añadimos la matrícula al dataframe
     df['MATRICULA'] = matriculas
